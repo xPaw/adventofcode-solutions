@@ -34,13 +34,7 @@
 			}
 		}
 		
-		var result =
-		{
-			finalFloor: floor,
-			firstBasementPosition: position
-		};
-		
-		return result;
+		return [ floor, position ];
 	};
 	
 	document.getElementById( 'day1-textarea' ).addEventListener( 'change', function()
@@ -52,20 +46,9 @@
 			return;
 		}
 		
-		// Validate the input, must contain parenthesis only.
-		if( !/^[\(\)]+$/.test( input ) )
-		{
-			this.parentNode.parentNode.classList.add( 'has-error' );
-			
-			return;
-		}
-		
-		// Remove has-error class if it was set before
-		this.parentNode.parentNode.classList.remove( 'has-error' );
-		
 		var solution = window.AdventOfCode.Day1( input );
 		
-		document.getElementById( 'day1-floor' ).textContent = solution.finalFloor;
-		document.getElementById( 'day1-position' ).textContent = solution.firstBasementPosition;
+		document.getElementById( 'day1-partone' ).textContent = solution[ 0 ];
+		document.getElementById( 'day1-parttwo' ).textContent = solution[ 1 ];
 	}, false );
 }());

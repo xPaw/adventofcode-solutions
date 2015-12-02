@@ -52,13 +52,7 @@
 			completeRibbon += ribbon + bow;
 		}
 		
-		var result =
-		{
-			wrappingPaper: completeArea,
-			ribbon: completeRibbon
-		};
-		
-		return result;
+		return [ completeArea, completeRibbon ];
 	};
 	
 	document.getElementById( 'day2-textarea' ).addEventListener( 'change', function()
@@ -72,7 +66,7 @@
 		
 		var solution = window.AdventOfCode.Day2( input );
 		
-		document.getElementById( 'day2-partone' ).textContent = solution.wrappingPaper;
-		document.getElementById( 'day2-parttwo' ).textContent = solution.ribbon;
+		document.getElementById( 'day2-partone' ).textContent = solution[ 0 ];
+		document.getElementById( 'day2-parttwo' ).textContent = solution[ 1 ];
 	}, false );
 }());
