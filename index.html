@@ -10,8 +10,6 @@
 		<link rel="icon" type="image/png" href="https://assets-cdn.github.com/images/icons/emoji/unicode/1f384.png">
 
 		<title>Advent of Code Solutions by xPaw</title>
-
-		<script>window.AdventOfCode = {}</script>
 	</head>
 	<body>
 		<div class="jumbotron">
@@ -23,105 +21,80 @@
 			</div>
 		</div>
 		
-		<div class="container">
-			<!-- Day 3 -->
-			<div class="panel panel-success" id="day3">
-				<a href="https://github.com/xPaw/adventofcode-solutions/blob/master/js/day3.js" class="pull-right btn btn-sm btn-info">View code</a>
-                <div class="panel-heading">
-					<h3 class="panel-title">Day 3: Perfectly Spherical Houses in a Vacuum</h3>
-				</div>
-                <div class="panel-body">
-					<form class="form-horizontal">
-                        <div class="form-group">
-                            <label for="day3-textarea" class="col-lg-2 control-label">Your input</label>
-                            <div class="col-lg-10">
-                                <textarea class="form-control" rows="3" id="day3-textarea" placeholder="^v^v^v^v^v"></textarea>
-                            </div>
-                        </div>
-                        
-						<div class="form-group">
-							<label for="day3-partone" class="col-lg-2 control-label">Part One Answer</label>
-							<div class="col-lg-10">
-								<span class="form-control" id="day3-partone">0</span>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="day3-parttwo" class="col-lg-2 control-label">Part Two Answer</label>
-							<div class="col-lg-10">
-								<span class="form-control" id="day3-parttwo">0</span>
-							</div>
-						</div>
-                    </form>
-				</div>
-				<script src="js/day3.js" async></script>
-            </div>
-			
-			<!-- Day 2 -->
-			<div class="panel panel-success" id="day2">
-				<a href="https://github.com/xPaw/adventofcode-solutions/blob/master/js/day2.js" class="pull-right btn btn-sm btn-info">View code</a>
-                <div class="panel-heading">
-					<h3 class="panel-title">Day 2: I Was Told There Would Be No Math</h3>
-				</div>
-                <div class="panel-body">
-					<form class="form-horizontal">
-                        <div class="form-group">
-                            <label for="day2-textarea" class="col-lg-2 control-label">Your input</label>
-                            <div class="col-lg-10">
-                                <textarea class="form-control" rows="3" id="day2-textarea" placeholder="2x3x4"></textarea>
-                            </div>
-                        </div>
-                        
-						<div class="form-group">
-							<label for="day2-partone" class="col-lg-2 control-label">Part One Answer</label>
-							<div class="col-lg-10">
-								<span class="form-control" id="day2-partone">0</span>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="day2-parttwo" class="col-lg-2 control-label">Part Two Answer</label>
-							<div class="col-lg-10">
-								<span class="form-control" id="day2-parttwo">0</span>
-							</div>
-						</div>
-                    </form>
-				</div>
-				<script src="js/day2.js" async></script>
-            </div>
-			
-			<!-- Day 1 -->
-			<div class="panel panel-success" id="day1">
-				<a href="https://github.com/xPaw/adventofcode-solutions/blob/master/js/day1.js" class="pull-right btn btn-sm btn-info">View code</a>
-                <div class="panel-heading">
-					<h3 class="panel-title">Day 1: Not Quite Lisp</h3>
-				</div>
-                <div class="panel-body">
-					<form class="form-horizontal">
-                        <div class="form-group">
-                            <label for="day1-textarea" class="col-lg-2 control-label">Your input</label>
-                            <div class="col-lg-10">
-                                <textarea class="form-control" rows="3" id="day1-textarea" placeholder="()()()"></textarea>
-                            </div>
-                        </div>
-                        
-						<div class="form-group">
-							<label for="day1-partone" class="col-lg-2 control-label">Part One Answer</label>
-							<div class="col-lg-10">
-								<span class="form-control" id="day1-partone">0</span>
-							</div>
-						</div>
-						
-						<div class="form-group">
-							<label for="day1-parttwo" class="col-lg-2 control-label">Part Two Answer</label>
-							<div class="col-lg-10">
-								<span class="form-control" id="day1-parttwo">0</span>
-							</div>
-						</div>
-                    </form>
-				</div>
-				<script src="js/day1.js" async></script>
-            </div>
+		<div class="container" id="js-forms">
+			<div class="alert alert-dismissible alert-warning">
+				<h4>You must enable javascript for this to work</h4>
+				<p>All solutions are done in javascript, what did you expect? :)</p>
+			</div>
 		</div>
+		
+		<script>
+			window.AdventOfCode = {};
+			
+			(function()
+			{
+				var solvedDays = 3;
+				var container = document.getElementById( 'js-forms' );
+				
+				container.innerHTML = '';
+				
+				var OnScriptLoad = function()
+				{
+					var i = this.dataset.day;
+					
+					document.getElementById( 'day' + i + '-textarea' ).addEventListener( 'change', function()
+					{
+						var input = this.value.trim();
+						
+						if( input.length === 0 )
+						{
+							return;
+						}
+						
+						var solution = window.AdventOfCode[ 'Day' + i ]( input );
+						
+						document.getElementById( 'day' + i + '-partone' ).textContent = solution[ 0 ];
+						document.getElementById( 'day' + i + '-parttwo' ).textContent = solution[ 1 ];
+					}, false );
+				};
+				
+				for( var i = solvedDays; i > 0; i-- )
+				{
+					container.innerHTML +=
+					'<div class="panel panel-success" id="day' + i + '">\
+						<a href="https://github.com/xPaw/adventofcode-solutions/blob/master/js/day' + i + '.js" target="_blank" class="pull-right btn btn-sm btn-info">View code</a>\
+						<div class="panel-heading">\
+							<h3 class="panel-title"><a href="#day' + i + '">#</a> Day ' + i + '</h3>\
+						</div>\
+						<div class="panel-body">\
+							<form class="form-horizontal">\
+								<div class="form-group">\
+									<label for="day' + i + '-textarea" class="col-lg-2 control-label">Your input</label>\
+									<div class="col-lg-10">\
+										<textarea class="form-control" rows="1" id="day' + i + '-textarea" spellcheck="false" placeholder="Your day ' + i + ' input"></textarea>\
+									</div>\
+								</div>\
+								<div class="form-group">\
+									<label for="day' + i + '-partone" class="col-lg-2 col-md-2 control-label">Part One Answer</label>\
+									<div class="col-lg-4 col-md-4">\
+										<span class="form-control" id="day' + i + '-partone">0</span>\
+									</div>\
+									<label for="day' + i + '-parttwo" class="col-lg-2 col-md-2 control-label">Part Two Answer</label>\
+									<div class="col-lg-4 col-md-4">\
+										<span class="form-control" id="day' + i + '-parttwo">0</span>\
+									</div>\
+								</div>\
+							</form>\
+						</div>\
+					</div>';
+					
+					var script = document.createElement( 'script' );
+					script.dataset.day = i;
+					script.onload = OnScriptLoad;
+					script.src = 'js/day' + i + '.js';
+					document.head.appendChild( script );
+				}
+			}());
+		</script>
 	</body>
 </html>
