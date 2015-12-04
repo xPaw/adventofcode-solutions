@@ -78,12 +78,17 @@
 					{
 						var solution = window.AdventOfCode[ 'Day' + i ]( input );
 						
-						document.getElementById( 'day' + i + '-partone' ).textContent = solution[ 0 ];
-						document.getElementById( 'day' + i + '-parttwo' ).textContent = solution[ 1 ];
+						document.getElementById( 'day' + i + '-partone' ).value = solution[ 0 ];
+						document.getElementById( 'day' + i + '-parttwo' ).value = solution[ 1 ];
 						
 						button.disabled = false;
 						button.textContent = 'Find the answer';
 					} );
+				};
+				
+				var OnFocus = function()
+				{
+					this.select();
 				};
 				
 				for( var i = solvedDays; i > 0; i-- )
@@ -106,11 +111,11 @@
 								</div>\
 								<label for="day' + i + '-partone" class="col-lg-2 col-md-2 control-label">Part One Answer</label>\
 								<div class="col-lg-3 col-md-3">\
-									<span class="form-control" id="day' + i + '-partone">0</span>\
+									<input class="form-control" id="day' + i + '-partone" value="0" >\
 								</div>\
 								<label for="day' + i + '-parttwo" class="col-lg-2 col-md-2 control-label">Part Two Answer</label>\
 								<div class="col-lg-3 col-md-3">\
-									<span class="form-control" id="day' + i + '-parttwo">0</span>\
+									<input class="form-control" id="day' + i + '-parttwo" value="0" >\
 								</div>\
 								<button type="button" class="btn btn-warning col-lg-2 col-md-2" id="day' + i + '-button" data-day="' + i + '">Find the answer</button>\
 							</form>\
@@ -120,6 +125,8 @@
 					container.appendChild( panel );
 					
 					document.getElementById( 'day' + i + '-button' ).addEventListener( 'click', OnButtonClick );
+					document.getElementById( 'day' + i + '-partone' ).addEventListener( 'focus', OnFocus );
+					document.getElementById( 'day' + i + '-parttwo' ).addEventListener( 'focus', OnFocus );
 				}
 			}());
 		</script>
