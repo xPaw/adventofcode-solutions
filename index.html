@@ -38,23 +38,35 @@
 				
 				container.innerHTML = '';
 				
+				var RequestIdleCallback = window.requestIdleCallback || function( cb ) { return setTimeout( cb, 1 ); };
+				
 				var OnScriptLoad = function()
 				{
 					var i = this.dataset.day;
 					
-					document.getElementById( 'day' + i + '-textarea' ).addEventListener( 'change', function()
+					document.getElementById( 'day' + i + '-button' ).addEventListener( 'click', function()
 					{
-						var input = this.value.trim();
+						var input = document.getElementById( 'day' + i + '-textarea' ).value.trim();
 						
 						if( input.length === 0 )
 						{
 							return;
 						}
 						
-						var solution = window.AdventOfCode[ 'Day' + i ]( input );
+						var that = this;
+						that.disabled = true;
+						that.textContent = 'Calculating...';
 						
-						document.getElementById( 'day' + i + '-partone' ).textContent = solution[ 0 ];
-						document.getElementById( 'day' + i + '-parttwo' ).textContent = solution[ 1 ];
+						RequestIdleCallback( function()
+						{
+							var solution = window.AdventOfCode[ 'Day' + i ]( input );
+							
+							document.getElementById( 'day' + i + '-partone' ).textContent = solution[ 0 ];
+							document.getElementById( 'day' + i + '-parttwo' ).textContent = solution[ 1 ];
+							
+							that.disabled = false;
+							that.textContent = 'Find the answer';
+						} );
 					}, false );
 				};
 				
@@ -74,16 +86,15 @@
 										<textarea class="form-control" rows="1" id="day' + i + '-textarea" spellcheck="false" placeholder="Your day ' + i + ' input"></textarea>\
 									</div>\
 								</div>\
-								<div class="form-group">\
-									<label for="day' + i + '-partone" class="col-lg-2 col-md-2 control-label">Part One Answer</label>\
-									<div class="col-lg-4 col-md-4">\
-										<span class="form-control" id="day' + i + '-partone">0</span>\
-									</div>\
-									<label for="day' + i + '-parttwo" class="col-lg-2 col-md-2 control-label">Part Two Answer</label>\
-									<div class="col-lg-4 col-md-4">\
-										<span class="form-control" id="day' + i + '-parttwo">0</span>\
-									</div>\
+								<label for="day' + i + '-partone" class="col-lg-2 col-md-2 control-label">Part One Answer</label>\
+								<div class="col-lg-3 col-md-3">\
+									<span class="form-control" id="day' + i + '-partone">0</span>\
 								</div>\
+								<label for="day' + i + '-parttwo" class="col-lg-2 col-md-2 control-label">Part Two Answer</label>\
+								<div class="col-lg-3 col-md-3">\
+									<span class="form-control" id="day' + i + '-parttwo">0</span>\
+								</div>\
+								<button type="button" class="btn btn-warning col-lg-2 col-md-2" id="day' + i + '-button">Find the answer</button>\
 							</form>\
 						</div>\
 					</div>';
