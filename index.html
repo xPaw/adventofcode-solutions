@@ -40,40 +40,58 @@
 				
 				var RequestIdleCallback = window.requestIdleCallback || function( cb ) { return setTimeout( cb, 1 ); };
 				
-				var OnScriptLoad = function()
+				var OnButtonClick = function()
 				{
-					var i = this.dataset.day;
+					var that = this;
+					var i = that.dataset.day;
+					var input = document.getElementById( 'day' + i + '-textarea' ).value.trim();
 					
-					document.getElementById( 'day' + i + '-button' ).addEventListener( 'click', function()
+					if( input.length === 0 )
 					{
-						var input = document.getElementById( 'day' + i + '-textarea' ).value.trim();
-						
-						if( input.length === 0 )
+						return;
+					}
+					
+					that.disabled = true;
+					that.textContent = 'Calculating...';
+					
+					if( that.dataset.loaded )
+					{
+						CalculateAnswer( i, input, that );
+					}
+					else
+					{
+						var script = document.createElement( 'script' );
+						script.onload = function()
 						{
-							return;
-						}
-						
-						var that = this;
-						that.disabled = true;
-						that.textContent = 'Calculating...';
-						
-						RequestIdleCallback( function()
-						{
-							var solution = window.AdventOfCode[ 'Day' + i ]( input );
+							that.dataset.loaded = true;
 							
-							document.getElementById( 'day' + i + '-partone' ).textContent = solution[ 0 ];
-							document.getElementById( 'day' + i + '-parttwo' ).textContent = solution[ 1 ];
-							
-							that.disabled = false;
-							that.textContent = 'Find the answer';
-						} );
-					}, false );
+							CalculateAnswer( i, input, that );
+						};
+						script.src = 'js/day' + i + '.js';
+						document.head.appendChild( script );
+					}
+				};
+				
+				var CalculateAnswer = function( i, input, button )
+				{
+					RequestIdleCallback( function()
+					{
+						var solution = window.AdventOfCode[ 'Day' + i ]( input );
+						
+						document.getElementById( 'day' + i + '-partone' ).textContent = solution[ 0 ];
+						document.getElementById( 'day' + i + '-parttwo' ).textContent = solution[ 1 ];
+						
+						button.disabled = false;
+						button.textContent = 'Find the answer';
+					} );
 				};
 				
 				for( var i = solvedDays; i > 0; i-- )
 				{
-					container.innerHTML +=
-					'<div class="panel panel-success" id="day' + i + '">\
+					var panel = document.createElement( 'div' );
+					panel.className = 'panel panel-success';
+					panel.id = 'day' + i;
+					panel.innerHTML = '\
 						<a href="https://github.com/xPaw/adventofcode-solutions/blob/master/js/day' + i + '.js" target="_blank" class="pull-right btn btn-sm btn-info">View code</a>\
 						<div class="panel-heading">\
 							<h3 class="panel-title"><a href="#day' + i + '">#</a> Day ' + i + '</h3>\
@@ -94,16 +112,14 @@
 								<div class="col-lg-3 col-md-3">\
 									<span class="form-control" id="day' + i + '-parttwo">0</span>\
 								</div>\
-								<button type="button" class="btn btn-warning col-lg-2 col-md-2" id="day' + i + '-button">Find the answer</button>\
+								<button type="button" class="btn btn-warning col-lg-2 col-md-2" id="day' + i + '-button" data-day="' + i + '">Find the answer</button>\
 							</form>\
 						</div>\
-					</div>';
+					';
 					
-					var script = document.createElement( 'script' );
-					script.dataset.day = i;
-					script.onload = OnScriptLoad;
-					script.src = 'js/day' + i + '.js';
-					document.head.appendChild( script );
+					container.appendChild( panel );
+					
+					document.getElementById( 'day' + i + '-button' ).addEventListener( 'click', OnButtonClick );
 				}
 			}());
 		</script>
