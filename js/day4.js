@@ -9,20 +9,24 @@
 
 window.AdventOfCode.Day4 = function( input )
 {
-	var md5 = SparkMD5.hashBinary;
-	var i = 0;
-	var hash = '';
-	
-	do
+	var GetLowestHash = function( leadingZeroes )
 	{
-		// The input to the MD5 hash is some secret key followed by a number in decimal.
-		// To mine AdventCoins, you must find Santa the lowest positive number
-		// (no leading zeroes: 1, 2, 3, ...) that produces such a hash.
-		hash = md5( input + ++i );
-	}
-	// Just find hash with 6 leading zeroes, this should answer both parts
-	// https://jsperf.com/substring-vs-index
-	while( hash.substring( 0, 6 ) !== '000000' );
+		var i = 0;
+		var hash = '';
+		var expectedZeroes = '0'.repeat( leadingZeroes ); // ES6
+		
+		do
+		{
+			// The input to the MD5 hash is some secret key followed by a number in decimal.
+			// To mine AdventCoins, you must find Santa the lowest positive number
+			// (no leading zeroes: 1, 2, 3, ...) that produces such a hash.
+			hash = SparkMD5.hashBinary( input + ++i );
+		}
+		// https://jsperf.com/substring-vs-index
+		while( hash.substring( 0, leadingZeroes ) !== expectedZeroes );
+		
+		return i;
+	};
 	
-	return [ i, i ];
+	return [ GetLowestHash( 5 ), GetLowestHash( 6 ) ];
 };
