@@ -12,9 +12,8 @@ window.AdventOfCode.Day1 = function( input )
 		{
 			floor++;
 		}
-		
 		// A closing parenthesis, ), means he should go down one floor.
-		if( input[ i ] === ')' )
+		else
 		{
 			floor--;
 		}
