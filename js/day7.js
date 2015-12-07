@@ -1,15 +1,37 @@
 window.AdventOfCode.Day7 = function( originalInput )
 {
+	var input = originalInput.split( '\n' );
+	
+	// Pre-sort the input to avoid multiple iterations
+	input.sort( function( a, b )
+	{
+		a = a.split( ' ' );
+		b = b.split( ' ' );
+		
+		// Get the output wire
+		a = a[ a.length - 1 ];
+		b = b[ b.length - 1 ];
+		
+		// Wire 'a' must end at the end of instructions
+		if( a === 'a' )
+		{
+			return 1;
+		}
+		else if( b === 'a' )
+		{
+			return -1;
+		}
+		
+		if( a.length === b.length )
+		{
+			return a > b ? 1 : -1;
+		}
+		
+		return a.length - b.length;
+	} );
+	
 	var Solve = function( wires )
 	{
-		var input = originalInput.split( '\n' );
-		var numberRegex = /^[0-9]+$/;
-		
-		var TestValue = function( value )
-		{
-			return value in wires || numberRegex.test( value );
-		};
-		
 		var GetValue = function( value )
 		{
 			if( value in wires )
@@ -32,57 +54,37 @@ window.AdventOfCode.Day7 = function( originalInput )
 			wires[ wire ] = value & 0xFFFF;
 		};
 		
-		while( input.length )
 		for( var i = 0; i < input.length; i++ )
 		{
 			var operation = input[ i ].split( ' ' );
-			var solved = false;
+			
+			console.log(i,operation);
 			
 			switch( operation.length )
 			{
 				// 123 -> x means that the signal 123 is provided to wire x.
 				case 3: // ["123", "->", "x"]
-					if( TestValue( operation[ 0 ] ) )
-					{
-						solved = true;
-						
-						SetWire( operation[ 2 ], GetValue( operation[ 0 ] ) );
-					}
+					SetWire( operation[ 2 ], GetValue( operation[ 0 ] ) );
 					
 					break;
 				
 				// NOT e -> f means that the bitwise complement of the value from wire e is provided to wire f.
 				case 4: // ["NOT", "x", "->", "h"]
-					if( TestValue( operation[ 1 ] ) )
-					{
-						solved = true;
-						
-						SetWire( operation[ 3 ], ~GetValue( operation[ 1 ] ) );
-					}
+					SetWire( operation[ 3 ], ~GetValue( operation[ 1 ] ) );
 					
 					break;
 				
 				// x AND y -> z means that the bitwise AND of wire x and wire y is provided to wire z.
 				case 5: // ["x", "AND", "y", "->", "d"]
-					if( TestValue( operation[ 0 ] ) && TestValue( operation[ 2 ] ) )
+					switch( operation[ 1 ] )
 					{
-						solved = true;
-						
-						switch( operation[ 1 ] )
-						{
-							case 'AND'   : SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) &  GetValue( operation[ 2 ] ) ); break;
-							case 'OR'    : SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) |  GetValue( operation[ 2 ] ) ); break;
-							case 'LSHIFT': SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) << GetValue( operation[ 2 ] ) ); break;
-							case 'RSHIFT': SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) >> GetValue( operation[ 2 ] ) ); break;
-						}
+						case 'AND'   : SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) &  GetValue( operation[ 2 ] ) ); break;
+						case 'OR'    : SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) |  GetValue( operation[ 2 ] ) ); break;
+						case 'LSHIFT': SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) << GetValue( operation[ 2 ] ) ); break;
+						case 'RSHIFT': SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) >> GetValue( operation[ 2 ] ) ); break;
 					}
 					
 					break;
-			}
-			
-			if( solved )
-			{
-				input.splice( i, 1 );
 			}
 		}
 		
