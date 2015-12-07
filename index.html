@@ -76,7 +76,17 @@
 				{
 					RequestIdleCallback( function()
 					{
+						if( console.time )
+						{
+							console.time( 'Day' + i );
+						}
+						
 						var solution = window.AdventOfCode[ 'Day' + i ]( input );
+						
+						if( console.timeEnd )
+						{
+							console.timeEnd( 'Day' + i );
+						}
 						
 						document.getElementById( 'day' + i + '-partone' ).value = solution[ 0 ];
 						document.getElementById( 'day' + i + '-parttwo' ).value = solution[ 1 ];
