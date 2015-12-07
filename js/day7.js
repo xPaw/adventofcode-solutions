@@ -2,12 +2,15 @@ window.AdventOfCode.Day7 = function( originalInput )
 {
 	var input = originalInput.split( '\n' );
 	
+	// Split all operations by space
+	input = input.map( function( a )
+	{
+		return a.split( ' ' );
+	} );
+	
 	// Pre-sort the input to avoid multiple iterations
 	input.sort( function( a, b )
 	{
-		a = a.split( ' ' );
-		b = b.split( ' ' );
-		
 		// Get the output wire
 		a = a[ a.length - 1 ];
 		b = b[ b.length - 1 ];
@@ -56,9 +59,7 @@ window.AdventOfCode.Day7 = function( originalInput )
 		
 		for( var i = 0; i < input.length; i++ )
 		{
-			var operation = input[ i ].split( ' ' );
-			
-			console.log(i,operation);
+			var operation = input[ i ];
 			
 			switch( operation.length )
 			{
