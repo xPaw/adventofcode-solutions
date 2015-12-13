@@ -12,7 +12,9 @@ window.AdventOfCode.Day6 = function( input )
 	// This would be a nice solution, right?
 	// But Array.fill just uses the same array reference, instead of cloning
 	
-	for( var i = 0; i < 1000; i++ )
+	var i, y;
+	
+	for( i = 0; i < 1000; i++ )
 	{
 		grid[ i ] = [];
 		
