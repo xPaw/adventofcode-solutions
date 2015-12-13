@@ -1,9 +1,7 @@
-window.AdventOfCode.Day7 = function( originalInput )
+window.AdventOfCode.Day7 = function( input )
 {
-	var input = originalInput.split( '\n' );
-	
 	// Split all operations by space
-	input = input.map( function( a )
+	input = input.split( '\n' ).map( function( a )
 	{
 		return a.split( ' ' );
 	} );

@@ -21,7 +21,7 @@ window.AdventOfCode.Day2 = function( input )
 			present[ 0 ] * present[ 1 ], // l*w
 			present[ 1 ] * present[ 2 ], // w*h
 			present[ 2 ] * present[ 0 ]  // h*l
-		]
+		];
 		
 		// Find the surface area of the box, which is 2*l*w + 2*w*h + 2*h*l.
 		var area =

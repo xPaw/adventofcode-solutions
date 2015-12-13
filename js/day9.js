@@ -6,7 +6,7 @@ window.AdventOfCode.Day9 = function( input )
 
 		function permute(arr, memo)
 		{
-			var cur, memo = memo || [];
+			var cur; memo = memo || [];
 
 			for (var i = 0; i < arr.length; i++)
 			{
@@ -25,7 +25,7 @@ window.AdventOfCode.Day9 = function( input )
 		return permute(inputArr);
 	};
 	
-	var input = input.split( '\n' );
+	input = input.split( '\n' );
 	var travelPaths = {};
 	var cities = {};
 
@@ -53,7 +53,7 @@ window.AdventOfCode.Day9 = function( input )
 	var shortestDistance = Number.MAX_VALUE;
 	var longestDistance = 0;
 	
-	for( var i = 0; i < permuted.length; i++ )
+	for( i = 0; i < permuted.length; i++ )
 	{
 		var distance = 0;
 		

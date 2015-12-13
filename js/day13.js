@@ -6,7 +6,7 @@ window.AdventOfCode.Day13 = function( input )
 
 		function permute(arr, memo)
 		{
-			var cur, memo = memo || [];
+			var cur; memo = memo || [];
 
 			for (var i = 0; i < arr.length; i++)
 			{
@@ -29,9 +29,9 @@ window.AdventOfCode.Day13 = function( input )
 	var mod = function( n, m )
 	{
 		return ( ( n % m ) + m ) % m;
-	}
+	};
 	
-	var input = input.replace( /\./g, '' ).split( '\n' );
+	input = input.replace( /\./g, '' ).split( '\n' );
 	var travelPaths = {};
 	var cities = {};
 	
@@ -45,17 +45,10 @@ window.AdventOfCode.Day13 = function( input )
 			travelPaths[ data[ 0 ] ] = {};
 		}
 		
-		var happiness = +data[ 3 ];
-		
-		if( data[ 2 ] === 'lose' )
-		{
-			happiness *= -1;
-		}
-		
-		travelPaths[ data[ 0 ] ][ data[ 10 ] ] = happiness;
+		travelPaths[ data[ 0 ] ][ data[ 10 ] ] = data[ 2 ] === 'lose' ? -data[ 3 ] : +data[ 3 ];
 	}
 	
-	var cities = Object.keys( cities );
+	cities = Object.keys( cities );
 	
 	var CalculateHappiness = function()
 	{
@@ -85,7 +78,7 @@ window.AdventOfCode.Day13 = function( input )
 	
 	travelPaths[ 'You' ] = {};
 	
-	for( var i = 0; i < cities.length; i++ )
+	for( i = 0; i < cities.length; i++ )
 	{
 		travelPaths[ cities[ i ] ][ 'You' ] = 0;
 		travelPaths[ 'You' ][ cities[ i ] ] = 0;

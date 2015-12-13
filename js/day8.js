@@ -1,6 +1,6 @@
 window.AdventOfCode.Day8 = function( input )
 {
-	var input = input.split( '\n' );
+	input = input.split( '\n' );
 	
 	var totalLength = 0;
 	var cleanLength = 0;
