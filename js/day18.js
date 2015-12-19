@@ -59,9 +59,17 @@ window.AdventOfCode.Day18 = function( input )
 		return newGrid;
 	}
 	
-	for( var i = 0; i < 5; i++ )
+	var inputPartTwo = JSON.parse( JSON.stringify( input ) );
+	
+	for( var i = 0; i < 100; i++ )
 	{
-		input = nextGeneration( input, [] );
+		input = nextGeneration( input );
+		inputPartTwo = nextGeneration( inputPartTwo );
+		
+		inputPartTwo[ 0 ][ 0 ] = 1;
+		inputPartTwo[ 0 ][ width - 1 ] = 1;
+		inputPartTwo[ height - 1 ][ 0 ] = 1;
+		inputPartTwo[ height - 1 ][ width - 1 ] = 1;
 	}
 	
 	var partOne = 0;
@@ -69,9 +77,10 @@ window.AdventOfCode.Day18 = function( input )
 	
 	for( i = 0; i < input.length; i++ )
 	{
-		for( y = 0; y < input[ i ].length; y++ )
+		for( var y = 0; y < input[ i ].length; y++ )
 		{
 			partOne += input[ i ][ y ];
+			partTwo += inputPartTwo[ i ][ y ];
 		}
 	}
 	
