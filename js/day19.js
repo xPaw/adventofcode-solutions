@@ -35,8 +35,6 @@ window.AdventOfCode.Day19 = function( input )
 		return a[ 0 ];
 	} );
 	
-	molecule = molecule;
-	
 	var regexp = new RegExp( '(' + input.join( '|' ) + ')', 'g' );
 	var replaceCallback = function( matched )
 	{
