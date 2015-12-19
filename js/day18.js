@@ -2,31 +2,34 @@ window.AdventOfCode.Day18 = function( input )
 {
 	input = input.split( '\n' ).map( function( row )
 	{
-		return row.split( '' ).map( function( cell )
+		row = row.split( '' ).map( function( cell )
 		{
-			return cell === '#' ? 1 : 0;
+			return cell === '#';
 		} );
+		
+		row.unshift( 0 );
+		row.push( 0 );
+		
+		return row;
 	} );
 	
-	var width = input.length;
-	var height = width;
+	var size = input.length;
 	
-	// Stolen from somewhere on stackoverflow
-	function countNeighbors(grid, x, y)
+	input.unshift( [] );
+	input.push( [] );
+	
+	function countNeighbors( grid, x, y )
 	{
 		var count = 0;
 		
-		for (var y1 = Math.max(0, y - 1); y1 <= Math.min(height, y + 1); y1++)
+		for( var y1 = y - 1; y1 < y + 2; y1++ )
 		{
-			for (var x1 = Math.max(0, x - 1); x1 <= Math.min(width, x + 1); x1++)
+			for( var x1 = x - 1; x1 < x + 2; x1++ )
 			{
-				try // lol!
+				if( ( x1 != x || y1 != y ) && grid[ x1 ][ y1 ] )
 				{
-					if ((x1 != x || y1 != y) && grid[x1][y1])
-						count += 1;
+					count += 1;
 				}
-				catch (e)
-				{}
 			}
 		}
 		
@@ -37,24 +40,20 @@ window.AdventOfCode.Day18 = function( input )
 	{
 		var newGrid = [];
 		
-		for( var y = 0; y < height; y++ )
+		for( var y = 1; y <= size; y++ )
 		{
-			newGrid[y] = [];
+			newGrid[ y ] = [];
 			
-			for( var x = 0; x < width; x++ )
+			for( var x = 1; x <= size; x++ )
 			{
 				var neighbors = countNeighbors( grid, y, x );
-
-				if( grid[y][x] )
-				{
-					newGrid[y][x] = neighbors === 2 || neighbors === 3 ? 1 : 0;
-				}
-				else
-				{
-					newGrid[y][x] = neighbors === 3 ? 1 : 0;
-				}
+				
+				newGrid[ y ][ x ] = neighbors === 3 || ( neighbors === 2 && grid[ y ][ x ] );
 			}
 		}
+		
+		newGrid[ 0 ] = [];
+		newGrid[ size + 1 ] = [];
 		
 		return newGrid;
 	}
@@ -66,18 +65,18 @@ window.AdventOfCode.Day18 = function( input )
 		input = nextGeneration( input );
 		inputPartTwo = nextGeneration( inputPartTwo );
 		
-		inputPartTwo[ 0 ][ 0 ] = 1;
-		inputPartTwo[ 0 ][ width - 1 ] = 1;
-		inputPartTwo[ height - 1 ][ 0 ] = 1;
-		inputPartTwo[ height - 1 ][ width - 1 ] = 1;
+		inputPartTwo[ 1 ][ 1 ] = 1;
+		inputPartTwo[ 1 ][ size ] = 1;
+		inputPartTwo[ size ][ 1 ] = 1;
+		inputPartTwo[ size ][ size ] = 1;
 	}
 	
 	var partOne = 0;
 	var partTwo = 0;
 	
-	for( i = 0; i < input.length; i++ )
+	for( i = 1; i <= size; i++ )
 	{
-		for( var y = 0; y < input[ i ].length; y++ )
+		for( var y = 1; y <= size; y++ )
 		{
 			partOne += input[ i ][ y ];
 			partTwo += inputPartTwo[ i ][ y ];
