@@ -3,7 +3,7 @@ window.AdventOfCode.Day20 = function( input )
 	input = +input;
 	
 	var i, j;
-	var n = input / ( input / 1E6 );
+	var n = 1E6; // Assume no one got input that produced an answer higher than 1mil
 	var houses = {};
 	var housesPartTwo = {};
 	
