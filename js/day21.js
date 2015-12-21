@@ -6,39 +6,14 @@ window.AdventOfCode.Day21 = function( input )
 	{
 		constructor( health, damage, armor )
 		{
-			this.MaxHealth = this.Health = health;
+			this.Health = health;
 			this.DamagePoints = damage;
 			this.ArmorPoints = armor;
 		}
 		
-		get IsAlive()
+		TakeDamage( entity )
 		{
-			return this.Health > 0;
-		}
-		
-		Reset()
-		{
-			this.Health = this.MaxHealth;
-		}
-		
-		Attack( entity )
-		{
-			entity.TakeDamage( this.DamagePoints );
-		}
-		
-		TakeDamage( damage )
-		{
-			// Damage dealt by an attacker each turn is equal to the
-			// attacker's damage score minus the defender's armor score.
-			damage -= this.ArmorPoints;
-			
-			// An attacker always does at least 1 damage.
-			if( damage < 1 )
-			{
-				damage = 1;
-			}
-			
-			this.Health -= damage;
+			return this.Health / Math.max( 1, entity.DamagePoints - this.ArmorPoints );
 		}
 	}
 	
@@ -79,13 +54,6 @@ window.AdventOfCode.Day21 = function( input )
 			}
 			
 			return gold;
-		}
-		
-		Reset()
-		{
-			super.Reset();
-			
-			this.RecalculateStats();
 		}
 		
 		RecalculateStats()
@@ -216,29 +184,16 @@ window.AdventOfCode.Day21 = function( input )
 		
 		Battle()
 		{
-			this.Player.Reset();
-			this.Boss.Reset();
+			this.Player.RecalculateStats();
 			
-			var turn = 0;
-			
-			while( this.Player.IsAlive && this.Boss.IsAlive )
+			if( this.Player.TakeDamage( this.Boss ) >= this.Boss.TakeDamage( this.Player ) )
 			{
-				if( ++turn % 2 === 0 )
+				if( this.CheapestWin > this.Player.GoldSpent )
 				{
-					this.Boss.Attack( this.Player );
-				}
-				else
-				{
-					this.Player.Attack( this.Boss );
+					this.CheapestWin = this.Player.GoldSpent;
 				}
 			}
-			
-			if( this.Player.IsAlive && this.CheapestWin > this.Player.GoldSpent )
-			{
-				this.CheapestWin = this.Player.GoldSpent;
-			}
-			
-			if( this.Boss.IsAlive && this.CostlyLoss < this.Player.GoldSpent )
+			else if( this.CostlyLoss < this.Player.GoldSpent )
 			{
 				this.CostlyLoss = this.Player.GoldSpent;
 			}
