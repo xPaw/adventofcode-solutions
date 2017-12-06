@@ -3,35 +3,13 @@ window.AdventOfCode.Day6 = function( input )
 	input = input.split( /\s/ ).map( ( num ) => parseInt( num, 10 ) );
 	
 	const duplicates = new Map();
-	let duplicateHit = false;
-	let isDuplicate = false;
 	let part1 = 0;
 	let part2 = 0;
 	let hit = '';
 	
-	while( true )
+	while( !duplicates.has( hit ) )
 	{
-		isDuplicate = duplicates.has( hit );
-		
-		duplicates.set( hit, true );
-		
-		if( duplicateHit )
-		{
-			part2++;
-			
-			if( duplicateHit === hit )
-			{
-				break;
-			}
-		}
-		else if( isDuplicate )
-		{
-			duplicateHit = hit;
-		}
-		else
-		{
-			part1++;
-		}
+		duplicates.set( hit, part1++ );
 		
 		let highestValue = -1;
 		let highestIndex = -1;
@@ -54,6 +32,8 @@ window.AdventOfCode.Day6 = function( input )
 		
 		hit = input.join( ',' );
 	}
+	
+	part2 = part1 - duplicates.get( hit );
 	
 	return [ part1, part2 ];
 };
