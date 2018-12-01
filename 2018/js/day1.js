@@ -1,9 +1,8 @@
 window.AdventOfCode.Day1 = ( input ) =>
 {
 	input = input
-		.replace( /\+/g, '' )
 		.split( '\n' )
-		.map( ( x ) => parseInt( x, 10 ) );
+		.map( x => +x );
 	
 	let index = 0;
 	let seenValue = 0;
