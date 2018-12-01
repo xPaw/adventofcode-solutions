@@ -1,0 +1,29 @@
+window.AdventOfCode.Day1 = ( input ) =>
+{
+	input = input
+		.replace( /\+/g, '' )
+		.split( '\n' )
+		.map( ( x ) => parseInt( x, 10 ) );
+	
+	let index = 0;
+	let seenValue = 0;
+	const seen = new Map();
+
+	do
+	{
+		seenValue += input[ index % input.length ];
+		index++;
+
+		if( seen.has( seenValue ) )
+		{
+			break;
+		}
+
+		seen.set( seenValue, true );
+	}
+	while( true );
+
+	const sum = input.reduce( ( p, c ) => p + c, 0 );
+	
+	return [ sum, seenValue ];
+};
