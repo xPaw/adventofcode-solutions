@@ -35,6 +35,7 @@
 			{
 				var solvedDays = 3;
 				var container = document.getElementById( 'js-forms' );
+				var script;
 				
 				container.innerHTML = '';
 				
@@ -53,23 +54,19 @@
 					
 					that.disabled = true;
 					that.textContent = 'Calculating...';
-					
-					if( that.dataset.loaded )
+
+					if( script )
+					{
+						document.head.removeChild( script );
+					}
+
+					script = document.createElement( 'script' );
+					script.onload = function()
 					{
 						CalculateAnswer( i, input, that );
-					}
-					else
-					{
-						var script = document.createElement( 'script' );
-						script.onload = function()
-						{
-							that.dataset.loaded = true;
-							
-							CalculateAnswer( i, input, that );
-						};
-						script.src = 'js/day' + i + '.js';
-						document.head.appendChild( script );
-					}
+					};
+					script.src = 'js/day' + i + '.js';
+					document.head.appendChild( script );
 				};
 				
 				var CalculateAnswer = function( i, input, button )
