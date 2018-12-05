@@ -30,6 +30,12 @@ window.AdventOfCode.Day5 = ( input ) =>
 		while( previous !== current );
 
 		reducedLengths.push( current.length );
+
+		// Pass part1 output into part2
+		if( i === 64 )
+		{
+			input = current;
+		}
 	}
 
 	return [ reducedLengths[ 0 ], Math.min( ...reducedLengths ) ];
