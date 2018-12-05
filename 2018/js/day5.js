@@ -11,7 +11,7 @@ window.AdventOfCode.Day5 = ( input ) =>
 		reactions.push( lowercase + uppercase );
 	}
 
-	const reduceReactions = new RegExp( reactions.join( '|' ) );
+	const reduceReactions = new RegExp( reactions.join( '|' ), 'g' );
 	const reducedLengths = [];
 
 	// 64 is @ which doesn't actually replace anything and we use that for part 1
