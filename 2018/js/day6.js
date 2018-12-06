@@ -26,26 +26,7 @@ window.AdventOfCode.Day6 = ( input ) =>
 		} );
 
 	const grid = [];
-	/*const hull = [];
-
-	for( const coord of input )
-	{
-		let a, b, c, d;
-		
-		for( const coordOther of input )
-		{
-			if( coord[ 0 ] === coordOther[ 0 ] && coord[ 1 ] === coordOther[ 1 ] ) continue;
-			if( coord[ 0 ] > coordOther[ 0 ] ) a = true;
-			if( coord[ 0 ] < coordOther[ 0 ] ) b = true;
-			if( coord[ 1 ] > coordOther[ 1 ] ) c = true;
-			if( coord[ 1 ] < coordOther[ 1 ] ) d = true;
-		}
-
-		if( a && b && c && d )
-		{
-			hull[ coord[ 0 ] * maxX + coord[ 1 ] ] = true;
-		}
-	}*/
+	const infiniteCells = [];
 
 	for( let x = minX; x <= maxX; x++ )
 	{
@@ -71,9 +52,10 @@ window.AdventOfCode.Day6 = ( input ) =>
 			distances = distances.sort( ( a, b ) => a - b );
 			closestPoint = closestPoint[ 0 ] * maxX + closestPoint[ 1 ];
 
+			
 			if( x === maxX || x === minX || y === minY || y === maxY )
 			{
-				closestPoint = null;
+				infiniteCells[ closestPoint ] = true;
 			}
 
 			grid[ x * maxX + y ] =
@@ -84,9 +66,9 @@ window.AdventOfCode.Day6 = ( input ) =>
 		}
 	}
 
-	console.log( grid.reduce( ( a, point ) =>
+	const part1 = grid.reduce( ( a, point ) =>
 	{
-		if( !point || !point.closest )
+		if( !point || !point.closest || infiniteCells[ point.closest ] )
 		{
 			return a;
 		}
@@ -94,7 +76,7 @@ window.AdventOfCode.Day6 = ( input ) =>
 		a[ point.closest ] = 1 + ( a[ point.closest ] || 0 );
 
 		return a;
-	}, [] ).sort( ( a, b ) => b - a ) );
+	}, [] ).sort( ( a, b ) => b - a )[ 0 ];
 
-	return [ 0, 0 ];
+	return [ part1, 0 ];
 };
