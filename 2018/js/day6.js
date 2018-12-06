@@ -1,6 +1,3 @@
-// 3933
-// 41145
-
 window.AdventOfCode.Day6 = ( input ) =>
 {
 	let minX = Number.MAX_SAFE_INTEGER;
@@ -52,7 +49,6 @@ window.AdventOfCode.Day6 = ( input ) =>
 			distances = distances.sort( ( a, b ) => a - b );
 			closestPoint = closestPoint[ 0 ] * maxX + closestPoint[ 1 ];
 
-			
 			if( x === maxX || x === minX || y === minY || y === maxY )
 			{
 				infiniteCells[ closestPoint ] = true;
@@ -78,5 +74,7 @@ window.AdventOfCode.Day6 = ( input ) =>
 		return a;
 	}, [] ).sort( ( a, b ) => b - a )[ 0 ];
 
-	return [ part1, 0 ];
+	const part2 = grid.filter( point => point && point.distance < 10000 ).length;
+
+	return [ part1, part2 ];
 };
