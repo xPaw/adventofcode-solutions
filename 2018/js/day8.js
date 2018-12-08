@@ -3,11 +3,12 @@ window.AdventOfCode.Day8 = ( input ) =>
 	input = input.split( ' ' ).map( x => +x );
 
 	let part1 = 0;
+	let index = 0;
 
 	const process = () =>
 	{
-		const childrenSize = input.shift();
-		const metadataSize = input.shift();
+		const childrenSize = input[ index++ ];
+		const metadataSize = input[ index++ ];
 		let values = [];
 		let value = 0;
 
@@ -16,7 +17,7 @@ window.AdventOfCode.Day8 = ( input ) =>
 			values.push( process() );
 		}
 
-		const metadata = input.slice( 0, metadataSize );
+		const metadata = input.slice( index, index += metadataSize );
 		const metadataSum = metadata.reduce( ( a, b ) => a + b, 0 );
 
 		part1 += metadataSum;
@@ -32,8 +33,6 @@ window.AdventOfCode.Day8 = ( input ) =>
 		{
 			value = metadataSum;
 		}
-
-		input = input.slice( metadataSize );
 
 		return value;
 	};
