@@ -33,7 +33,7 @@
 
 			(function()
 			{
-				var solvedDays = 7;
+				var solvedDays = 8;
 				var container = document.getElementById( 'js-forms' );
 				var script;
 
@@ -50,7 +50,6 @@
 						return;
 					}
 
-					that.disabled = true;
 					that.textContent = 'Calculating...';
 
 					if( console.clear )
@@ -91,7 +90,6 @@
 						document.getElementById( 'day' + i + '-partone' ).value = solution[ 0 ];
 						document.getElementById( 'day' + i + '-parttwo' ).value = solution[ 1 ];
 
-						button.disabled = false;
 						button.textContent = 'Find the answer';
 					} );
 				};
