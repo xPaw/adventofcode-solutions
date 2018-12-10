@@ -60,29 +60,58 @@ window.AdventOfCode.Day10 = ( input ) =>
 	maxX -= minX;
 	maxY -= minY;
 
-	const pixels = Array( ( maxY + 1 ) * maxX ).fill( ' ' );
+	const pixels = [];
 
 	for( const point of points )
 	{
 		point.y -= minY;
 		point.x -= minX;
 
-		pixels[ point.y * maxX + point.x ] = '#';
-	}
-
-	let string = '';
-
-	for( let y = 0; y <= maxY; y++ )
-	{
-		for( let x = 0; x <= maxX; x++ )
+		if( !pixels[ point.y ] )
 		{
-			string += pixels[ y * maxX + x ];
+			pixels[ point.y ] = [];
 		}
 
-		string += '\n';
+		pixels[ point.y ][ point.x ] = 1;
 	}
 
-	console.log( string );
+	const letters =
+	{
+		'  ##   #  # #    ##    ##    ########    ##    ##    ##    #': 'A',
+		'##### #    ##    ##    ###### #    ##    ##    ##    ###### ': 'B',
+		' #### #    ##     #     #     #     #     #     #    # #### ': 'C',
+		'#######     #     #     ##### #     #     #     #     ######': 'E',
+		'#######     #     #     ##### #     #     #     #     #     ': 'F',
+		' #### #    ##     #     #     #  ####    ##    ##   ## ### #': 'G',
+		'#    ##    ##    ##    ########    ##    ##    ##    ##    #': 'H',
+		'   ###    #     #     #     #     #     # #   # #   #  ###  ': 'J',
+		'#    ##   # #  #  # #   ##    ##    # #   #  #  #   # #    #': 'K',
+		'#     #     #     #     #     #     #     #     #     ######': 'L',
+		'#    ###   ###   ## #  ## #  ##  # ##  # ##   ###   ###    #': 'N',
+		'##### #    ##    ##    ###### #     #     #     #     #     ': 'P',
+		'##### #    ##    ##    ###### #  #  #   # #   # #    ##    #': 'R',
+		'#    ##    # #  #  #  #   ##    ##   #  #  #  # #    ##    #': 'X',
+		'######     #     #    #    #    #    #    #     #     ######': 'Z',
+	};
 
-	return [ 'See console', iterations ];
+	let answer = '';
+	const letterCount = Math.round( maxX / 8 );
+
+	for( let letter = 0; letter < letterCount; letter++ )
+	{
+		let stride = letter * 8;
+		let string = '';
+
+		for( let y = 0; y <= maxY; y++ )
+		{
+			for( let x = stride; x < stride + 6; x++ )
+			{
+				string += pixels[ y ][ x ] ? '#' : ' ';
+			}
+		}
+
+		answer += letters[ string ];
+	}
+
+	return [ answer, iterations ];
 };
