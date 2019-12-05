@@ -10,11 +10,11 @@ module.exports = ( input ) =>
 	let part2 = 0;
 
 bruteforce:
-	for( let y = 0; y <= 100; y++ )
+	for( let y = 0; y <= input.length; y++ )
 	{
 		input[ 1 ] = y;
 
-		for( let x = 0; x <= 100; x++ )
+		for( let x = 0; x <= input.length; x++ )
 		{
 			input[ 2 ] = x;
 
