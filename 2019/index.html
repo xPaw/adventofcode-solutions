@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='utf-8'>
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+
+		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400">
+		<link rel="stylesheet" type="text/css" href="../css/hacker.css">
+		<link rel="stylesheet" type="text/css" href="../css/styles.css">
+		<link rel="icon" type="image/png" href="https://assets-cdn.github.com/images/icons/emoji/unicode/1f384.png">
+
+		<title>Advent of Code Solutions 2018 by xPaw</title>
+	</head>
+	<body>
+		<div class="jumbotron">
+			<div class="container">
+				<h2>Solutions to <a href="https://adventofcode.com/">adventofcode.com</a> 2018</h2>
+				<p>
+					<a class="btn btn-lg btn-primary" href="https://github.com/xPaw/adventofcode-solutions" role="button">View on Github »</a>
+				</p>
+			</div>
+		</div>
+
+		<div class="container" id="js-forms">
+			<div class="alert alert-dismissible alert-warning">
+				<h4>You must enable javascript for this to work</h4>
+				<p>All solutions are done in javascript, what did you expect? :)</p>
+			</div>
+		</div>
+
+		<script>
+			window.AdventOfCode = {};
+
+			(function()
+			{
+				var solvedDays = 1;
+				var container = document.getElementById( 'js-forms' );
+				var script;
+
+				container.innerHTML = '';
+
+				var OnButtonClick = function()
+				{
+					var that = this;
+					var i = that.dataset.day;
+					var input = document.getElementById( 'day' + i + '-textarea' ).value.trim();
+
+					if( input.length === 0 )
+					{
+						return;
+					}
+
+					that.textContent = 'Calculating...';
+
+					if( console.clear )
+					{
+						console.clear();
+					}
+
+					if( script )
+					{
+						document.head.removeChild( script );
+					}
+
+					script = document.createElement( 'script' );
+					script.onload = function()
+					{
+						CalculateAnswer( i, input, that );
+					};
+					script.src = 'js/day' + i + '.js';
+					document.head.appendChild( script );
+				};
+
+				var CalculateAnswer = function( i, input, button )
+				{
+					window.requestIdleCallback( () =>
+					{
+						if( console.time )
+						{
+							console.time( 'Day' + i );
+						}
+
+						var solution = window.AdventOfCode[ 'Day' + i ]( input );
+
+						if( console.timeEnd )
+						{
+							console.timeEnd( 'Day' + i );
+						}
+
+						document.getElementById( 'day' + i + '-partone' ).value = solution[ 0 ];
+						document.getElementById( 'day' + i + '-parttwo' ).value = solution[ 1 ];
+
+						button.textContent = 'Find the answer';
+					} );
+				};
+
+				var OnFocus = function()
+				{
+					this.select();
+				};
+
+				for( var i = solvedDays; i > 0; i-- )
+				{
+					var panel = document.createElement( 'div' );
+					panel.className = 'panel panel-success';
+					panel.id = 'day' + i;
+					panel.innerHTML = '\
+						<a href="https://github.com/xPaw/adventofcode-solutions/blob/master/2018/js/day' + i + '.js" target="_blank" class="pull-right btn btn-sm btn-info">View code</a>\
+						<div class="panel-heading">\
+							<h3 class="panel-title"><a href="#day' + i + '">#</a> Day ' + i + '</h3>\
+						</div>\
+						<div class="panel-body">\
+							<form class="form-horizontal">\
+								<div class="form-group">\
+									<label for="day' + i + '-textarea" class="col-lg-2 control-label">Your input</label>\
+									<div class="col-lg-10">\
+										<textarea class="form-control" rows="1" id="day' + i + '-textarea" spellcheck="false" placeholder="Your day ' + i + ' input"></textarea>\
+									</div>\
+								</div>\
+								<label for="day' + i + '-partone" class="col-lg-2 col-md-2 control-label">Part One Answer</label>\
+								<div class="col-lg-3 col-md-3">\
+									<input class="form-control" id="day' + i + '-partone" value="0" >\
+								</div>\
+								<label for="day' + i + '-parttwo" class="col-lg-2 col-md-2 control-label">Part Two Answer</label>\
+								<div class="col-lg-3 col-md-3">\
+									<input class="form-control" id="day' + i + '-parttwo" value="0" >\
+								</div>\
+								<button type="button" class="btn btn-warning col-lg-2 col-md-2" id="day' + i + '-button" data-day="' + i + '">Find the answer</button>\
+							</form>\
+						</div>\
+					';
+
+					container.appendChild( panel );
+
+					document.getElementById( 'day' + i + '-button' ).addEventListener( 'click', OnButtonClick );
+					document.getElementById( 'day' + i + '-partone' ).addEventListener( 'focus', OnFocus );
+					document.getElementById( 'day' + i + '-parttwo' ).addEventListener( 'focus', OnFocus );
+				}
+
+				// Focus on the latest day
+				document.querySelector( 'textarea:first-child' ).focus();
+			}());
+		</script>
+	</body>
+</html>
