@@ -5,7 +5,8 @@ const day = parseInt( process.argv[ 2 ], 10 );
 
 if( isNaN( day ) )
 {
-	console.error( 'Specify a day' );
+	console.error( 'Usage: node index.js <day> [input]' );
+	console.error( 'If input is not specified, reads from data/day%.txt' );
 	process.exit( 1 );
 }
 
