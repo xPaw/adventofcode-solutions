@@ -1,4 +1,4 @@
-window.AdventOfCode.Day1 = ( input ) =>
+module.exports = ( input ) =>
 {
 	input = input
 		.split( '\n' )
