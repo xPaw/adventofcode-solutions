@@ -1,5 +1,7 @@
 "use strict";
 
+process.chdir( __dirname );
+
 const fs = require( 'fs' );
 const day = parseInt( process.argv[ 2 ], 10 );
 
