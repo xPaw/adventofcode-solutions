@@ -15,7 +15,7 @@ if( isNaN( day ) )
 console.log( `Day ${day}` );
 
 let input = process.argv[ 3 ] || fs.readFileSync( `./data/day${day}.txt` ).toString();
-input = input.trim();
+input = input.replace( /\r/g, '' ).trim();
 
 const solution = require( `./js/day${day}.js` );
 
