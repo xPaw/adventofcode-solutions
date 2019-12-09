@@ -48,7 +48,7 @@ module.exports = ( input ) =>
 			part2.push( '\n' );
 		}
 
-		part2.push( pixels[ i ] === COLOR_BLACK ? '\u2B1B' : '\u2B1C' );
+		part2.push( pixels[ i ] === COLOR_BLACK ? '  ' : '00' );
 	}
 
 	return [ part1, part2.join( '' ) ];
