@@ -16,17 +16,18 @@ function stateMachine( input, ioInput )
 	let base = 0;
 	let i = 0;
 	let instruction;
+	let powers = [ 0, 100, 1000, 10000 ]; // Math.pow is slow
 
 	const getAddress = ( n ) =>
 	{
-		const mode = instruction[ 3 - n ];
+		const mode = ~~( instruction / powers[ n ] ) % 10;
 		let offset = i + n;
 
 		switch( mode )
 		{
-			case '0': offset = input[ offset ]; break;
-			//case '1': offset = offset; break;
-			case '2': offset = base + input[ offset ]; break;
+			case 0: offset = input[ offset ]; break;
+			//case 1: offset = offset; break;
+			case 2: offset = base + input[ offset ]; break;
 		}
 
 		return offset;
@@ -36,8 +37,8 @@ function stateMachine( input, ioInput )
 halt:
 	while( true )
 	{
-		instruction = input[ i ].toString().padStart( 5, '0' );
-		const opcode = +instruction[ 3 ] * 10 + +instruction[ 4 ];
+		instruction = input[ i ];
+		const opcode = instruction % 100;
 
 		switch( opcode )
 		{
