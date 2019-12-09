@@ -39,13 +39,11 @@ halt:
 		instruction = input[ i ].toString().padStart( 5, '0' );
 		const opcode = +instruction[ 3 ] * 10 + +instruction[ 4 ];
 
-		//console.log('y', i, 'op:' + opcode, getValue(1), getValue(2), getValue( 3, true ), instruction);
-
 		switch( opcode )
 		{
 			case 1: // add
 			{
-				input[ getAddress( 3) ] = getValue( 1 ) + getValue( 2 );
+				input[ getAddress( 3 ) ] = getValue( 1 ) + getValue( 2 );
 				i += 4;
 
 				break;
