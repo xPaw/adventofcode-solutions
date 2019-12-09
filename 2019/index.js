@@ -12,8 +12,6 @@ if( isNaN( day ) )
 	process.exit( 1 );
 }
 
-console.log( `Day ${day}` );
-
 let runs = 1;
 
 if( process.argv[ 3 ] === 'bench' )
@@ -36,9 +34,16 @@ for( let i = 0; i < runs; i++ )
 
 const endTime = process.hrtime.bigint();
 
-console.log( `Part 1: ${result[ 0 ]}` );
-console.log( `Part 2: ${result[ 1 ]}` );
+console.log( 'Part 1: \x1b[32m%s\x1b[0m', result[ 0 ] );
+console.log( 'Part 2: \x1b[32m%s\x1b[0m', result[ 1 ] );
 
 const time = Number( endTime - startTime ) / 1e6 / runs;
 
-console.log( `Time: ${time.toFixed(6)} seconds for ${runs} runs` );
+if( runs > 1 )
+{
+	console.log( `Time  : \x1b[34m${time.toFixed(6)}\x1b[0m ms average for \x1b[34m${runs}\x1b[0m runs` );
+}
+else
+{
+	console.log( `Time  : \x1b[34m${time.toFixed(6)}\x1b[0m ms` );
+}
