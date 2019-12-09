@@ -1,3 +1,5 @@
+const stateMachine = require( '../intcode.js' );
+
 module.exports = ( input ) =>
 {
 	input = input
@@ -6,7 +8,9 @@ module.exports = ( input ) =>
 
 	input[ 1 ] = 12;
 	input[ 2 ] = 2;
-	const part1 = stateMachine( [ ...input ] );
+	const state = [ ...input ];
+	stateMachine( state );
+	const part1 = state[ 0 ];
 	let part2 = 0;
 
 bruteforce:
@@ -18,7 +22,10 @@ bruteforce:
 		{
 			input[ 2 ] = x;
 
-			if( stateMachine( [ ...input ] ) === 19690720 )
+			const state = [ ...input ];
+			stateMachine( state );
+
+			if( state[ 0 ] === 19690720 )
 			{
 				part2 = 100 * y + x;
 				break bruteforce;
@@ -28,36 +35,3 @@ bruteforce:
 
 	return [ part1, part2 ];
 };
-
-function stateMachine( input )
-{
-halt:
-	for( let i = 0; i < input.length; i++ )
-	{
-		const opcode = input[ i ];
-
-		switch( opcode )
-		{
-			case 1:
-			{
-				const result = input[ input[ ++i ] ] + input[ input[ ++i ] ];
-				input[ input[ ++i ] ] = result;
-
-				break;
-			}
-			case 2:
-			{
-				const result = input[ input[ ++i ] ] * input[ input[ ++i ] ];
-				input[ input[ ++i ] ] = result;
-
-				break;
-			}
-			case 99:
-			{
-				break halt;
-			}
-		}
-	}
-
-	return input[ 0 ];
-}
