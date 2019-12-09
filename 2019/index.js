@@ -37,13 +37,13 @@ const endTime = process.hrtime.bigint();
 console.log( 'Part 1: \x1b[32m%s\x1b[0m', result[ 0 ] );
 console.log( 'Part 2: \x1b[32m%s\x1b[0m', result[ 1 ] );
 
-const time = Number( endTime - startTime ) / 1e6 / runs;
+const time = Number( endTime - startTime ) / 1e9 / runs;
 
 if( runs > 1 )
 {
-	console.log( `Time  : \x1b[34m${time.toFixed(6)}\x1b[0m ms average for \x1b[34m${runs}\x1b[0m runs` );
+	console.log( `Time  : \x1b[34m${time.toFixed(6)}\x1b[0m seconds average for \x1b[34m${runs}\x1b[0m runs` );
 }
 else
 {
-	console.log( `Time  : \x1b[34m${time.toFixed(6)}\x1b[0m ms` );
+	console.log( `Time  : \x1b[34m${time.toFixed(6)}\x1b[0m seconds` );
 }
