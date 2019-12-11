@@ -1,9 +1,27 @@
-module.exports = ( input, ioInput ) =>
+const State =
 {
+	RUNNING: 0,
+	WAITING: 1,
+	HALTED: 2,
+};
+
+
+let base = 0;
+let i = 0;
+
+module.exports.State = State;
+module.exports.currentState = State.HALTED;
+module.exports.reset = () =>
+{
+	base = 0;
+	i = 0;
+};
+module.exports.run = ( input, ioInput ) =>
+{
+	module.exports.currentState = State.RUNNING;
+
 	const powers = [ 0, 100, 1000, 10000 ]; // Math.pow is slow
 	let output = [];
-	let base = 0;
-	let i = 0;
 	let instruction;
 
 	const getAddress = ( n ) =>
@@ -46,6 +64,12 @@ halt:
 			}
 			case 3: // input
 			{
+				if( !ioInput.length )
+				{
+					module.exports.currentState = State.WAITING;
+					break halt;
+				}
+
 				input[ getAddress( 1 ) ] = ioInput.shift();
 				i += 2;
 
@@ -107,6 +131,7 @@ halt:
 			}
 			case 99:
 			{
+				module.exports.currentState = State.HALTED;
 				break halt;
 			}
 		}
