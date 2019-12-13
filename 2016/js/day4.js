@@ -7,7 +7,7 @@ window.AdventOfCode.Day4 = function( input )
 	
 	for( let line of input )
 	{
-		line = line.match( /(.+?)\-(\d+)\[([a-z]+)\]/ );
+		line = line.match( /(.+?)-(\d+)\[([a-z]+)\]/ );
 		
 		let name = line[ 1 ];
 		const sector = +line[ 2 ];

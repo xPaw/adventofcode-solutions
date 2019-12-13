@@ -1,3 +1,4 @@
+/* globals SparkMD5 */
 window.AdventOfCode.Day5 = function( input )
 {
 	let i = 2307654;
@@ -33,7 +34,7 @@ window.AdventOfCode.Day5 = function( input )
 			}
 		}
 	}
-	while( true );
+	while( true ); // eslint-disable-line no-constant-condition
 	
 	return [ part1password, part2password.join( '' ) ];
 };

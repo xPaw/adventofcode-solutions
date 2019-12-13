@@ -1,3 +1,4 @@
+/* globals bigInt */
 window.AdventOfCode.Day25 = function( input )
 {
 	input = input.match( /([0-9]+)/g );

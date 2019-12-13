@@ -1,13 +1,11 @@
 module.exports = class IntCode
 {
-	powers = [ 0, 100, 1000, 10000 ]; // Math.pow is slow
-	memory;
-	halted = false;
-	base = 0;
-	cursor = 0;
-
 	constructor( input )
 	{
+		this.base = 0;
+		this.cursor = 0;
+		this.halted = false;
+		this.powers = [ 0, 100, 1000, 10000 ]; // Math.pow is slow
 		this.memory = [ ...input ]; // make a copy
 	}
 
@@ -34,9 +32,9 @@ module.exports = class IntCode
 	execute( ioInput )
 	{
 		let output = [];
+		let running = true;
 
-	halt:
-		while( true )
+		while( running )
 		{
 			const opcode = this.memory[ this.cursor ] % 100;
 
@@ -60,7 +58,8 @@ module.exports = class IntCode
 				{
 					if( !ioInput.length )
 					{
-						break halt;
+						running = false;
+						break;
 					}
 
 					this.memory[ this.getAddress( 1 ) ] = ioInput.shift();
@@ -125,7 +124,8 @@ module.exports = class IntCode
 				case 99:
 				{
 					this.halted = true;
-					break halt;
+					running = false;
+					break;
 				}
 			}
 		}

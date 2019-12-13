@@ -37,7 +37,7 @@ window.AdventOfCode.Day8 = function( input )
 		) )
 		{
 			const variable = line[ Token.Variable ];
-			value = ( registers[ variable ] || 0 );
+			let value = registers[ variable ] || 0;
 			
 			if( line[ Token.Modifier ] === 'inc' )
 			{
