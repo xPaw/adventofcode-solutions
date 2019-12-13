@@ -20,7 +20,7 @@ window.AdventOfCode.Day1 = ( input ) =>
 
 		seen.set( seenValue, true );
 	}
-	while( true );
+	while( true ); // eslint-disable-line no-constant-condition
 
 	const sum = input.reduce( ( p, c ) => p + c, 0 );
 	

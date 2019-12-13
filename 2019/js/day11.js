@@ -11,7 +11,7 @@ module.exports = ( input ) =>
 
 	for( const key in grid )
 	{
-		for( const key2 in grid[ key ] )
+		for( const key2 in grid[ key ] ) // eslint-disable-line no-unused-vars
 		{
 			part1++;
 		}

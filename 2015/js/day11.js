@@ -5,7 +5,7 @@ window.AdventOfCode.Day11 = function( input )
 	var illegal = /[iol]/;
 	var answers = [];
 	
-	while( true )
+	while( true ) // eslint-disable-line no-constant-condition
 	{
 		input = ( ( parseInt( input, 36 ) + 1 ).toString( 36 ) ).replace( /0/g, 'a' );
 		

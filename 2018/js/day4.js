@@ -12,7 +12,7 @@ window.AdventOfCode.Day4 = ( input ) =>
 	{
 		let result;
 
-		if( result = /Guard #([0-9]+)/.exec( line ) )
+		if( ( result = /Guard #([0-9]+)/.exec( line ) ) )
 		{
 			currentGuard = +result[ 1 ];
 
@@ -21,11 +21,11 @@ window.AdventOfCode.Day4 = ( input ) =>
 				guards[ currentGuard ] = [];
 			}
 		}
-		else if( result = /:([0-9]+)] falls asleep/.exec( line ) )
+		else if( ( result = /:([0-9]+)] falls asleep/.exec( line ) ) )
 		{
 			asleep = +result[ 1 ];
 		}
-		else if( result = /:([0-9]+)] wakes up/.exec( line ) )
+		else if( ( result = /:([0-9]+)] wakes up/.exec( line ) ) )
 		{
 			const awake = +result[ 1 ];
 

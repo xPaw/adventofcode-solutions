@@ -1,5 +1,4 @@
 const COLOR_BLACK = 0;
-const COLOR_WHITE = 1;
 const COLOR_TRANSPARENT = 2;
 
 module.exports = ( input ) =>

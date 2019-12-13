@@ -28,7 +28,6 @@ window.AdventOfCode.Day7 = ( input ) =>
 
 	let part1 = '';
 	graph = new Map( [ ...graph.entries() ].sort() );
-	const graph2 = new Map( graph );
 
 	while( graph.size > 0 )
 	{

@@ -151,8 +151,6 @@ window.AdventOfCode.Day21 = function( input )
 		
 		Simulate()
 		{
-			var i = 0;
-			
 			for( let weapon of this.Shop.Weapons )
 			{
 				this.Player.Weapon = weapon;

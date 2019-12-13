@@ -36,7 +36,6 @@ window.AdventOfCode.Day7 = function( input )
 	let supportsTLS = 0;
 	let supportsSSL = 0;
 	
-	addressLoop:
 	for( let address of input )
 	{
 		address += "]"; // To process the ending part
