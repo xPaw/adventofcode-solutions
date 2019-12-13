@@ -1,4 +1,4 @@
-const stateMachine = require( '../intcode.js' );
+const IntCode = require( '../intcode.js' );
 
 module.exports = ( input ) =>
 {
@@ -7,7 +7,7 @@ module.exports = ( input ) =>
 		.map( x => +x );
 
 	let part1 = 0;
-	let grid = robot( [ ...input ] );
+	let grid = robot( input );
 
 	for( const key in grid )
 	{
@@ -18,7 +18,7 @@ module.exports = ( input ) =>
 	}
 
 	let part2 = [];
-	grid = robot( [ ...input ], 1 );
+	grid = robot( input, 1 );
 
 	for( const key in grid )
 	{
@@ -48,7 +48,7 @@ function robot( input, defaultColor = 0 )
 		{ x: -1, y: 0 },
 	];
 
-	stateMachine.reset();
+	const stateMachine = new IntCode( input );
 
 	do
 	{
@@ -57,7 +57,7 @@ function robot( input, defaultColor = 0 )
 			grid[ y ] = [];
 		}
 
-		const [ color, turn ] = stateMachine.run( input, [ grid[ y ][ x ] || defaultColor ] );
+		const [ color, turn ] = stateMachine.execute( [ grid[ y ][ x ] || defaultColor ] );
 
 		grid[ y ][ x ] = color;
 
@@ -68,7 +68,7 @@ function robot( input, defaultColor = 0 )
 		x += direction.x;
 		y += direction.y;
 	}
-	while( stateMachine.currentState !== stateMachine.State.HALTED );
+	while( !stateMachine.halted );
 
 	return grid;
 }

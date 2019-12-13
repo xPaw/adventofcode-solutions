@@ -1,4 +1,4 @@
-const stateMachine = require( '../intcode.js' );
+const IntCode = require( '../intcode.js' );
 
 module.exports = ( input ) =>
 {
@@ -8,9 +8,9 @@ module.exports = ( input ) =>
 
 	input[ 1 ] = 12;
 	input[ 2 ] = 2;
-	const state = [ ...input ];
-	stateMachine( state );
-	const part1 = state[ 0 ];
+	const stateMachine = new IntCode( input );
+	stateMachine.execute();
+	const part1 = stateMachine.memory[ 0 ];
 	let part2 = 0;
 
 bruteforce:
@@ -22,10 +22,10 @@ bruteforce:
 		{
 			input[ 2 ] = x;
 
-			const state = [ ...input ];
-			stateMachine( state );
+			const stateMachine = new IntCode( input );
+			stateMachine.execute();
 
-			if( state[ 0 ] === 19690720 )
+			if( stateMachine.memory[ 0 ] === 19690720 )
 			{
 				part2 = 100 * y + x;
 				break bruteforce;

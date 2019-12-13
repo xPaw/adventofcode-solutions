@@ -1,4 +1,4 @@
-const stateMachine = require( '../intcode.js' );
+const IntCode = require( '../intcode.js' );
 
 module.exports = ( input ) =>
 {
@@ -17,7 +17,7 @@ module.exports = ( input ) =>
 		for( let i = 0; i < 5; i++ )
 		{
 			const ioInput = [ phase[ i ], signal ];
-			signal = stateMachine( [ ...input ], ioInput ).pop();
+			signal = new IntCode( input ).execute( ioInput ).pop();
 		}
 
 		if( part1 < signal )
