@@ -11,57 +11,47 @@ module.exports = ( input ) =>
 
 	let part1 = 0;
 	let part2 = 0;
-	let output = stateMachine.run( input, [ 0 ] );
-	const ball = { x: 0, y: 0 };
-	const paddle = { x: 0, y: 0 };
-
-	for( let i = 0; i < output.length; i+= 3 )
-	{
-		const x = output[ i ];
-		const y = output[ i + 1 ];
-		const tile = output[ i + 2 ];
-
-		if( tile === 2 )
-		{
-			part1++;
-		}
-		else if( tile === 3 )
-		{
-			paddle.x = x;
-			paddle.y = y;
-		}
-		else if( tile === 4 )
-		{
-			ball.x = x;
-			ball.y = y;
-		}
-	}
-
+	let ballX = 0;
+	let paddleX = 0;
 	let nextInput = 0;
 
 	do
 	{
-		output = stateMachine.run( input, [ nextInput ] );
+		const output = stateMachine.run( input, [ nextInput ] );
 
-		for( let i = 0; i < output.length; i+= 3 )
+		for( let i = 0; i < output.length; i += 3 )
 		{
 			const x = output[ i ];
 			const y = output[ i + 1 ];
-			part2 = output[ i + 2 ];
+			const tile = output[ i + 2 ];
 
-			ball.x = x;
-			ball.y = y;
+			if( x === -1 && y === 0 )
+			{
+				part2 = tile;
+			}
+			else if( tile === 2 )
+			{
+				part1++;
+			}
+			else if( tile === 3 )
+			{
+				paddleX = x;
+			}
+			else if( tile === 4 )
+			{
+				ballX = x;
+			}
 		}
 
-		if( paddle.x < ball.x )
+		if( paddleX < ballX )
 		{
 			nextInput = 1;
-			paddle.x++;
+			paddleX++;
 		}
-		else if( paddle.x > ball.x )
+		else if( paddleX > ballX )
 		{
 			nextInput = -1;
-			paddle.x--;
+			paddleX--;
 		}
 		else
 		{
