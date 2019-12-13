@@ -1,4 +1,4 @@
-const stateMachine = require( '../intcode.js' );
+const IntCode = require( '../intcode.js' );
 
 module.exports = ( input ) =>
 {
@@ -6,8 +6,8 @@ module.exports = ( input ) =>
 		.split( ',' )
 		.map( x => +x );
 
-	let part1 = stateMachine( [ ...input ], [ 1 ] ).pop();
-	let part2 = stateMachine( [ ...input ], [ 2 ] ).pop();
+	const part1 = new IntCode( input ).execute( [ 1 ] ).pop();
+	const part2 = new IntCode( input ).execute( [ 2 ] ).pop();
 
 	return [ part1, part2 ];
 };

@@ -1,4 +1,4 @@
-const stateMachine = require( '../intcode.js' );
+const IntCode = require( '../intcode.js' );
 
 module.exports = ( input ) =>
 {
@@ -6,8 +6,8 @@ module.exports = ( input ) =>
 		.split( ',' )
 		.map( x => +x );
 
-	stateMachine.reset();
 	input[ 0 ] = 2;
+	const stateMachine = new IntCode( input );
 
 	let part1 = 0;
 	let part2 = 0;
@@ -17,7 +17,7 @@ module.exports = ( input ) =>
 
 	do
 	{
-		const output = stateMachine.run( input, [ nextInput ] );
+		const output = stateMachine.execute( [ nextInput ] );
 
 		for( let i = 0; i < output.length; i += 3 )
 		{
@@ -58,7 +58,7 @@ module.exports = ( input ) =>
 			nextInput = 0;
 		}
 	}
-	while( stateMachine.currentState !== stateMachine.State.HALTED );
+	while( !stateMachine.halted );
 
 	return [ part1, part2 ];
 };
