@@ -1,8 +1,14 @@
 {
 	"scripts": {
-		"test": "eslint ."
+		"test": "eslint . && ava"
 	},
 	"devDependencies": {
+		"ava": "^3.13.0",
 		"eslint": "^7.11.0"
+	},
+	"ava": {
+		"files": [
+			"2019/test.js"
+		]
 	}
 }
