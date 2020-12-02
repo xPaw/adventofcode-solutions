@@ -6,6 +6,7 @@ process.chdir( __dirname );
 test( '2020', t =>
 {
 	assert( t, 1, 63616, 67877784 );
+	assert( t, 2, 439, 584 );
 } );
 
 function assert( t, day, answer1, answer2 )
