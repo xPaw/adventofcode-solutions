@@ -41,8 +41,7 @@ module.exports = ( input ) =>
 	{
 		if( typeof contains === 'number' )
 		{
-			const bags = countBags( [ color, input.get( color ) ] );
-			return bags > 0 ? contains + bags * contains : contains;
+			return contains + countBags( [ color, input.get( color ) ] ) * contains;
 		}
 
 		return [ ...contains ].reduce( ( a, b ) => a + countBags( b ), 0 );
