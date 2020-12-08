@@ -47,7 +47,7 @@ module.exports = ( input ) =>
 	let part2 = 0;
 
 outer:
-	for( let i = input.length - 1; i > 0; i-- )
+	for( let i = input.length - 1; i >= 0; i-- )
 	{
 		input.forEach( x => x.seen = false );
 
