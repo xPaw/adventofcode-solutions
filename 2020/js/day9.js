@@ -18,15 +18,14 @@ module.exports = ( input ) =>
 			}
 		}
 
-		if( sums[ input[ i ] ] )
+		if( !sums[ input[ i ] ] )
 		{
-			continue;
+			part1 = input[ i ];
+			break;
 		}
-
-		part1 = input[ i ];
-		break;
 	}
 
+outer:
 	for( let i = 0; i < input.length - 1; i++ )
 	{
 		let currentSum = 0;
@@ -35,10 +34,17 @@ module.exports = ( input ) =>
 		{
 			currentSum += input[ j ];
 
+			if( currentSum > part1 )
+			{
+				break;
+			}
+
 			if( currentSum === part1 && j - i > 1 )
 			{
 				const slice = input.slice( i, j + 1 );
 				part2 = Math.min( ...slice ) + Math.max( ...slice );
+
+				break outer;
 			}
 		}
 	}
