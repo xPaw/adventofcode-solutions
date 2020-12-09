@@ -4,50 +4,46 @@ module.exports = ( input ) =>
 
 	const PREAMBLE_SIZE = 25;
 	let part1 = 0;
-	let part2 = 0;
 
+outer:
 	for( let i = PREAMBLE_SIZE; i < input.length; i++ )
 	{
-		const sums = [];
-
 		for( let j = i - PREAMBLE_SIZE; j < i; j++ )
 		{
 			for( let y = i - PREAMBLE_SIZE; y < i; y++ )
 			{
-				sums[ input[ j ] + input[ y ] ] = true;
+				if( input[ j ] + input[ y ] === input[ i ] )
+				{
+					continue outer;
+				}
 			}
 		}
 
-		if( !sums[ input[ i ] ] )
-		{
-			part1 = input[ i ];
-			break;
-		}
+		part1 = input[ i ];
+		break;
 	}
 
-outer:
-	for( let i = 0; i < input.length - 1; i++ )
+	let sum = 0;
+	let lower = 0;
+	let upper = 0;
+
+	while( sum !== part1 || upper === lower )
 	{
-		let currentSum = 0;
-
-		for( let j = i; j < input.length; j++ )
+		if( sum < part1 )
 		{
-			currentSum += input[ j ];
+			upper++;
+			sum += input[ upper ];
+		}
 
-			if( currentSum > part1 )
-			{
-				break;
-			}
-
-			if( currentSum === part1 && j - i > 1 )
-			{
-				const slice = input.slice( i, j + 1 );
-				part2 = Math.min( ...slice ) + Math.max( ...slice );
-
-				break outer;
-			}
+		if( sum > part1 )
+		{
+			lower++;
+			sum -= input[ lower ];
 		}
 	}
+
+	const slice = input.slice( lower + 1, upper + 1 );
+	const part2 = Math.min( ...slice ) + Math.max( ...slice );
 
 	return [ part1, part2 ];
 };
