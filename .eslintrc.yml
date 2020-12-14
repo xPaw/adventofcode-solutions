@@ -7,3 +7,6 @@ env:
 extends: eslint:recommended
 parserOptions:
   ecmaVersion: 2020
+
+globals:
+  BigInt: true
