@@ -1,6 +1,6 @@
 module.exports = ( input ) =>
 {
-	const loc = ( x, y, z, w ) => `${x},${y},${z},${w}`;
+	const loc = ( x, y, z, w ) => x + y * 100 + z * 10000 + w * 1000000;
 	const originalSpace = new Set();
 
 	input = input.split( '\n' ).map( x => x.split( '' ).map( x => x === '#' ) );
