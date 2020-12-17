@@ -2,11 +2,12 @@ module.exports = ( input ) =>
 {
 	input = input
 		.split( '\n' )
-		.map( x => {
+		.map( x =>
+		{
 			return {
 				action: x[ 0 ],
 				value: parseInt( x.substring( 1 ), 10 )
-			}
+			};
 		} );
 
 	// Part 1
@@ -31,10 +32,19 @@ module.exports = ( input ) =>
 		E: value => x += value,
 		S: value => y -= value,
 		W: value => x -= value,
-		L: value => { for( let angle = value; angle > 0; angle -= 90 ) [ wx, wy ] = [ -wy, wx ] },
-		R: value => { for( let angle = value; angle > 0; angle -= 90 ) [ wx, wy ] = [ wy, -wx ] },
-		F: value => { x += wx * value; y += wy * value; },
-	}
+		L: value =>
+		{
+			for( let angle = value; angle > 0; angle -= 90 ) [ wx, wy ] = [ -wy, wx ];
+		},
+		R: value =>
+		{
+			for( let angle = value; angle > 0; angle -= 90 ) [ wx, wy ] = [ wy, -wx ];
+		},
+		F: value =>
+		{
+			x += wx * value; y += wy * value;
+		},
+	};
 
 	const part1 = solve();
 

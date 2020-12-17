@@ -1,14 +1,14 @@
 window.AdventOfCode.Day10 = function( input )
 {
-	var nextInput = '';
-	var fortyLength = 0;
-	
-	for( var x = 0; x < 50; x++ )
+	let nextInput = '';
+	let fortyLength = 0;
+
+	for( let x = 0; x < 50; x++ )
 	{
-		var currentDigit = input[ 0 ];
-		var currentCount = 0;
-		
-		for( var i = 0; i < input.length; i++ )
+		let currentDigit = input[ 0 ];
+		let currentCount = 0;
+
+		for( let i = 0; i < input.length; i++ )
 		{
 			if( currentDigit != input[ i ] )
 			{
@@ -21,16 +21,16 @@ window.AdventOfCode.Day10 = function( input )
 				currentCount++;
 			}
 		}
-		
+
 		nextInput += currentCount + '' + currentDigit;
 		input = nextInput;
 		nextInput = '';
-		
+
 		if( x === 39 )
 		{
 			fortyLength = input.length;
 		}
 	}
-	
+
 	return [ fortyLength, input.length ];
 };

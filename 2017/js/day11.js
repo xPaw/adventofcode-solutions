@@ -4,7 +4,7 @@ window.AdventOfCode.Day11 = function( input )
 	let x = 0;
 	let y = 0;
 	let z = 0;
-	
+
 	input.split( ',' ).forEach( ( direction ) =>
 	{
 		switch( direction )
@@ -16,12 +16,12 @@ window.AdventOfCode.Day11 = function( input )
 			case 'ne': x++; z--; break;
 			case 'nw': x--; y++; break;
 		}
-		
+
 		distances.push( ( Math.abs( x ) + Math.abs( y ) + Math.abs( z ) ) / 2 );
 	} );
-	
+
 	const part1 = distances[ distances.length - 1 ];
 	const part2 = Math.max( ...distances );
-	
+
 	return [ part1, part2 ];
 };

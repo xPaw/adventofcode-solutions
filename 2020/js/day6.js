@@ -7,7 +7,8 @@ module.exports = ( input ) =>
 		.reduce( ( a, b ) => a + b, 0 );
 
 	const part2 = input
-		.map( group => {
+		.map( group =>
+		{
 			const people = group.split( '\n' ).map( l => l.split( '' ) );
 			const sum = new Map();
 

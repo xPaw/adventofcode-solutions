@@ -4,11 +4,11 @@ window.AdventOfCode.Day9 = function( input )
 	let totalScore = 0;
 	let totalGarbage = 0;
 	let groups = 0;
-	
+
 	for( let i = 0; i < input.length; i++ )
 	{
 		const character = input[ i ];
-		
+
 		// any character that comes after ! should be ignored
 		if( character === '!' )
 		{
@@ -43,6 +43,6 @@ window.AdventOfCode.Day9 = function( input )
 			--groups;
 		}
 	}
-	
+
 	return [ totalScore, totalGarbage ];
 };

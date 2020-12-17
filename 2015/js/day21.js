@@ -1,7 +1,7 @@
 window.AdventOfCode.Day21 = function( input )
 {
 	'use strict';
-	
+
 	class Entity
 	{
 		constructor( health, damage, armor )
@@ -10,73 +10,73 @@ window.AdventOfCode.Day21 = function( input )
 			this.DamagePoints = damage;
 			this.ArmorPoints = armor;
 		}
-		
+
 		TakeDamage( entity )
 		{
 			return this.Health / Math.max( 1, entity.DamagePoints - this.ArmorPoints );
 		}
 	}
-	
+
 	class Player extends Entity
 	{
 		constructor()
 		{
 			super( 100, 0, 0 );
-			
+
 			this.Weapon = null;
 			this.Armor = null;
 			this.RingLeft = null;
 			this.RingRight = null;
 		}
-		
+
 		get GoldSpent()
 		{
-			var gold = 0;
-			
+			let gold = 0;
+
 			if( this.Weapon )
 			{
 				gold += this.Weapon.Cost;
 			}
-			
+
 			if( this.Armor )
 			{
 				gold += this.Armor.Cost;
 			}
-			
+
 			if( this.RingLeft )
 			{
 				gold += this.RingLeft.Cost;
 			}
-			
+
 			if( this.RingRight )
 			{
 				gold += this.RingRight.Cost;
 			}
-			
+
 			return gold;
 		}
-		
+
 		RecalculateStats()
 		{
 			this.DamagePoints = 0;
 			this.ArmorPoints = 0;
-			
+
 			if( this.Weapon )
 			{
 				this.DamagePoints += this.Weapon.Damage;
 			}
-			
+
 			if( this.Armor )
 			{
 				this.ArmorPoints += this.Armor.Armor;
 			}
-			
+
 			if( this.RingLeft )
 			{
 				this.DamagePoints += this.RingLeft.Damage;
 				this.ArmorPoints += this.RingLeft.Armor;
 			}
-			
+
 			if( this.RingRight )
 			{
 				this.DamagePoints += this.RingRight.Damage;
@@ -84,12 +84,12 @@ window.AdventOfCode.Day21 = function( input )
 			}
 		}
 	}
-	
+
 	class Boss extends Entity
 	{
-		
+
 	}
-	
+
 	class Item
 	{
 		constructor( name, cost, damage, armor )
@@ -100,7 +100,7 @@ window.AdventOfCode.Day21 = function( input )
 			this.Armor = armor;
 		}
 	}
-	
+
 	class Shop
 	{
 		constructor()
@@ -113,7 +113,7 @@ window.AdventOfCode.Day21 = function( input )
 				new Item( 'Longsword' , 40, 7, 0 ),
 				new Item( 'Greataxe'  , 74, 8, 0 ),
 			];
-			
+
 			this.Armor =
 			[
 				null, // Armor is optional, stored in shop for easier iteration
@@ -123,7 +123,7 @@ window.AdventOfCode.Day21 = function( input )
 				new Item( 'Bandedmail',  75, 0, 4 ),
 				new Item( 'Platemail' , 102, 0, 5 ),
 			];
-			
+
 			this.Rings =
 			[
 				null, // Rings are optional, stored in shop for easier iteration
@@ -136,7 +136,7 @@ window.AdventOfCode.Day21 = function( input )
 			];
 		}
 	}
-	
+
 	class Game
 	{
 		constructor( input )
@@ -144,49 +144,49 @@ window.AdventOfCode.Day21 = function( input )
 			this.Shop = new Shop();
 			this.Player = new Player();
 			this.Boss = new Boss( +input[ 0 ], +input[ 1 ], +input[ 2 ] );
-			
+
 			this.CheapestWin = Number.MAX_VALUE;
 			this.CostlyLoss = 0;
 		}
-		
+
 		Simulate()
 		{
-			for( let weapon of this.Shop.Weapons )
+			for( const weapon of this.Shop.Weapons )
 			{
 				this.Player.Weapon = weapon;
-				
-				for( let armor of this.Shop.Armor )
+
+				for( const armor of this.Shop.Armor )
 				{
 					this.Player.Armor = armor;
-					
-					for( let ringLeft of this.Shop.Rings )
+
+					for( const ringLeft of this.Shop.Rings )
 					{
 						this.Player.RingLeft = ringLeft;
-						
-						for( let ringRight of this.Shop.Rings )
+
+						for( const ringRight of this.Shop.Rings )
 						{
 							// Can't buy two rings of same type
 							if( ringLeft === ringRight )
 							{
 								continue;
 							}
-							
+
 							this.Player.RingRight = ringRight;
-							
+
 							this.Battle();
 						}
 					}
 				}
 			}
 		}
-		
+
 		Battle()
 		{
 			this.Player.RecalculateStats();
-			
+
 			if( this.Player.TakeDamage( this.Boss ) >= this.Boss.TakeDamage( this.Player ) )
 			{
-				if( this.CheapestWin > this.Player.GoldSpent )
+				if( this.CheapestWin >this.Player.GoldSpent )
 				{
 					this.CheapestWin = this.Player.GoldSpent;
 				}
@@ -197,10 +197,10 @@ window.AdventOfCode.Day21 = function( input )
 			}
 		}
 	}
-	
-	var game = new Game( input.match( /([0-9]+)/g ) );
-	
+
+	const game = new Game( input.match( /([0-9]+)/g ) );
+
 	game.Simulate();
-	
+
 	return [ game.CheapestWin, game.CostlyLoss ];
 };

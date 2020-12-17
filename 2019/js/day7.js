@@ -7,7 +7,7 @@ module.exports = ( input ) =>
 		.map( x => +x );
 
 	let part1 = 0;
-	let part2 = 0;
+	const part2 = 0;
 	const phases = permutator( [ 0, 1, 2, 3, 4 ] );
 
 	for( const phase of phases )
@@ -29,28 +29,28 @@ module.exports = ( input ) =>
 	return [ part1, part2 ];
 };
 
-function permutator(inputArr)
+function permutator( inputArr )
 {
-	let result = [];
+	const result = [];
 
-	const permute = (arr, m = []) =>
+	const permute = ( arr, m = [] ) =>
 	{
-		if (arr.length === 0)
+		if( arr.length === 0 )
 		{
-			result.push(m)
+			result.push( m );
 		}
 		else
 		{
-			for (let i = 0; i < arr.length; i++)
+			for( let i = 0; i < arr.length; i++ )
 			{
-				let curr = arr.slice();
-				let next = curr.splice(i, 1);
-				permute(curr.slice(), m.concat(next))
+				const curr = arr.slice();
+				const next = curr.splice( i, 1 );
+				permute( curr.slice(), m.concat( next ) );
 			}
 		}
-	}
+	};
 
-	permute(inputArr)
+	permute( inputArr );
 
 	return result;
 }

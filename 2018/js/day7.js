@@ -43,7 +43,7 @@ window.AdventOfCode.Day7 = ( input ) =>
 					break;
 				}
 			}
-			
+
 			if( !depends )
 			{
 				part1 += set[ 0 ];

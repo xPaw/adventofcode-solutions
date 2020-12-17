@@ -11,12 +11,12 @@
 
 window.AdventOfCode.Day4 = function( input )
 {
-	var GetLowestHash = function( leadingZeroes )
+	const GetLowestHash = function( leadingZeroes )
 	{
-		var i = 0;
-		var hash = '';
-		var expectedZeroes = '0'.repeat( leadingZeroes ); // ES6
-		
+		let i = 0;
+		let hash = '';
+		const expectedZeroes = '0'.repeat( leadingZeroes ); // ES6
+
 		do
 		{
 			// The input to the MD5 hash is some secret key followed by a number in decimal.
@@ -26,9 +26,9 @@ window.AdventOfCode.Day4 = function( input )
 		}
 		// https://jsperf.com/substring-vs-index
 		while( hash.substring( 0, leadingZeroes ) !== expectedZeroes );
-		
+
 		return i;
 	};
-	
+
 	return [ GetLowestHash( 5 ), GetLowestHash( 6 ) ];
 };

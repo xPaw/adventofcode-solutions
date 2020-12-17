@@ -5,14 +5,14 @@ window.AdventOfCode.Day7 = function( input )
 	{
 		return a.split( ' ' );
 	} );
-	
+
 	// Pre-sort the input to avoid multiple iterations
 	input.sort( function( a, b )
 	{
 		// Get the output wire
 		a = a[ a.length - 1 ];
 		b = b[ b.length - 1 ];
-		
+
 		// Wire 'a' must end at the end of instructions
 		if( a === 'a' )
 		{
@@ -22,28 +22,28 @@ window.AdventOfCode.Day7 = function( input )
 		{
 			return -1;
 		}
-		
+
 		if( a.length === b.length )
 		{
 			return a > b ? 1 : -1;
 		}
-		
+
 		return a.length - b.length;
 	} );
-	
-	var Solve = function( wires )
+
+	const Solve = function( wires )
 	{
-		var GetValue = function( value )
+		const GetValue = function( value )
 		{
 			if( value in wires )
 			{
 				return wires[ value ];
 			}
-			
+
 			return +value;
 		};
-		
-		var SetWire = function( wire, value )
+
+		const SetWire = function( wire, value )
 		{
 			// Can't assign same wire twice,
 			// this becomes a problem when overriding b
@@ -51,28 +51,28 @@ window.AdventOfCode.Day7 = function( input )
 			{
 				return;
 			}
-			
+
 			wires[ wire ] = value & 0xFFFF;
 		};
-		
-		for( var i = 0; i < input.length; i++ )
+
+		for( let i = 0; i < input.length; i++ )
 		{
-			var operation = input[ i ];
-			
+			const operation = input[ i ];
+
 			switch( operation.length )
 			{
 				// 123 -> x means that the signal 123 is provided to wire x.
 				case 3: // ["123", "->", "x"]
 					SetWire( operation[ 2 ], GetValue( operation[ 0 ] ) );
-					
+
 					break;
-				
+
 				// NOT e -> f means that the bitwise complement of the value from wire e is provided to wire f.
 				case 4: // ["NOT", "x", "->", "h"]
 					SetWire( operation[ 3 ], ~GetValue( operation[ 1 ] ) );
-					
+
 					break;
-				
+
 				// x AND y -> z means that the bitwise AND of wire x and wire y is provided to wire z.
 				case 5: // ["x", "AND", "y", "->", "d"]
 					switch( operation[ 1 ] )
@@ -82,16 +82,16 @@ window.AdventOfCode.Day7 = function( input )
 						case 'LSHIFT': SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) << GetValue( operation[ 2 ] ) ); break;
 						case 'RSHIFT': SetWire( operation[ 4 ], GetValue( operation[ 0 ] ) >> GetValue( operation[ 2 ] ) ); break;
 					}
-					
+
 					break;
 			}
 		}
-		
+
 		return wires[ 'a' ] || 0;
 	};
-	
-	var solution1 = Solve( {} );
-	var solution2 = Solve( { b: solution1 } );
-	
+
+	const solution1 = Solve( {} );
+	const solution2 = Solve( { b: solution1 } );
+
 	return [ solution1, solution2 ];
 };

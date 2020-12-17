@@ -6,7 +6,7 @@ module.exports = ( input ) =>
 		.sort( ( a, b ) => a - b );
 
 	let current = 0;
-	let diffs =
+	const diffs =
 	[
 		0,
 		0,

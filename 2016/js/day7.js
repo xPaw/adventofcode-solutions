@@ -1,7 +1,7 @@
 window.AdventOfCode.Day7 = function( input )
 {
 	input = input.split( '\n' );
-	
+
 	function HasAbba( message )
 	{
 		for( let i = 0; i < message.length - 3; i++ )
@@ -13,14 +13,14 @@ window.AdventOfCode.Day7 = function( input )
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	function GetBabs( message )
 	{
-		let babs = [];
-		
+		const babs = [];
+
 		for( let i = 0; i < message.length - 2; i++ )
 		{
 			if( message[ i ] !== message[ i + 1 ]
@@ -29,25 +29,25 @@ window.AdventOfCode.Day7 = function( input )
 				babs.push( message[ i + 1 ] + message[ i ] + message[ i + 1 ] );
 			}
 		}
-		
+
 		return babs;
 	}
-	
+
 	let supportsTLS = 0;
 	let supportsSSL = 0;
-	
+
 	for( let address of input )
 	{
 		address += "]"; // To process the ending part
-		
+
 		let part = "";
 		let isValidTLS = true;
 		let hasAbba = false;
 		let insideBracket = false;
 		let babsToLookFor = [];
-		let hypernets = [];
-		
-		for( let char of address )
+		const hypernets = [];
+
+		for( const char of address )
 		{
 			if( char === '[' || char === ']' )
 			{
@@ -57,10 +57,10 @@ window.AdventOfCode.Day7 = function( input )
 					{
 						isValidTLS = false;
 					}
-					
+
 					hasAbba = true;
 				}
-				
+
 				if( insideBracket )
 				{
 					hypernets.push( part );
@@ -69,7 +69,7 @@ window.AdventOfCode.Day7 = function( input )
 				{
 					babsToLookFor = babsToLookFor.concat( GetBabs( part ) );
 				}
-				
+
 				part = "";
 				insideBracket = char === '[';
 			}
@@ -78,12 +78,12 @@ window.AdventOfCode.Day7 = function( input )
 				part += char;
 			}
 		}
-		
+
 		if( hasAbba && isValidTLS )
 		{
 			supportsTLS++;
 		}
-		
+
 		hypernetLoop:
 		for( const hypernet of hypernets )
 		{
@@ -97,6 +97,6 @@ window.AdventOfCode.Day7 = function( input )
 			}
 		}
 	}
-	
+
 	return [ supportsTLS, supportsSSL ];
 };

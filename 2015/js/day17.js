@@ -15,32 +15,32 @@ g(e,"index");f(e,{valueOf:d,init:function(){e.index=0},nth:function(a){if(!(a>=c
 window.AdventOfCode.Day17 = function( input )
 {
 	input = input.split( '\n' ).map( Number );
-	
-	var smallestAmountRequired = Number.MAX_VALUE;
-	var partOne = Combinatorics.power( input ).filter( function( list )
+
+	let smallestAmountRequired = Number.MAX_VALUE;
+	const partOne = Combinatorics.power( input ).filter( function( list )
 	{
-		var sum = list.reduce( function( a, b )
+		const sum = list.reduce( function( a, b )
 		{
 			return a + b;
 		}, 0 );
-		
+
 		if( sum === 150 )
 		{
 			if( smallestAmountRequired > list.length )
 			{
 				smallestAmountRequired = list.length;
 			}
-			
+
 			return true;
 		}
-		
+
 		return false;
 	} );
-	
-	var partTwo = partOne.filter( function( a )
+
+	const partTwo = partOne.filter( function( a )
 	{
 		return a.length === smallestAmountRequired;
 	} );
-	
+
 	return [ partOne.length, partTwo.length ];
 };

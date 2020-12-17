@@ -1,27 +1,27 @@
 window.AdventOfCode.Day8 = function( input )
 {
 	input = input.split( '\n' );
-	
-	var totalLength = 0;
-	var cleanLength = 0;
-	var encodedLength = 0;
-	
-	for( var i = 0; i < input.length; i++ )
+
+	let totalLength = 0;
+	let cleanLength = 0;
+	let encodedLength = 0;
+
+	for( let i = 0; i < input.length; i++ )
 	{
-		var str = input[ i ];
-		var escaping = false;
-		
+		const str = input[ i ];
+		let escaping = false;
+
 		totalLength += str.length;
 		encodedLength += str.length + 4;
-		
-		for( var x = 1; x < str.length - 1; x++ )
+
+		for( let x = 1; x < str.length - 1; x++ )
 		{
-			var char = str[ x ];
-			
+			const char = str[ x ];
+
 			if( escaping )
 			{
 				escaping = false;
-				
+
 				if( char === 'x' )
 				{
 					x += 2;
@@ -34,15 +34,15 @@ window.AdventOfCode.Day8 = function( input )
 			else if( char === '\\' )
 			{
 				encodedLength++;
-				
+
 				escaping = true;
-				
+
 				continue;
 			}
-			
+
 			cleanLength++;
 		}
 	}
-	
+
 	return [ totalLength - cleanLength, encodedLength - totalLength ];
 };

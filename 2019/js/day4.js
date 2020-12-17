@@ -5,7 +5,7 @@ module.exports = ( input ) =>
 	const end = +input[ 1 ];
 	let part1 = 0;
 	let part2 = 0;
-	
+
 	do
 	{
 		const pass = start.toString();
@@ -52,7 +52,7 @@ function checkPassword2( pass )
 			return 0;
 		}
 
-		hasDouble |= a === b && b !== pass[i + 1] && prev !== a;
+		hasDouble |= a === b && b !== pass[ i + 1 ] && prev !== a;
 		prev = a;
 	}
 

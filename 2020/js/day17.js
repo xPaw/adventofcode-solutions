@@ -17,7 +17,7 @@ module.exports = ( input ) =>
 	{
 		let count = 0;
 
-		for( let w = ( p2 ? baseW - 1 : 0 ); w <= ( p2 ? baseW + 1 : 0 ); w++)
+		for( let w = ( p2 ? baseW - 1 : 0 ); w <= ( p2 ? baseW + 1 : 0 ); w++ )
 		{
 			for( let z = baseZ - 1; z <= baseZ + 1; z++ )
 			{
@@ -25,7 +25,7 @@ module.exports = ( input ) =>
 				{
 					for( let x = baseX - 1; x <= baseX + 1; x++ )
 					{
-						if ( space.has( loc( x, y, z, w ) ) && ( baseX !== x || baseY !== y || baseZ !== z || baseW !== w ) )
+						if( space.has( loc( x, y, z, w ) ) && ( baseX !== x || baseY !== y || baseZ !== z || baseW !== w ) )
 						{
 							count++;
 						}
@@ -51,7 +51,7 @@ module.exports = ( input ) =>
 
 		for( let cycles = 0; cycles < 6; cycles++ )
 		{
-			let newSpace = new Set();
+			const newSpace = new Set();
 
 			x1--;
 			x2++;
@@ -74,7 +74,7 @@ module.exports = ( input ) =>
 					{
 						for( let x = x1; x < x2; x++ )
 						{
-							let occupied = countAdjacent( space, x, y, z, w, p2 );
+							const occupied = countAdjacent( space, x, y, z, w, p2 );
 
 							if( occupied === 3 || ( occupied === 2 && space.has( loc( x, y, z, w ) ) ) )
 							{
@@ -84,7 +84,7 @@ module.exports = ( input ) =>
 					}
 				}
 			}
-	
+
 			space = newSpace;
 		}
 

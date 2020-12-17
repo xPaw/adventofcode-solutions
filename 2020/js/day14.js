@@ -5,8 +5,8 @@ module.exports = ( input ) =>
 	let mask;
 	let mask1;
 	let mask2;
-	let memoryP1 = {};
-	let memoryP2 = {};
+	const memoryP1 = {};
+	const memoryP2 = {};
 
 	for( const line of input )
 	{

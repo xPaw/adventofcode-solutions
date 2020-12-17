@@ -18,7 +18,7 @@ window.AdventOfCode.Day24 = function( input )
 	{
 		return +a;
 	} );
-	
+
 	Array.prototype.sum = function( )
 	{
 		return this.reduce( function( a, b )
@@ -26,37 +26,37 @@ window.AdventOfCode.Day24 = function( input )
 			return a + b;
 		}, 0 );
 	};
-	
-	var Solve = function( parts )
+
+	const Solve = function( parts )
 	{
-		var sumToMatch = input.sum() / parts;
-		
-		var Calculate = function( list, group )
+		const sumToMatch = input.sum() / parts;
+
+		const Calculate = function( list, group )
 		{
-			for( var i = 1; i <= list.length; i++ )
+			for( let i = 1; i <= list.length; i++ )
 			{
-				var newList = Combinatorics.combination( list, i ).filter( function( a )
+				const newList = Combinatorics.combination( list, i ).filter( function( a )
 				{
 					return sumToMatch === a.sum();
 				} );
-				
-				for( var y = newList.length - 1; y > 0; y-- )
+
+				for( let y = newList.length - 1; y > 0; y-- )
 				{
 					if( group === 2 )
 					{
 						return true;
 					}
-					
-					var sum = Calculate( list.filter( function( a )
+
+					const sum = Calculate( list.filter( function( a )
 					{
 						return newList[ y ].indexOf( a ) === -1;
 					} ), group - 1 );
-					
+
 					if( group < parts )
 					{
 						return sum;
 					}
-					
+
 					if( sum )
 					{
 						return newList[ y ].reduce( function( a, b )
@@ -67,9 +67,9 @@ window.AdventOfCode.Day24 = function( input )
 				}
 			}
 		};
-		
+
 		return Calculate( input, parts );
 	};
-	
+
 	return [ Solve( 3 ), Solve( 4 ) ];
 };

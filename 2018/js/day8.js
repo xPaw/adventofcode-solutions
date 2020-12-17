@@ -9,7 +9,7 @@ window.AdventOfCode.Day8 = ( input ) =>
 	{
 		const childrenSize = input[ index++ ];
 		const metadataSize = input[ index++ ];
-		let values = [];
+		const values = [];
 		let value = 0;
 
 		for( let i = childrenSize; i > 0; i-- )

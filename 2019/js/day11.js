@@ -17,7 +17,7 @@ module.exports = ( input ) =>
 		}
 	}
 
-	let part2 = [];
+	const part2 = [];
 	grid = robot( input, 1 );
 
 	for( const key in grid )
