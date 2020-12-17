@@ -12,7 +12,8 @@ module.exports = ( input ) =>
 			.map( x => parseInt( x, 10 ) )
 		);
 	const fields = input[ 0 ]
-		.map( l => {
+		.map( l =>
+		{
 			const m = l.match( /(?<name>[a-z ]+): (?<min1>\d+)-(?<max1>\d+) or (?<min2>\d+)-(?<max2>\d+)/ ).groups;
 			m.min1 = parseInt( m.min1, 10 );
 			m.min2 = parseInt( m.min2, 10 );

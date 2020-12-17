@@ -1,92 +1,92 @@
 window.AdventOfCode.Day13 = function( input )
 {
-	var permutator = function(inputArr)
+	const permutator = function( inputArr )
 	{
-		var results = [];
+		const results = [];
 
-		function permute(arr, memo)
+		function permute( arr, memo )
 		{
-			var cur; memo = memo || [];
+			let cur; memo = memo || [];
 
-			for (var i = 0; i < arr.length; i++)
+			for( let i = 0; i < arr.length; i++ )
 			{
-				cur = arr.splice(i, 1);
-				if (arr.length === 0)
+				cur = arr.splice( i, 1 );
+				if( arr.length === 0 )
 				{
-					results.push(memo.concat(cur));
+					results.push( memo.concat( cur ) );
 				}
-				permute(arr.slice(), memo.concat(cur));
-				arr.splice(i, 0, cur[0]);
+				permute( arr.slice(), memo.concat( cur ) );
+				arr.splice( i, 0, cur[ 0 ] );
 			}
 
 			return results;
 		}
 
-		return permute(inputArr);
+		return permute( inputArr );
 	};
-	
+
 	// Silly javascript quirks
-	var mod = function( n, m )
+	const mod = function( n, m )
 	{
 		return ( ( n % m ) + m ) % m;
 	};
-	
+
 	input = input.replace( /\./g, '' ).split( '\n' );
-	var travelPaths = {};
-	var cities = {};
-	
-	for( var i = 0; i < input.length; i++ )
+	const travelPaths = {};
+	let cities = {};
+
+	for( let i = 0; i < input.length; i++ )
 	{
-		var data = input[ i ].split( ' ' );
-		
+		const data = input[ i ].split( ' ' );
+
 		if( !cities[ data[ 0 ] ] )
 		{
 			cities[ data[ 0 ] ] = true;
 			travelPaths[ data[ 0 ] ] = {};
 		}
-		
+
 		travelPaths[ data[ 0 ] ][ data[ 10 ] ] = data[ 2 ] === 'lose' ? -data[ 3 ] : +data[ 3 ];
 	}
-	
+
 	cities = Object.keys( cities );
-	
-	var CalculateHappiness = function()
+
+	const CalculateHappiness = function()
 	{
-		var permuted = permutator( cities );
-		var bestHappiness = 0;
-		
-		for( var i = 0; i < permuted.length; i++ )
+		const permuted = permutator( cities );
+		let bestHappiness = 0;
+
+		for( let i = 0; i < permuted.length; i++ )
 		{
-			var distance = 0;
-			
-			for( var x = 0; x < cities.length; x++ )
+			let distance = 0;
+
+			for( let x = 0; x < cities.length; x++ )
 			{
 				distance += travelPaths[ permuted[ i ][ x ] ][ permuted[ i ][ mod( x - 1, cities.length ) ] ];
 				distance += travelPaths[ permuted[ i ][ x ] ][ permuted[ i ][ mod( x + 1, cities.length ) ] ];
 			}
-			
+
 			if( bestHappiness < distance )
 			{
 				bestHappiness = distance;
 			}
 		}
-		
+
 		return bestHappiness;
 	};
-	
-	var answerOne = CalculateHappiness();
-	
+
+	const answerOne = CalculateHappiness();
+
 	travelPaths[ 'You' ] = {};
-	
-	for( i = 0; i < cities.length; i++ )
+
+	for( let i = 0; i < cities.length; i++ )
 	{
 		travelPaths[ cities[ i ] ][ 'You' ] = 0;
 		travelPaths[ 'You' ][ cities[ i ] ] = 0;
 	}
-	
+
 	cities.push( 'You' );
-	
-	var answerTwo = CalculateHappiness();
-	
+
+	const answerTwo = CalculateHappiness();
+
 	return [ answerOne, answerTwo ];
 };

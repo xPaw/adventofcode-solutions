@@ -5,7 +5,7 @@ module.exports = ( input ) =>
 	const PREAMBLE_SIZE = 25;
 	let part1 = 0;
 
-outer:
+	outer:
 	for( let i = PREAMBLE_SIZE; i < input.length; i++ )
 	{
 		for( let j = i - PREAMBLE_SIZE; j < i; j++ )

@@ -13,7 +13,7 @@ module.exports = ( input ) =>
 	const part1 = stateMachine.memory[ 0 ];
 	let part2 = 0;
 
-bruteforce:
+	bruteforce:
 	for( let y = 0; y <= input.length; y++ )
 	{
 		input[ 1 ] = y;

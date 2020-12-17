@@ -17,13 +17,13 @@ window.AdventOfCode.Day2 = ( input ) =>
 			letters.set( letter, ( letters.get( letter ) || 0 ) + 1 );
 		}
 
-		const values = Array.from(letters.values());
+		const values = Array.from( letters.values() );
 
-		part1twos += +values.includes(2);
-		part1threes += +values.includes(3);
+		part1twos += +values.includes( 2 );
+		part1threes += +values.includes( 3 );
 	}
 
-part2:
+	part2:
 	for( const id of input )
 	{
 		for( const id2 of input )

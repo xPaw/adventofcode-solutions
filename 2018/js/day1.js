@@ -3,7 +3,7 @@ window.AdventOfCode.Day1 = ( input ) =>
 	input = input
 		.split( '\n' )
 		.map( x => +x );
-	
+
 	let index = 0;
 	let seenValue = 0;
 	const seen = new Map();
@@ -23,6 +23,6 @@ window.AdventOfCode.Day1 = ( input ) =>
 	while( true ); // eslint-disable-line no-constant-condition
 
 	const sum = input.reduce( ( p, c ) => p + c, 0 );
-	
+
 	return [ sum, seenValue ];
 };

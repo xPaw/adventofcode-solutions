@@ -1,5 +1,6 @@
 {
 	"scripts": {
+		"fix": "eslint --fix .",
 		"test": "eslint . && ava"
 	},
 	"devDependencies": {

@@ -19,7 +19,7 @@ window.AdventOfCode.Day12 = ( input ) =>
 	{
 		let result = 0;
 
-		for( let c in state )
+		for( const c in state )
 		{
 			if( state[ c ] === '#' )
 			{
@@ -39,7 +39,7 @@ window.AdventOfCode.Day12 = ( input ) =>
 
 	for( ; i < 200; i++ )
 	{
-		let nextState = Array( state.length ).fill( '.' );
+		const nextState = Array( state.length ).fill( '.' );
 
 		for( let c = 0; c < state.length; c++ )
 		{

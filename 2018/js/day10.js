@@ -99,7 +99,7 @@ window.AdventOfCode.Day10 = ( input ) =>
 
 	for( let letter = 0; letter < letterCount; letter++ )
 	{
-		let stride = letter * 8;
+		const stride = letter * 8;
 		let string = '';
 
 		for( let y = 0; y <= maxY; y++ )

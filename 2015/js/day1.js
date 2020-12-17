@@ -1,11 +1,11 @@
 window.AdventOfCode.Day1 = function( input )
 {
-	var floor = 0;
-	var position = -1;
-	
+	let floor = 0;
+	let position = -1;
+
 	// Santa starts on the ground floor (floor 0) and then
 	// follows the instructions one character at a time.
-	for( var i = 0; i < input.length; i++ )
+	for( let i = 0; i < input.length; i++ )
 	{
 		// An opening parenthesis, (, means he should go up one floor.
 		if( input[ i ] === '(' )
@@ -17,7 +17,7 @@ window.AdventOfCode.Day1 = function( input )
 		{
 			floor--;
 		}
-		
+
 		// Now, given the same instructions, find the position of the first
 		// character that causes him to enter the basement (floor -1).
 		// The first character in the instructions has position 1,
@@ -30,6 +30,6 @@ window.AdventOfCode.Day1 = function( input )
 			position = i + 1;
 		}
 	}
-	
+
 	return [ floor, position ];
 };

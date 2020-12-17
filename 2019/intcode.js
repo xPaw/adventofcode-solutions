@@ -31,7 +31,7 @@ module.exports = class IntCode
 
 	execute( ioInput )
 	{
-		let output = [];
+		const output = [];
 		let running = true;
 
 		while( running )
@@ -132,4 +132,4 @@ module.exports = class IntCode
 
 		return output;
 	}
-}
+};

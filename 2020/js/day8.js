@@ -2,7 +2,8 @@ module.exports = ( input ) =>
 {
 	input = input
 		.split( '\n' )
-		.map( x => {
+		.map( x =>
+		{
 			const instruction = x.match( /^(?<ins>[a-z]+) (?<num>[-+][0-9]+)/ ).groups;
 			instruction.num = parseInt( instruction.num, 10 );
 			instruction.seen = false;
@@ -14,7 +15,7 @@ module.exports = ( input ) =>
 	{
 		let cursor = 0;
 		let accumulator = 0;
-		
+
 		while( cursor < input.length )
 		{
 			const instruction = input[ cursor ];
@@ -43,10 +44,10 @@ module.exports = ( input ) =>
 		};
 	}
 
-	let part1 = run().accumulator;
+	const part1 = run().accumulator;
 	let part2 = 0;
 
-outer:
+	outer:
 	for( let i = input.length - 1; i >= 0; i-- )
 	{
 		input.forEach( x => x.seen = false );

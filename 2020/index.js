@@ -41,9 +41,9 @@ const time = Number( endTime - startTime ) / 1e9 / runs;
 
 if( runs > 1 )
 {
-	console.log( `Time  : \x1b[34m${time.toFixed(6)}\x1b[0m seconds average for \x1b[34m${runs}\x1b[0m runs` );
+	console.log( `Time  : \x1b[34m${time.toFixed( 6 )}\x1b[0m seconds average for \x1b[34m${runs}\x1b[0m runs` );
 }
 else
 {
-	console.log( `Time  : \x1b[34m${time.toFixed(6)}\x1b[0m seconds` );
+	console.log( `Time  : \x1b[34m${time.toFixed( 6 )}\x1b[0m seconds` );
 }

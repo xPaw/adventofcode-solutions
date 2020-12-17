@@ -18,7 +18,7 @@ module.exports = ( input ) =>
 
 	for( const layer of layers )
 	{
-		let counts = [ 0, 0, 0 ];
+		const counts = [ 0, 0, 0 ];
 
 		for( let i = 0; i < stride; i++ )
 		{

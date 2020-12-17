@@ -10,3 +10,19 @@ parserOptions:
 
 globals:
   BigInt: true
+
+rules:
+  array-bracket-spacing: [error, always]
+  brace-style: [error, allman]
+  camelcase: off
+  computed-property-spacing: [error, always]
+  indent: [error, tab, {SwitchCase: 1}]
+  keyword-spacing: [error, {before: false, after: false, overrides: {case: {after: true}, return: {after: true}, const: {after: true}, let: {after: true}, of: {before: true}}}]
+  no-tabs: off
+  no-trailing-spaces: error
+  no-var: [error]
+  object-curly-spacing: [error, always]
+  prefer-const: [error]
+  semi: [error, always]
+  space-before-function-paren: [error, never]
+  space-in-parens: [error, always]
