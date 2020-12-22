@@ -48,7 +48,7 @@ module.exports = ( input ) =>
 
 		do
 		{
-			const hash = score( d1 ) + ( 10000 * score( d2 ) );
+			const hash = 100000 * score( d1 ) + score( d2 );
 
 			if( previousRounds.has( hash ) )
 			{
