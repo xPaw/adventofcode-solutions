@@ -25,6 +25,7 @@ test( '2020', t =>
 	assert( t, 18, 9535936849815, 472171581333710 );
 	assert( t, 19, 248, 381 );
 	assert( t, 21, 2485, 'bqkndvb,zmb,bmrmhm,snhrpv,vflms,bqtvr,qzkjrtl,rkkrx' );
+	assert( t, 22, 33400, 33745 );
 } );
 
 function assert( t, day, answer1, answer2 )
