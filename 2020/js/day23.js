@@ -41,7 +41,7 @@ module.exports = ( input ) =>
 			{
 				if( --nextCup === 0 )
 				{
-					nextCup = max === 10 ? ( max - 1 ) : max;
+					nextCup = max;
 				}
 			}
 			while( cup1 === nextCup || cup2 === nextCup || cup3 === nextCup );
@@ -55,7 +55,7 @@ module.exports = ( input ) =>
 		return cups;
 	}
 
-	let cups = solve( 10, 100 );
+	let cups = solve( 9, 100 );
 	let part1 = 0;
 	let current = cups[ 1 ];
 
