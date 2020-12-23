@@ -2,37 +2,71 @@ module.exports = ( input ) =>
 {
 	input = input.split( '' ).map( x => parseInt( x, 10 ) );
 
-	const part2 = 0;
-
-	for( let i = 0; i < 100; i++ )
+	function solve( max, iterations )
 	{
-		const takenCups = input.slice( 1, 4 );
-		const remainingCups = [ input[ 0 ], ...input.slice( 4 ) ];
-		let destination = input[ 0 ] - 1;
-		let destinationPosition = -1;
+		const cups = new Int32Array( max + 1 );
 
-		do
+		for( let i = 0; i < input.length - 1; i++ )
 		{
-			destinationPosition = remainingCups.indexOf( destination-- );
-
-			if( destination === -1 )
-			{
-				destination = input.length;
-			}
+			cups[ input[ i ] ] = input[ i + 1 ];
 		}
-		while( destinationPosition === -1 );
 
-		input =
-		[
-			...remainingCups.slice( 1, destinationPosition + 1 ),
-			...takenCups,
-			...remainingCups.slice( destinationPosition + 1 ),
-			remainingCups[ 0 ]
-		];
+		let prev = input[ input.length - 1 ];
+
+		if( max > 10 ) // this is dumb
+		{
+			for( let i = input.length + 1; i <= max; i++ )
+			{
+				cups[ prev ] = i;
+				prev = i;
+			}
+
+			cups[ max ] = input[ 0 ];
+		}
+		else
+		{
+			cups[ prev ] = input[ 0 ];
+		}
+
+		let currentCup = input[ 0 ];
+
+		for( let i = 0; i < iterations; i++ )
+		{
+			let nextCup = currentCup;
+			const cup1 = cups[ currentCup ];
+			const cup2 = cups[ cup1 ];
+			const cup3 = cups[ cup2 ];
+
+			do
+			{
+				if( --nextCup === 0 )
+				{
+					nextCup = max === 10 ? ( max - 1 ) : max;
+				}
+			}
+			while( cup1 === nextCup || cup2 === nextCup || cup3 === nextCup );
+
+			cups[ currentCup ] = cups[ cup3 ];
+			cups[ cup3 ] = cups[ nextCup ];
+			cups[ nextCup ] = cup1;
+			currentCup = cups[ currentCup ];
+		}
+
+		return cups;
 	}
 
-	const one = input.indexOf( 1 );
-	const part1 = parseInt( [ ...input.slice( one + 1 ), ...input.slice( 0, one ) ].join( '' ), 10 );
+	let cups = solve( 10, 100 );
+	let part1 = 0;
+	let current = cups[ 1 ];
+
+	for( let i = 0; i < input.length - 1; ++i )
+	{
+		part1 += Math.pow( 10, input.length - i - 2 ) * current;
+		current = cups[ current ];
+	}
+
+	cups = solve( 1000000, 10000000 );
+	const part2 = cups[ 1 ] * cups[ cups[ 1 ] ];
 
 	return [ part1, part2 ];
 };
