@@ -33,13 +33,14 @@ string part1 = string.Empty;
 string part2 = string.Empty;
 var data = await File.ReadAllTextAsync($"Data/day{day}.txt");
 
-var solution = GetSolutionClass(day);
+var type = GetSolutionType(day);
 
 var stopWatch = new Stopwatch();
 stopWatch.Start();
 
 for (var i = 0; i < runs; i++)
 {
+	var solution = (IAnswer)Activator.CreateInstance(type)!;
 	(part1, part2) = solution.Solve(data);
 }
 
@@ -79,7 +80,7 @@ else
 
 return 0;
 
-static IAnswer GetSolutionClass(int day)
+static Type GetSolutionType(int day)
 {
 	foreach (Type type in typeof(AnswerAttribute).Assembly.GetTypes())
 	{
@@ -94,7 +95,7 @@ static IAnswer GetSolutionClass(int day)
 		{
 			if (attribute.Day == day)
 			{
-				return (IAnswer)Activator.CreateInstance(type)!;
+				return type;
 			}
 		}
 	}

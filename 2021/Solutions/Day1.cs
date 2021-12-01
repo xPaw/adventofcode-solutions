@@ -21,7 +21,7 @@ class Day1 : IAnswer
 				part1++;
 			}
 
-			if (i > 2 && numbers[i] > numbers[i - 3])
+			if (i > 2 && number > numbers[i - 3])
 			{
 				part2++;
 			}
