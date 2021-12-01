@@ -60,12 +60,10 @@ Console.Write("Time  : ");
 
 if (runs > 1)
 {
-	var average = new TimeSpan(stopWatch.Elapsed.Ticks / runs);
-
 	Console.ForegroundColor = ConsoleColor.Blue;
-	Console.Write(average.Duration());
+	Console.Write("{0:N6}", stopWatch.Elapsed.TotalMilliseconds / runs);
 	Console.ResetColor();
-	Console.Write(" average for ");
+	Console.Write("ms average for ");
 	Console.ForegroundColor = ConsoleColor.Blue;
 	Console.Write(runs);
 	Console.ResetColor();
@@ -74,8 +72,9 @@ if (runs > 1)
 else
 {
 	Console.ForegroundColor = ConsoleColor.Blue;
-	Console.WriteLine(stopWatch.Elapsed.Duration());
+	Console.Write("{0:N6}", stopWatch.Elapsed.TotalMilliseconds);
 	Console.ResetColor();
+	Console.Write("ms for a single run");
 }
 
 return 0;
