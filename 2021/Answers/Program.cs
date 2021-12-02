@@ -34,17 +34,16 @@ Console.WriteLine(day);
 
 string part1 = string.Empty;
 string part2 = string.Empty;
-var data = await File.ReadAllTextAsync($"Data/day{day}.txt");
 
-var type = GetSolutionType(day);
+var data = await Solver.LoadData(day);
+var type = Solver.GetSolutionType(day);
 
 var stopWatch = new Stopwatch();
 stopWatch.Start();
 
 for (var i = 0; i < runs; i++)
 {
-	var solution = (IAnswer)Activator.CreateInstance(type)!;
-	(part1, part2) = solution.Solve(data);
+	(part1, part2) = Solver.Solve(type, data);
 }
 
 stopWatch.Stop();
@@ -81,26 +80,3 @@ else
 }
 
 return 0;
-
-static Type GetSolutionType(int day)
-{
-	foreach (Type type in typeof(AnswerAttribute).Assembly.GetTypes())
-	{
-		if (!typeof(IAnswer).IsAssignableFrom(type))
-		{
-			continue;
-		}
-
-		var attributes = type.GetCustomAttributes(typeof(AnswerAttribute), true);
-
-		foreach (AnswerAttribute attribute in attributes)
-		{
-			if (attribute.Day == day)
-			{
-				return type;
-			}
-		}
-	}
-
-	throw new Exception($"Unable to find solution for day {day}");
-}
