@@ -13,7 +13,7 @@ var runs = 1;
 
 if (args.Length > 0)
 {
-	if (!int.TryParse(args[0], out day))
+	if (args[0] != "today" && !int.TryParse(args[0], out day))
 	{
 		Console.Error.WriteLine("Usage: [day [runs]]");
 		return 1;
@@ -28,6 +28,9 @@ if (args.Length > 0)
 		}
 	}
 }
+
+Console.Write("Day   : ");
+Console.WriteLine(day);
 
 string part1 = string.Empty;
 string part2 = string.Empty;
