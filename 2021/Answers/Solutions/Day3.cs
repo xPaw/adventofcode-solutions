@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace AdventOfCode2021;
 
@@ -15,17 +15,15 @@ class Day3 : IAnswer
 		var lines = input
 			.Split('\n', StringSplitOptions.RemoveEmptyEntries)
 			.Select(l => Convert.ToInt32(l, 2))
-			.ToArray();
+			.ToList();
 
-		var (zeros, ones) = RecalculateBits(lines);
+		var answers = RecalculateBits(lines);
 		var gamma = 0;
 		var rate = 0;
 
 		for (var i = 0; i < BitLength; i++)
 		{
-			var isOneCommon = ones[i] >= zeros[i];
-
-			if (isOneCommon)
+			if (answers[i])
 			{
 				gamma |= 1 << i;
 			}
@@ -35,8 +33,8 @@ class Day3 : IAnswer
 			}
 		}
 
-		var generatorValue = FindValue((int[])lines.Clone(), 1);
-		var scrubberValue = FindValue((int[])lines.Clone(), 0);
+		var generatorValue = FindValue(lines.ToList(), 1);
+		var scrubberValue = FindValue(lines.ToList(), 0);
 
 		var part1 = (gamma * rate).ToString();
 		var part2 = (generatorValue * scrubberValue).ToString();
@@ -44,40 +42,39 @@ class Day3 : IAnswer
 		return (part1.ToString(), part2.ToString());
 	}
 
-	private int FindValue(int[] input, int valueToFind)
+	private int FindValue(List<int> input, int valueToFind)
 	{
-		var (zeros, ones) = RecalculateBits(input);
+		var answers = RecalculateBits(input);
 
 		for (var i = BitLength - 1; i >= 0; i--)
 		{
-			var isOneCommon = ones[i] >= zeros[i] ? (1 - valueToFind) : valueToFind;
+			var isOneCommon = answers[i] ? (1 - valueToFind) : valueToFind;
+			var newArray = new List<int>();
 
-			for (var l = 0; l < input.Length; l++)
+			for (var l = 0; l < input.Count; l++)
 			{
 				var line = input[l];
 
-				if (((line >> i) & 1) == isOneCommon)
+				if (((line >> i) & 1) != isOneCommon)
 				{
-					input[l] = 0;
+					newArray.Add(line);
 				}
 			}
 
-			input = input.Where(x => x > 0).ToArray();
-
-			if (input.Length == 1)
+			if (newArray.Count == 1)
 			{
-				return input[0];
+				return newArray[0];
 			}
 
-			(zeros, ones) = RecalculateBits(input);
+			answers = RecalculateBits(newArray);
+			input = newArray;
 		}
 
 		return 0;
 	}
 
-	private (int[] zeros, int[] ones) RecalculateBits(int[] input)
+	private bool[] RecalculateBits(List<int> input)
 	{
-		var zeros = new int[BitLength];
 		var ones = new int[BitLength];
 
 		foreach (var line in input)
@@ -88,13 +85,9 @@ class Day3 : IAnswer
 				{
 					ones[y]++;
 				}
-				else
-				{
-					zeros[y]++;
-				}
 			}
 		}
 
-		return (zeros, ones);
+		return ones.Select(x => x >= input.Count / 2).ToArray();
 	}
 }
