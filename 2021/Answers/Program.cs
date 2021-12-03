@@ -76,7 +76,7 @@ else
 	Console.ForegroundColor = ConsoleColor.Blue;
 	Console.Write("{0:N6}", stopWatch.Elapsed.TotalMilliseconds);
 	Console.ResetColor();
-	Console.Write("ms for a single run");
+	Console.WriteLine("ms for a single run");
 }
 
 return 0;
