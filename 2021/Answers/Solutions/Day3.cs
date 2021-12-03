@@ -36,8 +36,8 @@ class Day3 : IAnswer
 		var generatorValue = FindValue(lines.ToList(), 1);
 		var scrubberValue = FindValue(lines.ToList(), 0);
 
-		var part1 = (gamma * epsilon).ToString();
-		var part2 = (generatorValue * scrubberValue).ToString();
+		var part1 = gamma * epsilon;
+		var part2 = generatorValue * scrubberValue;
 
 		return (part1.ToString(), part2.ToString());
 	}
