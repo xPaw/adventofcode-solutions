@@ -8,7 +8,8 @@ public class Solver
 {
 	public static async Task<string> LoadData(int day)
 	{
-		return await File.ReadAllTextAsync($"{AppDomain.CurrentDomain.BaseDirectory}/day{day}.txt");
+		var data = await File.ReadAllTextAsync($"{AppDomain.CurrentDomain.BaseDirectory}/day{day}.txt");
+		return data.Trim();
 	}
 
 	public static (string Part1, string Part2) Solve(Type type, string data)

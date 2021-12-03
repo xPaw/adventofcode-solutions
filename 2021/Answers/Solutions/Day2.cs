@@ -16,7 +16,7 @@ class Day2 : IAnswer
 	public (string Part1, string Part2) Solve(string input)
 	{
 		var lines = input
-			.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+			.Split('\n')
 			.Select(l =>
 			{
 				var sp = l.Split(' ', 2);

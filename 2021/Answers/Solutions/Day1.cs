@@ -7,7 +7,7 @@ class Day1 : IAnswer
 {
 	public (string Part1, string Part2) Solve(string input)
 	{
-		var lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+		var lines = input.Split('\n');
 		var numbers = Array.ConvertAll(lines, int.Parse);
 		var part1 = 0;
 		var part2 = 0;

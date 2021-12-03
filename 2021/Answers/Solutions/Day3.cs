@@ -13,7 +13,7 @@ class Day3 : IAnswer
 	{
 		BitLength = input.IndexOf('\n');
 		var lines = input
-			.Split('\n', StringSplitOptions.RemoveEmptyEntries)
+			.Split('\n')
 			.Select(l => Convert.ToInt32(l, 2))
 			.ToList();
 
