@@ -19,7 +19,7 @@ class Day3 : IAnswer
 
 		var answers = RecalculateBits(lines);
 		var gamma = 0;
-		var rate = 0;
+		var epsilon = 0;
 
 		for (var i = 0; i < BitLength; i++)
 		{
@@ -29,14 +29,14 @@ class Day3 : IAnswer
 			}
 			else
 			{
-				rate |= 1 << i;
+				epsilon |= 1 << i;
 			}
 		}
 
 		var generatorValue = FindValue(lines.ToList(), 1);
 		var scrubberValue = FindValue(lines.ToList(), 0);
 
-		var part1 = (gamma * rate).ToString();
+		var part1 = (gamma * epsilon).ToString();
 		var part2 = (generatorValue * scrubberValue).ToString();
 
 		return (part1.ToString(), part2.ToString());
@@ -44,18 +44,16 @@ class Day3 : IAnswer
 
 	private int FindValue(List<int> input, int valueToFind)
 	{
-		var answers = RecalculateBits(input);
-
 		for (var i = BitLength - 1; i >= 0; i--)
 		{
-			var isOneCommon = answers[i] ? (1 - valueToFind) : valueToFind;
+			var isOneCommon = RecalculateSingleBit(input, i) ? valueToFind : (1 - valueToFind);
 			var newArray = new List<int>();
 
 			for (var l = 0; l < input.Count; l++)
 			{
 				var line = input[l];
 
-				if (((line >> i) & 1) != isOneCommon)
+				if (((line >> i) & 1) == isOneCommon)
 				{
 					newArray.Add(line);
 				}
@@ -66,7 +64,6 @@ class Day3 : IAnswer
 				return newArray[0];
 			}
 
-			answers = RecalculateBits(newArray);
 			input = newArray;
 		}
 
@@ -88,6 +85,25 @@ class Day3 : IAnswer
 			}
 		}
 
-		return ones.Select(x => x >= input.Count / 2).ToArray();
+		return ones.Select(x => x >= input.Count / 2.0).ToArray();
+	}
+
+	private bool RecalculateSingleBit(List<int> input, int position)
+	{
+		var ones = 0;
+		var half = input.Count / 2.0;
+
+		foreach (var line in input)
+		{
+			if (((line >> position) & 1) > 0)
+			{
+				if (++ones >= half)
+				{
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }
