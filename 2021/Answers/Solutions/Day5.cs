@@ -29,7 +29,6 @@ class Day5 : IAnswer
 			)
 			.ToList();
 
-
 		var maxX = 1 + lines.Max(x => x.Max(x => x.X));
 		var maxY = 1 + lines.Max(y => y.Max(y => y.Y));
 		var grid = new byte[maxX * maxY];
@@ -45,78 +44,23 @@ class Day5 : IAnswer
 		{
 			var start = coords[0];
 			var end = coords[1];
+			var lenX = end.X - start.X;
+			var lenY = end.Y - start.Y;
+			var dX = Math.Sign(lenX);
+			var dY = Math.Sign(lenY);
 
-			if (allowDiagonals)
+			if ((dX == 0 || dY == 0) == allowDiagonals)
 			{
-				if (Math.Abs(start.X - end.X) != Math.Abs(start.Y - end.Y))
-				{
-					continue;
-				}
-
-				/*
-				var dX = start.X < end.X ? 1 : -1;
-				var dY = start.Y < end.Y ? 1 : -1;
-
-				for (int x = start.X, y = start.Y; x != end.X || y != end.Y; x += dX, y += dY)
-				{
-					grid[y * stride + x]++;
-				}
-				*/
-
-				if (start.X < end.X)
-				{
-					if (start.Y < end.Y)
-					{
-						for (int x = start.X, y = start.Y; x <= end.X && y <= end.Y; x++, y++)
-						{
-							grid[y * stride + x]++;
-						}
-					}
-					else
-					{
-						for (int x = start.X, y = start.Y; x <= end.X && y >= end.Y; x++, y--)
-						{
-							grid[y * stride + x]++;
-						}
-					}
-				}
-				else
-				{
-					if (start.Y < end.Y)
-					{
-						for (int x = start.X, y = start.Y; x >= end.X && y <= end.Y; x--, y++)
-						{
-							grid[y * stride + x]++;
-						}
-					}
-					else
-					{
-						for (int x = start.X, y = start.Y; x >= end.X && y >= end.Y; x--, y--)
-						{
-							grid[y * stride + x]++;
-						}
-					}
-				}
+				continue;
 			}
-			else
+
+			var length = dY == 0 ? Math.Abs(lenX) : Math.Abs(lenY);
+
+			for (var i = 0; i <= length; i++)
 			{
-				if (!(start.X == end.X || start.Y == end.Y))
-				{
-					continue;
-				}
-
-				var startX = Math.Min(start.X, end.X);
-				var startY = Math.Min(start.Y, end.Y);
-				var endX = Math.Max(start.X, end.X);
-				var endY = Math.Max(start.Y, end.Y);
-
-				for (var x = startX; x <= endX; x++)
-				{
-					for (var y = startY; y <= endY; y++)
-					{
-						grid[y * stride + x]++;
-					}
-				}
+				var x = start.X + i * dX;
+				var y = start.Y + i * dY;
+				grid[y * stride + x]++;
 			}
 		}
 
