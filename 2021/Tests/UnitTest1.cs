@@ -19,5 +19,9 @@ public class SolutionTests
 
 		Assert.Equal(answer1, part1);
 		Assert.Equal(answer2, part2);
+
+		var example = await Solver.SolveExample(day, type);
+		Assert.Equal(example.Item1, example.Item2);
+		Assert.Equal(example.Item3, example.Item4);
 	}
 }

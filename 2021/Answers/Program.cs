@@ -28,7 +28,7 @@ if (args.Length > 0)
 	}
 }
 
-Console.Write("Day   : ");
+Console.Write("Day: ");
 Console.WriteLine(day);
 
 string part1 = string.Empty;
@@ -36,6 +36,10 @@ string part2 = string.Empty;
 
 var data = await Solver.LoadData(day);
 var type = Solver.GetSolutionType(day);
+
+await Solver.SolveExample(day, type);
+
+Console.WriteLine();
 
 var stopWatch = new Stopwatch();
 stopWatch.Start();
@@ -57,6 +61,7 @@ Console.ForegroundColor = ConsoleColor.Green;
 Console.WriteLine(part2);
 Console.ResetColor();
 
+Console.WriteLine();
 Console.Write("Time  : ");
 
 if (runs > 1)

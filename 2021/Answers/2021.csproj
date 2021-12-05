@@ -8,8 +8,7 @@
 		<NoWarn>CA1822</NoWarn>
   </PropertyGroup>
 	<ItemGroup>
-	  <None Include="../Data/**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+	  <None Include="../Data/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="Data/" />
+	  <None Include="../DataExamples/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="DataExamples/" />
 	</ItemGroup>
 </Project>

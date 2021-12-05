@@ -18,9 +18,8 @@
     </PackageReference>
   </ItemGroup>
 	<ItemGroup>
-	  <None Include="../Data/**">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+	  <None Include="../Data/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="Data/" />
+	  <None Include="../DataExamples/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="DataExamples/" />
 	</ItemGroup>
 	<ItemGroup>
 	  <ProjectReference Include="..\Answers\2021.csproj" />
