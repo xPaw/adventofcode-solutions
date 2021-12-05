@@ -10,6 +10,7 @@ public class SolutionTests
 	[InlineData(2, "1728414", "1765720035")]
 	[InlineData(3, "693486", "3379326")]
 	[InlineData(4, "45031", "2568")]
+	[InlineData(5, "6548", "19663")]
 	public async Task TestDay(int day, string answer1, string answer2)
 	{
 		var data = await Solver.LoadData(day);
