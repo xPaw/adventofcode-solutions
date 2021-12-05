@@ -64,6 +64,16 @@ class Day5 : IAnswer
 			}
 		}
 
-		return grid.Count(x => x > 1);
+		var result = 0;
+
+		foreach (var value in grid)
+		{
+			if (value > 1)
+			{
+				result += value;
+			}
+		}
+
+		return result;
 	}
 }
