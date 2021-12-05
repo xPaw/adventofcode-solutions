@@ -70,7 +70,7 @@ class Day5 : IAnswer
 		{
 			if (value > 1)
 			{
-				result += value;
+				result++;
 			}
 		}
 
