@@ -10,9 +10,9 @@ class Day6 : IAnswer
 	{
 		var timers = new long[9];
 
-		foreach (var timer in input.Split(','))
+		for (var i = input.Length - 1; i >= 0; i -= 2)
 		{
-			timers[int.Parse(timer)]++;
+			timers[input[i] - '0']++;
 		}
 
 		for (var day = 1; day <= 80; day++) Update(timers);
