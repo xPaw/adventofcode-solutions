@@ -13,7 +13,7 @@ class Day7 : IAnswer
 		var part1 = int.MaxValue;
 		var part2 = int.MaxValue;
 
-		for (var position = 1; position < max; position++)
+		for (var position = 0; position <= max; position++)
 		{
 			var fuel = 0;
 			var fuel2 = 0;
