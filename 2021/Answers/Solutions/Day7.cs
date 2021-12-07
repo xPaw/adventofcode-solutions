@@ -10,32 +10,49 @@ class Day7 : IAnswer
 	{
 		var numbers = Array.ConvertAll(input.Split(','), int.Parse);
 		var max = numbers.Max();
-		var part1 = int.MaxValue;
-		var part2 = int.MaxValue;
 
-		for (var position = 0; position <= max; position++)
+		Array.Sort(numbers);
+
+		var part1 = 0;
+		var median = numbers[numbers.Length / 2];
+
+		for (var i = 0; i < numbers.Length; i++)
 		{
-			var fuel = 0;
-			var fuel2 = 0;
-
-			for (var i = 0; i < numbers.Length; i++)
-			{
-				var diff = Math.Abs(numbers[i] - position);
-				fuel += diff;
-				fuel2 += diff * (diff + 1) / 2;
-			}
-
-			if (part1 > fuel)
-			{
-				part1 = fuel;
-			}
-
-			if (part2 > fuel2)
-			{
-				part2 = fuel2;
-			}
+			part1 += Math.Abs(numbers[i] - median);
 		}
 
+		var part2 = BinarySearch(numbers, 0, max, (numbers, position) =>
+		{
+			var fuel = 0;
+
+			for (var i = numbers.Length - 1; i >= 0; i--)
+			{
+				var diff = Math.Abs(numbers[i] - position);
+				fuel += diff * (diff + 1) / 2;
+			}
+
+			return fuel;
+		});
+
 		return (part1.ToString(), part2.ToString());
+	}
+
+	private int BinarySearch(int[] numbers, int from, int to, Func<int[], int, int> function)
+	{
+		if (from == to)
+		{
+			return function(numbers, from);
+		}
+
+		var median = (from + to) / 2;
+
+		if (function(numbers, median) < function(numbers, median + 1))
+		{
+			return BinarySearch(numbers, from, median, function);
+		}
+		else
+		{
+			return BinarySearch(numbers, median + 1, to, function);
+		}
 	}
 }
