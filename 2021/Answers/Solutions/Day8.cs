@@ -44,36 +44,15 @@ class Day8 : IAnswer
 		{
 			var signal = line[0];
 			var output = line[1];
-			var knownDigits = new Dictionary<Segment, int>();
-			var unknownDigits = new List<(Segment, int)>();
 			Segment one = 0;
 			Segment four = 0;
 
 			foreach (var value in signal)
 			{
-				var parsed = Parse(value);
-
 				switch (value.Length)
 				{
-					case 2: knownDigits[parsed] = 1; one = parsed; break;
-					case 4: knownDigits[parsed] = 4; four = parsed; break;
-					case 3: knownDigits[parsed] = 7; break;
-					case 7: knownDigits[parsed] = 8; break;
-					default: unknownDigits.Add((parsed, value.Length)); break;
-				}
-			}
-
-			foreach (var (parsed, length) in unknownDigits)
-			{
-				var knownOne = parsed & one;
-				var knownFour = parsed & four;
-
-				switch (GetBitCount(knownOne), GetBitCount(knownFour))
-				{
-					case (1, 2): knownDigits[parsed] = length == 5 ? 2 : -1; break;
-					case (1, 3): knownDigits[parsed] = length == 5 ? 5 : 6; break;
-					case (2, 3): knownDigits[parsed] = length == 5 ? 3 : 0; break;
-					case (2, 4): knownDigits[parsed] = length == 5 ? -1 : 9; break;
+					case 2: one = Parse(value); break;
+					case 4: four = Parse(value); break;
 				}
 			}
 
@@ -91,7 +70,20 @@ class Day8 : IAnswer
 					case 3: number = 7; part1++; break;
 					case 7: number = 8; part1++; break;
 					default:
-						number = knownDigits[Parse(value)];
+						var parsed = Parse(value);
+						var knownOne = parsed & one;
+						var knownFour = parsed & four;
+
+						number = (value.Length, GetBitCount(knownOne), GetBitCount(knownFour)) switch
+						{
+							(5, 1, 2) => 2,
+							(5, 1, 3) => 5,
+							(5, 2, 3) => 3,
+							(6, 1, 3) => 6,
+							(6, 2, 3) => 0,
+							(6, 2, 4) => 9,
+							_ => throw new NotImplementedException(),
+						};
 						break;
 				}
 
