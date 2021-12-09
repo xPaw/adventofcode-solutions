@@ -67,10 +67,10 @@ class Day9 : IAnswer
 
 	int GetBasin(int[][] locations, int x, int y)
 	{
-		var basin = new HashSet<int>
-		{
-			x * MaxY + y
-		};
+		var count = 1;
+		var basin = new bool[MaxX * MaxY + MaxY + 1];
+		basin[x * MaxY + y] = true;
+
 		var queue = new Queue<(int x, int y)>();
 		queue.Enqueue((x, y));
 
@@ -80,15 +80,16 @@ class Day9 : IAnswer
 
 			foreach (var (x2, y2) in GetNeighbors(p.x, p.y))
 			{
-				if (!basin.Contains(x2 * MaxY + y2) && locations[x][y] < locations[x2][y2] && locations[x2][y2] < 9)
+				if (!basin[x2 * MaxY + y2] && locations[x][y] < locations[x2][y2] && locations[x2][y2] < 9)
 				{
 					queue.Enqueue((x2, y2));
-					basin.Add(x2 * MaxY + y2);
+					basin[x2 * MaxY + y2] = true;
+					count++;
 				}
 			}
 		}
 
-		return basin.Count;
+		return count;
 	}
 
 	IEnumerable<(int x, int y)> GetNeighbors(int x, int y)
