@@ -41,12 +41,30 @@ await Solver.SolveExample(day, type);
 
 Console.WriteLine();
 
+double total = 0;
+double max = 0;
+double min = double.MaxValue;
+
 var stopWatch = new Stopwatch();
-stopWatch.Start();
 
 for (var i = 0; i < runs; i++)
 {
+	stopWatch.Restart();
 	(part1, part2) = Solver.Solve(type, data);
+	stopWatch.Stop();
+
+	var elapsed = stopWatch.Elapsed.TotalMilliseconds;
+	total += elapsed;
+
+	if (min > elapsed)
+	{
+		min = elapsed;
+	}
+
+	if (max < elapsed)
+	{
+		max = elapsed;
+	}
 }
 
 stopWatch.Stop();
@@ -62,25 +80,38 @@ Console.WriteLine(part2);
 Console.ResetColor();
 
 Console.WriteLine();
-Console.Write("Time  : ");
+Console.Write("Time: ");
 
 if (runs > 1)
 {
 	Console.ForegroundColor = ConsoleColor.Blue;
-	Console.Write("{0:N6}", stopWatch.Elapsed.TotalMilliseconds / runs);
+	Console.Write("{0:N6}", total / runs);
 	Console.ResetColor();
 	Console.Write("ms average for ");
 	Console.ForegroundColor = ConsoleColor.Blue;
 	Console.Write(runs);
 	Console.ResetColor();
 	Console.WriteLine(" runs");
+
+
+	Console.Write("Min : ");
+	Console.ForegroundColor = ConsoleColor.Blue;
+	Console.Write("{0:N6}", min);
+	Console.ResetColor();
+	Console.WriteLine("ms");
+
+	Console.Write("Max : ");
+	Console.ForegroundColor = ConsoleColor.Blue;
+	Console.Write("{0:N6}", max);
+	Console.ResetColor();
+	Console.WriteLine("ms");
 }
 else
 {
 	Console.ForegroundColor = ConsoleColor.Blue;
 	Console.Write("{0:N6}", stopWatch.Elapsed.TotalMilliseconds);
 	Console.ResetColor();
-	Console.WriteLine("ms for a single run");
+	Console.WriteLine("ms");
 }
 
 return 0;
