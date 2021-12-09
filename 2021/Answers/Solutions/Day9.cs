@@ -27,20 +27,20 @@ class Day9 : IAnswer
 			})
 			.ToArray();
 
-		MaxY = locations.Length - 1;
-		MaxX = locations[0].Length - 1;
+		MaxX = locations.Length - 1;
+		MaxY = locations[0].Length - 1;
 
 		var part1 = 0;
 		var basins = new List<int>();
 
-		for (var y = 0; y <= MaxY; y++)
+		for (var x = 0; x <= MaxX; x++)
 		{
-			for (var x = 0; x <= MaxX; x++)
+			for (var y = 0; y <= MaxY; y++)
 			{
-				var n = locations[y][x];
+				var n = locations[x][y];
 				var good = true;
 
-				foreach (var p in GetNeighbors(y, x))
+				foreach (var p in GetNeighbors(x, y))
 				{
 					if (locations[p.x][p.y] <= n)
 					{
@@ -53,14 +53,7 @@ class Day9 : IAnswer
 				{
 					part1 += 1 + n;
 
-					var basin = new HashSet<int>();
-
-					foreach (var coord in GetBasin(basin, locations, y, x))
-					{
-						basin.Add(coord.x * MaxX + coord.y);
-					}
-
-					basins.Add(basin.Count);
+					basins.Add(GetBasin(locations, x, y));
 				}
 			}
 		}
@@ -72,20 +65,30 @@ class Day9 : IAnswer
 		return (part1.ToString(), part2.ToString());
 	}
 
-	IEnumerable<(int x, int y)> GetBasin(HashSet<int> basin, int[][] locations, int x, int y)
+	int GetBasin(int[][] locations, int x, int y)
 	{
-		yield return (x, y);
-
-		foreach (var (x2, y2) in GetNeighbors(x, y))
+		var basin = new HashSet<int>
 		{
-			if (!basin.Contains(x2 * MaxX + y2) && locations[x][y] < locations[x2][y2] && locations[x2][y2] < 9)
+			x * MaxY + y
+		};
+		var queue = new Queue<(int x, int y)>();
+		queue.Enqueue((x, y));
+
+		while (queue.Count > 0)
+		{
+			var p = queue.Dequeue();
+
+			foreach (var (x2, y2) in GetNeighbors(p.x, p.y))
 			{
-				foreach (var t in GetBasin(basin, locations, x2, y2))
+				if (!basin.Contains(x2 * MaxY + y2) && locations[x][y] < locations[x2][y2] && locations[x2][y2] < 9)
 				{
-					yield return t;
+					queue.Enqueue((x2, y2));
+					basin.Add(x2 * MaxY + y2);
 				}
 			}
 		}
+
+		return basin.Count;
 	}
 
 	IEnumerable<(int x, int y)> GetNeighbors(int x, int y)
@@ -95,7 +98,7 @@ class Day9 : IAnswer
 			yield return (x, y - 1);
 		}
 
-		if (y < MaxX)
+		if (y < MaxY)
 		{
 			yield return (x, y + 1);
 		}
@@ -105,7 +108,7 @@ class Day9 : IAnswer
 			yield return (x - 1, y);
 		}
 
-		if (x < MaxY)
+		if (x < MaxX)
 		{
 			yield return (x + 1, y);
 		}
