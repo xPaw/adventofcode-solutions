@@ -31,9 +31,6 @@ if (args.Length > 0)
 Console.Write("Day: ");
 Console.WriteLine(day);
 
-string part1 = string.Empty;
-string part2 = string.Empty;
-
 var data = await Solver.LoadData(day);
 var type = Solver.GetSolutionType(day);
 
@@ -47,7 +44,21 @@ double min = double.MaxValue;
 
 var stopWatch = new Stopwatch();
 
-for (var i = 0; i < runs; i++)
+stopWatch.Restart();
+var (part1, part2) = Solver.Solve(type, data);
+stopWatch.Stop();
+
+Console.Write("Part 1: ");
+Console.ForegroundColor = ConsoleColor.Green;
+Console.WriteLine(part1);
+Console.ResetColor();
+
+Console.Write("Part 2: ");
+Console.ForegroundColor = ConsoleColor.Green;
+Console.WriteLine(part2);
+Console.ResetColor();
+
+for (var i = 1; i < runs; i++)
 {
 	stopWatch.Restart();
 	(part1, part2) = Solver.Solve(type, data);
@@ -67,17 +78,10 @@ for (var i = 0; i < runs; i++)
 	}
 }
 
-stopWatch.Stop();
-
-Console.Write("Part 1: ");
-Console.ForegroundColor = ConsoleColor.Green;
-Console.WriteLine(part1);
-Console.ResetColor();
-
-Console.Write("Part 2: ");
-Console.ForegroundColor = ConsoleColor.Green;
-Console.WriteLine(part2);
-Console.ResetColor();
+if (part1 == part2)
+{
+	Console.WriteLine("This should never happen, just here so compiler doesn't optimize away");
+}
 
 Console.WriteLine();
 Console.Write("Time: ");
