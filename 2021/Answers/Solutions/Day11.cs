@@ -11,7 +11,6 @@ class Day11 : IAnswer
 		const int SIZE = 10;
 
 		var octopuses = new int[SIZE * SIZE];
-		var flashed = new bool[SIZE * SIZE];
 		var offset = 0;
 
 		for (var i = 0; i < input.Length; i++)
@@ -30,18 +29,15 @@ class Day11 : IAnswer
 
 		while (part2 == 0)
 		{
-			var flash = false;
-
 			for (var x = 0; x < SIZE; x++)
 			{
 				for (var y = 0; y < SIZE; y++)
 				{
-					if (++octopuses[x * SIZE + y] > 9)
-					{
-						flash = true;
-					}
+					octopuses[x * SIZE + y]++;
 				}
 			}
+
+			var flash = true;
 
 			while (flash)
 			{
@@ -53,9 +49,9 @@ class Day11 : IAnswer
 					{
 						offset = x * SIZE + y;
 
-						if (octopuses[offset] > 9 && !flashed[offset])
+						if (octopuses[offset] > 9)
 						{
-							flashed[offset] = true;
+							octopuses[offset] = int.MinValue;
 
 							for (var dX = -1; dX <= 1; dX++)
 							{
@@ -68,7 +64,7 @@ class Day11 : IAnswer
 									{
 										offset = x2 * SIZE + y2;
 
-										if (++octopuses[offset] > 9 && !flashed[offset])
+										if (++octopuses[offset] > 9)
 										{
 											flash = true;
 										}
@@ -88,7 +84,7 @@ class Day11 : IAnswer
 				{
 					offset = x * SIZE + y;
 
-					if (flashed[offset])
+					if (octopuses[offset] < 0)
 					{
 						if (step < 100)
 						{
@@ -96,10 +92,8 @@ class Day11 : IAnswer
 						}
 
 						octopuses[offset] = 0;
-						flashed[offset] = false;
 					}
-
-					if (octopuses[offset] > 0)
+					else if (octopuses[offset] > 0)
 					{
 						allZeroes = false;
 					}
