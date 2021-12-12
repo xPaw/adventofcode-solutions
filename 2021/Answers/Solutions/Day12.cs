@@ -32,13 +32,13 @@ class Day12 : IAnswer
 			Caves[path[1]].Add(path[0]);
 		}
 
-		var part1 = Score(START, new HashSet<string>() { START });
-		var part2 = Score(START, new HashSet<string>() { START }, true);
+		var part1 = Score(START, new List<string>() { START });
+		var part2 = Score(START, new List<string>() { START }, true);
 
 		return (part1.ToString(), part2.ToString());
 	}
 
-	int Score(string start, HashSet<string> visited, bool moreThanOnce = false)
+	int Score(string start, List<string> visited, bool moreThanOnce = false)
 	{
 		var score = 0;
 
@@ -54,13 +54,13 @@ class Day12 : IAnswer
 			{
 				if (moreThanOnce && point != START)
 				{
-					score += Score(point, new HashSet<string>(visited, visited.Comparer));
+					score += Score(point, new List<string>(visited));
 				}
 
 				continue;
 			}
 
-			var visiting = new HashSet<string>(visited, visited.Comparer);
+			var visiting = new List<string>(visited);
 
 			if (point.All(char.IsLower))
 			{
