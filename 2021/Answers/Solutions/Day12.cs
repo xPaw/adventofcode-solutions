@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -10,7 +9,7 @@ class Day12 : IAnswer
 	const string START = "start";
 	const string END = "end";
 
-	readonly Dictionary<string, HashSet<string>> Caves = new();
+	readonly Dictionary<string, List<string>> Caves = new();
 
 	public (string Part1, string Part2) Solve(string input)
 	{
@@ -20,54 +19,59 @@ class Day12 : IAnswer
 
 			if (!Caves.ContainsKey(path[0]))
 			{
-				Caves.Add(path[0], new HashSet<string>());
+				Caves.Add(path[0], new List<string>());
 			}
 
 			if (!Caves.ContainsKey(path[1]))
 			{
-				Caves.Add(path[1], new HashSet<string>());
+				Caves.Add(path[1], new List<string>());
 			}
 
 			Caves[path[0]].Add(path[1]);
 			Caves[path[1]].Add(path[0]);
 		}
 
-		var part1 = Score(START, new List<string>() { START });
-		var part2 = Score(START, new List<string>() { START }, true);
+		var part1 = Score(START, new Stack<string>(), true);
+		var part2 = Score(START, new Stack<string>(), false);
 
 		return (part1.ToString(), part2.ToString());
 	}
 
-	int Score(string start, List<string> visited, bool moreThanOnce = false)
+	int Score(string start, Stack<string> visited, bool moreThanOnce)
 	{
+		if (start == END)
+		{
+			return 1;
+		}
+
+		var isSmall = start.All(char.IsLower);
+
+		if (isSmall)
+		{
+			visited.Push(start);
+		}
+
 		var score = 0;
 
 		foreach (var point in Caves[start])
 		{
-			if (point == END)
-			{
-				score++;
-				continue;
-			}
-
+			var newMoreThanOnce = moreThanOnce;
 			if (visited.Contains(point))
 			{
-				if (moreThanOnce && point != START)
+				if (moreThanOnce || point == START)
 				{
-					score += Score(point, new List<string>(visited));
+					continue;
 				}
 
-				continue;
+				newMoreThanOnce = true;
 			}
 
-			var visiting = new List<string>(visited);
+			score += Score(point, visited, newMoreThanOnce);
+		}
 
-			if (point.All(char.IsLower))
-			{
-				visiting.Add(point);
-			}
-
-			score += Score(point, visiting, moreThanOnce);
+		if (isSmall)
+		{
+			visited.Pop();
 		}
 
 		return score;
