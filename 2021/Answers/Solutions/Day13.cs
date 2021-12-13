@@ -22,11 +22,16 @@ class Day13 : IAnswer
 		var maxX = numbers.Max(x => x[0]) + 2;
 		var maxY = numbers.Max(y => y[1]) + 2;
 		var part1 = 0;
-		var grid = new bool[maxY, maxX];
+		var grid = new bool[maxY][];
+
+		for (var i = 0; i < maxY; i++)
+		{
+			grid[i] = new bool[maxX];
+		}
 
 		foreach (var coord in numbers)
 		{
-			grid[coord[1], coord[0]] = true;
+			grid[coord[1]][coord[0]] = true;
 		}
 
 		foreach (var line in inputs[1].Split('\n'))
@@ -42,9 +47,9 @@ class Day13 : IAnswer
 					{
 						var y2 = 2 * fold - y;
 
-						if (grid[y2, x])
+						if (grid[y2][x])
 						{
-							grid[y, x] = true;
+							grid[y][x] = true;
 						}
 					}
 				}
@@ -58,9 +63,9 @@ class Day13 : IAnswer
 					{
 						var x2 = 2 * fold - x;
 
-						if (grid[y, x2])
+						if (grid[y][x2])
 						{
-							grid[y, x] = true;
+							grid[y][x] = true;
 						}
 					}
 				}
@@ -73,7 +78,7 @@ class Day13 : IAnswer
 				{
 					for (int x = 0; x < maxX; x++)
 					{
-						if (grid[y, x])
+						if (grid[y][x])
 						{
 							part1++;
 						}
@@ -89,7 +94,7 @@ class Day13 : IAnswer
 		{
 			for (int x = 0; x < maxX; x++)
 			{
-				part2.Append(grid[y, x] ? '#' : ' ');
+				part2.Append(grid[y][x] ? '#' : ' ');
 			}
 
 			part2.Append('\n');
