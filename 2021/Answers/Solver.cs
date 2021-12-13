@@ -58,7 +58,12 @@ public class Solver
 		var data = await File.ReadAllLinesAsync($"{AppDomain.CurrentDomain.BaseDirectory}/DataExamples/answers.txt");
 		var answers = data[day - 1].Split(" | ");
 
-		return (answers[0], answers[1]);
+		var GetAnswer = (int id) =>
+		{
+			return answers[id].Replace("\\n", "\n");
+		};
+
+		return (GetAnswer(0), GetAnswer(1));
 	}
 
 	public static Type GetSolutionType(int day)
