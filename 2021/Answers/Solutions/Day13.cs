@@ -22,6 +22,45 @@ class Day13 : IAnswer
 		var maxX = numbers.Max(x => x[0]) + 2;
 		var maxY = numbers.Max(y => y[1]) + 2;
 		var part1 = 0;
+
+		foreach (var line in inputs[1].Split('\n'))
+		{
+			var fold = int.Parse(line[13..]);
+			var isY = line[11] == 'y';
+
+			if (isY)
+			{
+				foreach (var number in numbers)
+				{
+					var y = number[1];
+					if (y > fold)
+					{
+						number[1] = 2 * fold - y;
+					}
+				}
+
+				maxY = fold;
+			}
+			else
+			{
+				foreach (var number in numbers)
+				{
+					var x = number[0];
+					if (x > fold)
+					{
+						number[0] = 2 * fold - x;
+					}
+				}
+
+				maxX = fold;
+			}
+
+			if (part1 == 0)
+			{
+				part1 = numbers.DistinctBy(x => x[1] * maxY + x[0]).Count();
+			}
+		}
+
 		var grid = new bool[maxY][];
 
 		for (var i = 0; i < maxY; i++)
@@ -32,59 +71,6 @@ class Day13 : IAnswer
 		foreach (var coord in numbers)
 		{
 			grid[coord[1]][coord[0]] = true;
-		}
-
-		foreach (var line in inputs[1].Split('\n'))
-		{
-			var fold = int.Parse(line[13..]);
-			var isY = line[11] == 'y';
-
-			if (isY)
-			{
-				for (int y = 0; y < fold; y++)
-				{
-					for (int x = 0; x < maxX; x++)
-					{
-						var y2 = 2 * fold - y;
-
-						if (grid[y2][x])
-						{
-							grid[y][x] = true;
-						}
-					}
-				}
-				maxY = fold;
-			}
-			else
-			{
-				for (int y = 0; y < maxY; y++)
-				{
-					for (int x = 0; x < fold; x++)
-					{
-						var x2 = 2 * fold - x;
-
-						if (grid[y][x2])
-						{
-							grid[y][x] = true;
-						}
-					}
-				}
-				maxX = fold;
-			}
-
-			if (part1 == 0)
-			{
-				for (int y = 0; y < maxY; y++)
-				{
-					for (int x = 0; x < maxX; x++)
-					{
-						if (grid[y][x])
-						{
-							part1++;
-						}
-					}
-				}
-			}
 		}
 
 		var part2 = new StringBuilder(maxY * maxX + maxY + 1);
