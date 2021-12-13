@@ -19,8 +19,8 @@ class Day13 : IAnswer
 			)
 			.ToArray();
 
-		var maxX = numbers.Max(x => x[0]) + 2;
-		var maxY = numbers.Max(y => y[1]) + 2;
+		var maxX = 0;
+		var maxY = 0;
 		var part1 = 0;
 
 		foreach (var line in inputs[1].Split('\n'))
@@ -57,20 +57,15 @@ class Day13 : IAnswer
 
 			if (part1 == 0)
 			{
-				part1 = numbers.DistinctBy(x => x[1] * maxY + x[0]).Count();
+				part1 = numbers.DistinctBy(x => x[1] * 10000 + x[0]).Count();
 			}
 		}
 
-		var grid = new bool[maxY][];
-
-		for (var i = 0; i < maxY; i++)
-		{
-			grid[i] = new bool[maxX];
-		}
+		var grid = new bool[maxY * maxX + maxX];
 
 		foreach (var coord in numbers)
 		{
-			grid[coord[1]][coord[0]] = true;
+			grid[coord[1] * maxX + coord[0]] = true;
 		}
 
 		var part2 = new StringBuilder(maxY * maxX + maxY + 1);
@@ -80,7 +75,7 @@ class Day13 : IAnswer
 		{
 			for (int x = 0; x < maxX; x++)
 			{
-				part2.Append(grid[y][x] ? '#' : ' ');
+				part2.Append(grid[y * maxX + x] ? '#' : ' ');
 			}
 
 			part2.Append('\n');
