@@ -36,39 +36,35 @@ class Day13 : IAnswer
 
 			if (isY)
 			{
-				var newGrid = new bool[fold, maxX];
 				for (int y = 0; y < fold; y++)
 				{
 					for (int x = 0; x < maxX; x++)
 					{
 						var y2 = 2 * fold - y;
 
-						if (grid[y, x] || grid[y2, x])
+						if (grid[y2, x])
 						{
-							newGrid[y, x] = true;
+							grid[y, x] = true;
 						}
 					}
 				}
 				maxY = fold;
-				grid = newGrid;
 			}
 			else
 			{
-				var newGrid = new bool[maxY, fold];
 				for (int y = 0; y < maxY; y++)
 				{
 					for (int x = 0; x < fold; x++)
 					{
 						var x2 = 2 * fold - x;
 
-						if (grid[y, x] || grid[y, x2])
+						if (grid[y, x2])
 						{
-							newGrid[y, x] = true;
+							grid[y, x] = true;
 						}
 					}
 				}
 				maxX = fold;
-				grid = newGrid;
 			}
 
 			if (part1 == 0)
