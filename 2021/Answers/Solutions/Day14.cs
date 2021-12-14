@@ -26,14 +26,12 @@ class Day14 : IAnswer
 
 		for (var i = 0; i < polymer.Length; i++)
 		{
-			chars.TryGetValue(polymer[i], out var count);
-			chars[polymer[i]] = count + 1;
+			chars[polymer[i]] = chars.GetValueOrDefault(polymer[i]) + 1;
 
 			if (i < polymer.Length - 1)
 			{
 				var pair = (polymer[i], polymer[i + 1]);
-				pairs.TryGetValue(pair, out count);
-				pairs[pair] = count + 1;
+				pairs[pair] = pairs.GetValueOrDefault(pair) + 1;
 			}
 		}
 
@@ -47,15 +45,11 @@ class Day14 : IAnswer
 				pairs[pair.Key] -= pair.Value;
 
 				var newPair = (pair.Key.Item1, insert);
-				pairs.TryGetValue(newPair, out var count);
-				pairs[newPair] = count + pair.Value;
+				pairs[newPair] = pairs.GetValueOrDefault(newPair) + pair.Value;
 
 				newPair = (insert, pair.Key.Item2);
-				pairs.TryGetValue(newPair, out count);
-				pairs[newPair] = count + pair.Value;
-
-				chars.TryGetValue(insert, out count);
-				chars[insert] = count + pair.Value;
+				pairs[newPair] = pairs.GetValueOrDefault(newPair) + pair.Value;
+				chars[insert] = chars.GetValueOrDefault(insert) + pair.Value;
 			}
 
 			if (step == 9)
