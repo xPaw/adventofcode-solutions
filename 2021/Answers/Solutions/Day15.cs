@@ -39,24 +39,22 @@ class Day15 : IAnswer
 		var activeTiles = new PriorityQueue<Tile, int>();
 		activeTiles.Enqueue(start, 0);
 
-		var Enqueue = (Tile walkableTile) =>
+		var Enqueue = (int tileX, int tileY, int tileCost) =>
 		{
-			var hash = walkableTile.Y * 10000 + walkableTile.X;
+			var hash = tileY * 10000 + tileX;
 
-			if (visitedTiles.Contains(hash))
+			if (!visitedTiles.Add(hash))
 			{
 				return;
 			}
 
-			visitedTiles.Add(hash);
-
-			var y = Math.DivRem(walkableTile.Y, size);
-			var x = Math.DivRem(walkableTile.X, size);
+			var y = Math.DivRem(tileY, size);
+			var x = Math.DivRem(tileX, size);
 
 			var cost = (map[y.Remainder * size + x.Remainder] + y.Quotient + x.Quotient - 1) % 9 + 1;
-			cost += walkableTile.Cost;
+			cost += tileCost;
 
-			activeTiles.Enqueue(new Tile(walkableTile.X, walkableTile.Y, cost), cost);
+			activeTiles.Enqueue(new Tile(tileX, tileY, cost), cost);
 		};
 
 		while (true)
@@ -70,22 +68,22 @@ class Day15 : IAnswer
 
 			if (checkTile.Y > 0)
 			{
-				Enqueue(new Tile(checkTile.X, checkTile.Y - 1, checkTile.Cost));
+				Enqueue(checkTile.X, checkTile.Y - 1, checkTile.Cost);
 			}
 
 			if (checkTile.Y < finish)
 			{
-				Enqueue(new Tile(checkTile.X, checkTile.Y + 1, checkTile.Cost));
+				Enqueue(checkTile.X, checkTile.Y + 1, checkTile.Cost);
 			}
 
 			if (checkTile.X > 0)
 			{
-				Enqueue(new Tile(checkTile.X - 1, checkTile.Y, checkTile.Cost));
+				Enqueue(checkTile.X - 1, checkTile.Y, checkTile.Cost);
 			}
 
 			if (checkTile.X < finish)
 			{
-				Enqueue(new Tile(checkTile.X + 1, checkTile.Y, checkTile.Cost));
+				Enqueue(checkTile.X + 1, checkTile.Y, checkTile.Cost);
 			}
 		}
 	}
