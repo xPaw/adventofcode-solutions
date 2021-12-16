@@ -157,9 +157,7 @@ class Day16 : IAnswer
 
 		for (int p = 0; p <= bitLength; p++)
 		{
-			// C# doesn't support bit shifts past 32 bits properly
-			// value |= (long)(bits[p] << (bitLength - p));
-			value += bits[p] * (long)Math.Pow(2, bitLength - p);
+			value |= (long)bits[p] << (bitLength - p);
 		}
 
 #if DEBUG
