@@ -135,16 +135,14 @@ class Day16 : IAnswer
 
 	long ReadVarInt()
 	{
-		var bits = new List<byte>();
+		long value = 0;
 
 		while (true)
 		{
 			var continued = ReadBit();
 
-			for (var p = 0; p < 4; p++)
-			{
-				bits.Add(ReadBit());
-			}
+			value <<= 4;
+			value += ReadInt(4);
 
 			if (continued == 0)
 			{
@@ -152,16 +150,8 @@ class Day16 : IAnswer
 			}
 		}
 
-		long value = 0;
-		var bitLength = bits.Count - 1;
-
-		for (int p = 0; p <= bitLength; p++)
-		{
-			value |= (long)bits[p] << (bitLength - p);
-		}
-
 #if DEBUG
-		Console.WriteLine($"Read literal value: {value} for {bits.Count} bits");
+		Console.WriteLine($"Read literal value: {value}");
 #endif
 
 		return value;
