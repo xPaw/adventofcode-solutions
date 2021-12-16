@@ -1,6 +1,7 @@
+#pragma warning disable IDE0042
+
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AdventOfCode2021;
 
