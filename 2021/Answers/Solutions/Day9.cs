@@ -7,6 +7,13 @@ namespace AdventOfCode2021;
 [Answer(9)]
 class Day9 : IAnswer
 {
+	readonly List<(int x, int y)> Directions = new()
+	{
+		(0, -1),
+		(0, 1),
+		(-1, 0),
+		(1, 0),
+	};
 	int MaxY;
 	int MaxX;
 
@@ -32,6 +39,7 @@ class Day9 : IAnswer
 
 		var part1 = 0;
 		var basins = new List<int>();
+		var basinTemp = new bool[MaxX * MaxY + MaxY + 1];
 
 		for (var x = 0; x <= MaxX; x++)
 		{
@@ -40,9 +48,17 @@ class Day9 : IAnswer
 				var n = locations[x][y];
 				var good = true;
 
-				foreach (var p in GetNeighbors(x, y))
+				foreach (var (dx, dy) in Directions)
 				{
-					if (locations[p.x][p.y] <= n)
+					var x2 = x + dx;
+					var y2 = y + dy;
+
+					if (y2 < 0 || x2 < 0 || y2 > MaxY || x2 > MaxX)
+					{
+						continue;
+					}
+
+					if (locations[x2][y2] <= n)
 					{
 						good = false;
 						break;
@@ -53,7 +69,8 @@ class Day9 : IAnswer
 				{
 					part1 += 1 + n;
 
-					basins.Add(GetBasin(locations, x, y));
+					basins.Add(GetBasin(basinTemp, locations, x, y));
+					Array.Clear(basinTemp, 0, basinTemp.Length);
 				}
 			}
 		}
@@ -65,10 +82,9 @@ class Day9 : IAnswer
 		return (part1.ToString(), part2.ToString());
 	}
 
-	int GetBasin(int[][] locations, int x, int y)
+	int GetBasin(bool[] basin, int[][] locations, int x, int y)
 	{
 		var count = 1;
-		var basin = new bool[MaxX * MaxY + MaxY + 1];
 		basin[x * MaxY + y] = true;
 
 		var queue = new Queue<(int x, int y)>();
@@ -78,8 +94,16 @@ class Day9 : IAnswer
 		{
 			var p = queue.Dequeue();
 
-			foreach (var (x2, y2) in GetNeighbors(p.x, p.y))
+			foreach (var (dx, dy) in Directions)
 			{
+				var x2 = p.x + dx;
+				var y2 = p.y + dy;
+
+				if (y2 < 0 || x2 < 0 || y2 > MaxY || x2 > MaxX)
+				{
+					continue;
+				}
+
 				if (!basin[x2 * MaxY + y2] && locations[x][y] < locations[x2][y2] && locations[x2][y2] < 9)
 				{
 					queue.Enqueue((x2, y2));
@@ -90,28 +114,5 @@ class Day9 : IAnswer
 		}
 
 		return count;
-	}
-
-	IEnumerable<(int x, int y)> GetNeighbors(int x, int y)
-	{
-		if (y > 0)
-		{
-			yield return (x, y - 1);
-		}
-
-		if (y < MaxY)
-		{
-			yield return (x, y + 1);
-		}
-
-		if (x > 0)
-		{
-			yield return (x - 1, y);
-		}
-
-		if (x < MaxX)
-		{
-			yield return (x + 1, y);
-		}
 	}
 }
