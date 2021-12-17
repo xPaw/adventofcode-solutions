@@ -54,6 +54,7 @@ var stopWatch = new Stopwatch();
 stopWatch.Restart();
 var (part1, part2) = Solver.Solve(type, data);
 stopWatch.Stop();
+total += stopWatch.Elapsed.TotalMilliseconds;
 
 Console.Write("Part 1: ");
 Console.ForegroundColor = ConsoleColor.Green;
@@ -103,7 +104,6 @@ if (runs > 1)
 	Console.Write(runs);
 	Console.ResetColor();
 	Console.WriteLine(" runs");
-
 
 	Console.Write("Min : ");
 	Console.ForegroundColor = ConsoleColor.Blue;
