@@ -18,7 +18,7 @@ class Day17 : IAnswer
 		var y1 = int.Parse(split[5]);
 		var y2 = int.Parse(split[7]);
 
-		var part1 = 0;
+		var part1 = y1 * (y1 + 1) / 2;
 		var part2 = 0;
 		var yMin = Math.Min(y1, y2);
 		var yMax = Math.Abs(yMin);
@@ -29,17 +29,11 @@ class Day17 : IAnswer
 			{
 				var coordinates = (x: 0, y: 0);
 				var velocity = (x, y);
-				var localMax = 0;
 
 				while (true)
 				{
 					coordinates.x += velocity.x;
 					coordinates.y += velocity.y;
-
-					if (localMax < coordinates.y)
-					{
-						localMax = coordinates.y;
-					}
 
 					if (coordinates.x > x2 || coordinates.y < yMin)
 					{
@@ -49,12 +43,6 @@ class Day17 : IAnswer
 					if (coordinates.x >= x1 && coordinates.x <= x2 && coordinates.y >= y1 && coordinates.y <= y2)
 					{
 						part2++;
-
-						if (part1 < localMax)
-						{
-							part1 = localMax;
-						}
-
 						break;
 					}
 
