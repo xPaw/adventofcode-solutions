@@ -26,6 +26,11 @@ class Day17 : IAnswer
 
 		for (var x = xMin; x <= x2; x++)
 		{
+			if (x > x2 / 2 && x < x1)
+			{
+				continue;
+			}
+
 			for (var y = yMin; y <= yMax; y++)
 			{
 				var coordinates = (x: 0, y: 0);
