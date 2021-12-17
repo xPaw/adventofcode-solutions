@@ -47,9 +47,12 @@ class Day17 : IAnswer
 						break;
 					}
 
-					if (velocity.x != 0)
+					if (velocity.x > 0)
 					{
-						velocity.x += velocity.x > 0 ? -1 : 1;
+						if (--velocity.x == 0 && coordinates.x < x1)
+						{
+							break;
+						}
 					}
 
 					velocity.y--;
