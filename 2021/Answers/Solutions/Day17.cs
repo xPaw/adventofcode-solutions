@@ -22,8 +22,9 @@ class Day17 : IAnswer
 		var part2 = 0;
 		var yMin = Math.Min(y1, y2);
 		var yMax = Math.Abs(yMin);
+		var xMin = ((int)Math.Sqrt(8 * x1 + 1) - 1) / 2;
 
-		for (var x = 1; x <= x2; x++)
+		for (var x = xMin; x <= x2; x++)
 		{
 			for (var y = yMin; y <= yMax; y++)
 			{
