@@ -133,9 +133,9 @@ static async Task BenchmarkAllDays()
 
 	Console.WriteLine($"{"Day",-10} {"Runs",-10} Time");
 
-	for (var day = 1; day < 17; day++)
+	for (var day = 1; day <= 18; day++)
 	{
-		var runs = day == 12 || day == 15 ? 100 : 5000;
+		var runs = day == 12 || day == 15 || day == 18 ? 100 : 5000;
 
 		Console.Write($"{day,-10} {runs,-10} ");
 
