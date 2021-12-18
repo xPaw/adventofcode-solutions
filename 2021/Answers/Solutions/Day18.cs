@@ -25,10 +25,17 @@ class Day18 : IAnswer
 			newNumber.X!.Parent = newNumber;
 			newNumber.Y!.Parent = newNumber;
 
+#if DEBUG
+			Console.WriteLine($"after addition: {newNumber}");
+#endif
+
 			while (true)
 			{
 				if (newNumber.Explode())
 				{
+#if DEBUG
+					Console.WriteLine($"after explode:  {newNumber}");
+#endif
 					continue;
 				}
 
@@ -36,6 +43,10 @@ class Day18 : IAnswer
 				{
 					break;
 				}
+
+#if DEBUG
+				Console.WriteLine($"after split:    {newNumber}");
+#endif
 			}
 
 			return newNumber;
