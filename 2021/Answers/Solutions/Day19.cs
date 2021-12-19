@@ -166,7 +166,7 @@ class Day19 : IAnswer
 		{
 			foreach (var beacon in beacons)
 			{
-				trueBeacons.Add(beacon.X * 100000 + beacon.Y * 10000 + beacon.Z);
+				trueBeacons.Add(beacon.X * 1000000 + beacon.Y * 100000 + beacon.Z);
 			}
 		}
 
