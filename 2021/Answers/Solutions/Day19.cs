@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace AdventOfCode2021;
 
-[Answer(19)]
+[Answer(19, slow: true)]
 class Day19 : IAnswer
 {
 	[DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]

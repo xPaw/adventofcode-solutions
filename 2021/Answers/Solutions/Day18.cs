@@ -4,7 +4,7 @@ using System.IO;
 
 namespace AdventOfCode2021;
 
-[Answer(18)]
+[Answer(18, slow: true)]
 class Day18 : IAnswer
 {
 	[DebuggerDisplay($"{{{nameof(ToString)}(),nq}}")]

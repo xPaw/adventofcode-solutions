@@ -133,14 +133,15 @@ static async Task BenchmarkAllDays()
 
 	Console.WriteLine($"{"Day",-10} {"Runs",-10} Time");
 
-	for (var day = 1; day <= 20; day++)
+	for (var day = 1; day <= 21; day++)
 	{
-		var runs = day == 12 || day == 15 || day == 18 || day == 19 || day == 20 ? 100 : 5000;
+		var data = await Solver.LoadData(day);
+		var type = Solver.GetSolutionType(day);
+		var attribute = (AnswerAttribute)type.GetCustomAttributes(typeof(AnswerAttribute), true)[0];
+		var runs = attribute.Slow ? 100 : 5000;
 
 		Console.Write($"{day,-10} {runs,-10} ");
 
-		var data = await Solver.LoadData(day);
-		var type = Solver.GetSolutionType(day);
 		var stopWatch = new Stopwatch();
 		double total = 0d;
 

@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
-
 namespace AdventOfCode2021;
 
-[Answer(20)]
+[Answer(20, slow: true)]
 class Day20 : IAnswer
 {
 	struct Pixel

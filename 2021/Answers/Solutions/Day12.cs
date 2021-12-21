@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace AdventOfCode2021;
 
-[Answer(12)]
+[Answer(12, slow: true)]
 class Day12 : IAnswer
 {
 	const string START = "start";

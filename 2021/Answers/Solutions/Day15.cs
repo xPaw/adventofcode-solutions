@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace AdventOfCode2021;
 
-[Answer(15)]
+[Answer(15, slow: true)]
 class Day15 : IAnswer
 {
 
