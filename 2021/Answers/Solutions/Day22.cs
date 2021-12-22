@@ -27,27 +27,24 @@ class Day22 : IAnswer
 			var z1 = int.Parse(split[9]);
 			var z2 = int.Parse(split[11]);
 
-			for (var x = Math.Max(x1, -50); x <= x2; x++)
+			if (x1 >= -50 && x2 <= 50 && y1 >= -50 && y2 <= 50 && z1 >= -50 && z2 <= 50)
 			{
-				if (x < -50 || x > 50) continue;
-
-				for (var y = Math.Max(y1, -50); y <= y2; y++)
+				for (var x = x1; x <= x2; x++)
 				{
-					if (y < -50 || y > 50) continue;
-
-					for (var z = Math.Max(z1, -50); z <= z2; z++)
+					for (var y = y1; y <= y2; y++)
 					{
-						if (z < -50 || z > 50) continue;
-
-						var hash = x * 10000000 + y * 100000 + z;
-
-						if (turnOn)
+						for (var z = z1; z <= z2; z++)
 						{
-							grid.Add(hash);
-						}
-						else
-						{
-							grid.Remove(hash);
+							var hash = x * 10000 + y * 100 + z;
+
+							if (turnOn)
+							{
+								grid.Add(hash);
+							}
+							else
+							{
+								grid.Remove(hash);
+							}
 						}
 					}
 				}
