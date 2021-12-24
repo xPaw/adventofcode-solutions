@@ -24,6 +24,13 @@ class Day24 : IAnswer
 		var part1 = Solve(true);
 		var part2 = Solve(false);
 
+#if DEBUG
+		System.Diagnostics.Debug.Assert(ArithmeticLogicUnit.FromLong(lines, part1).Registers[3] == 0);
+		System.Diagnostics.Debug.Assert(ArithmeticLogicUnit.FromLong(lines, part2).Registers[3] == 0);
+		System.Diagnostics.Debug.Assert(ArithmeticLogicUnit.FromLong(lines, part1 + 1).Registers[3] != 0);
+		System.Diagnostics.Debug.Assert(ArithmeticLogicUnit.FromLong(lines, part2 - 1).Registers[3] != 0);
+#endif
+
 		return (part1.ToString(), part2.ToString());
 	}
 
@@ -68,5 +75,88 @@ class Day24 : IAnswer
 		}
 
 		return n;
+	}
+
+	class ArithmeticLogicUnit
+	{
+		public readonly int[] Registers = new int[4];
+
+		public static ArithmeticLogicUnit FromLong(string[] instructions, long input)
+		{
+			var list = new List<int>();
+			while (input > 0)
+			{
+				list.Add((int)(input % 10));
+				input /= 10L;
+			}
+			list.Reverse();
+
+			return new ArithmeticLogicUnit(instructions, list.ToArray());
+		}
+
+		public ArithmeticLogicUnit(string[] instructions, int[] input)
+		{
+			var inputIndex = 0;
+
+			foreach (var instruction in instructions)
+			{
+				var line = instruction.Split(' ');
+
+				switch (line[0])
+				{
+					case "inp":
+						Registers[GetRegister(line[1])] = input[inputIndex++];
+						break;
+
+					case "add":
+						Registers[GetRegister(line[1])] += GetValue(line[2]);
+						break;
+
+					case "mul":
+						Registers[GetRegister(line[1])] *= GetValue(line[2]);
+						break;
+
+					case "div":
+						Registers[GetRegister(line[1])] /= GetValue(line[2]);
+						break;
+
+					case "mod":
+						Registers[GetRegister(line[1])] %= GetValue(line[2]);
+						break;
+
+					case "eql":
+						var r = GetRegister(line[1]);
+						Registers[r] = Registers[r] == GetValue(line[2]) ? 1 : 0;
+						break;
+
+					default:
+						throw new NotImplementedException(instruction);
+				}
+			}
+		}
+
+		int GetRegister(string register)
+		{
+			return register[0] switch
+			{
+				'w' => 0,
+				'x' => 1,
+				'y' => 2,
+				'z' => 3,
+				_ => int.Parse(register)
+			};
+		}
+
+		int GetValue(string value)
+		{
+			return value[0] switch
+			{
+				'w' => Registers[0],
+				'x' => Registers[1],
+				'y' => Registers[2],
+				'z' => Registers[3],
+				_ => int.Parse(value)
+			};
+		}
 	}
 }
