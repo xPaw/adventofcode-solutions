@@ -38,7 +38,7 @@ class Day24 : IAnswer
 							{
 								for (var n7 = 1; n7 < 10; n7++)
 								{
-									var stack = new Stack<(int Digit, int C)>();
+									var stack = new Stack<int>();
 									var digit = 0;
 									var bad = false;
 
@@ -58,12 +58,12 @@ class Day24 : IAnswer
 												_ => throw new NotImplementedException(),
 											};
 											digit++;
-											stack.Push((number[i], c[i]));
+											stack.Push(i);
 										}
 										else
 										{
-											var (lastDigit, lastC) = stack.Pop();
-											number[i] = lastDigit + lastC + b[i];
+											var y = stack.Pop();
+											number[i] = number[y] + c[y] + b[i];
 
 											if (number[i] < 1 || number[i] > 9)
 											{
