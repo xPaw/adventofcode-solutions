@@ -6,39 +6,58 @@ namespace AdventOfCode2021;
 [Answer(24, slow: true)]
 class Day24 : IAnswer
 {
+	readonly int[] a = new int[14];
+	readonly int[] b = new int[14];
+	readonly int[] c = new int[14];
+	readonly int[] stackLookup = new int[14];
+
 	public (string Part1, string Part2) Solve(string input)
 	{
 		var lines = input.Split('\n');
-		long part1 = 0;
-		long part2 = long.MaxValue;
-
-		var a = new int[14];
-		var b = new int[14];
-		var c = new int[14];
-		var number = new int[14];
+		var stack = new Stack<int>(7);
 
 		for (var i = 0; i < 14; i++)
 		{
 			a[i] = ParseNumber(lines[4 + 18 * i]);
 			b[i] = ParseNumber(lines[5 + 18 * i]);
 			c[i] = ParseNumber(lines[15 + 18 * i]);
+
+			if (a[i] == 1)
+			{
+				stack.Push(i);
+			}
+			else
+			{
+				stackLookup[i] = stack.Pop();
+			}
 		}
 
-		for (var n1 = 1; n1 < 10; n1++)
+		var part1 = Solve(new int[] { 9, 8, 7, 6, 5, 4, 3, 2, 1 });
+		var part2 = Solve(new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+
+		return (part1.ToString(), part2.ToString());
+	}
+
+	int ParseNumber(string line) => int.Parse(line[line.LastIndexOf(' ')..]);
+
+	long Solve(int[] range)
+	{
+		var number = new int[14];
+
+		foreach (var n1 in range)
 		{
-			for (var n2 = 1; n2 < 10; n2++)
+			foreach (var n2 in range)
 			{
-				for (var n3 = 1; n3 < 10; n3++)
+				foreach (var n3 in range)
 				{
-					for (var n4 = 1; n4 < 10; n4++)
+					foreach (var n4 in range)
 					{
-						for (var n5 = 1; n5 < 10; n5++)
+						foreach (var n5 in range)
 						{
-							for (var n6 = 1; n6 < 10; n6++)
+							foreach (var n6 in range)
 							{
-								for (var n7 = 1; n7 < 10; n7++)
+								foreach (var n7 in range)
 								{
-									var stack = new Stack<int>();
 									var digit = 0;
 									var bad = false;
 
@@ -58,11 +77,10 @@ class Day24 : IAnswer
 												_ => throw new NotImplementedException(),
 											};
 											digit++;
-											stack.Push(i);
 										}
 										else
 										{
-											var y = stack.Pop();
+											var y = stackLookup[i];
 											number[i] = number[y] + c[y] + b[i];
 
 											if (number[i] < 1 || number[i] > 9)
@@ -85,15 +103,7 @@ class Day24 : IAnswer
 										n = 10 * n + number[i];
 									}
 
-									if (part1 < n)
-									{
-										part1 = n;
-									}
-
-									if (part2 > n)
-									{
-										part2 = n;
-									}
+									return n;
 								}
 							}
 						}
@@ -102,8 +112,6 @@ class Day24 : IAnswer
 			}
 		}
 
-		return (part1.ToString(), part2.ToString());
+		return 0;
 	}
-
-	int ParseNumber(string line) => int.Parse(line[line.LastIndexOf(' ')..]);
 }
