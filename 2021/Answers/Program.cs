@@ -133,7 +133,7 @@ static async Task BenchmarkAllDays()
 
 	Console.WriteLine($"{"Day",-10} {"Runs",-10} Time");
 
-	for (var day = 1; day <= 21; day++)
+	for (var day = 1; day <= 25; day++)
 	{
 		var data = await Solver.LoadData(day);
 		var type = Solver.GetSolutionType(day);
@@ -141,6 +141,12 @@ static async Task BenchmarkAllDays()
 		var runs = attribute.Slow ? 100 : 5000;
 
 		Console.Write($"{day,-10} {runs,-10} ");
+
+		if (day == 23)
+		{
+			Console.WriteLine("* solved by hand");
+			continue;
+		}
 
 		var stopWatch = new Stopwatch();
 		double total = 0d;
