@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-
 namespace AdventOfCode;
 
 [Answer(1)]
@@ -9,50 +5,57 @@ public class Day1 : IAnswer
 {
 	public (string Part1, string Part2) Solve(string input)
 	{
-		var span = input.AsSpan();
-		var elves = new List<int>();
+		var length = input.Length;
 		var current = 0;
+		var num = 0;
+		var a = 0;
+		var b = 0;
+		var c = 0;
 
-		while (true)
+		void Swap(int x)
 		{
-			var newLine = span.IndexOf('\n');
-
-			if (newLine == 0)
+			if (a < x)
 			{
-				elves.Add(current);
-				current = 0;
-				span = span[1..];
-				continue;
+				c = b;
+				b = a;
+				a = x;
 			}
-
-			ReadOnlySpan<char> str;
-
-			if (newLine == -1)
+			else if (b < x)
 			{
-				str = span;
+				c = b;
+				b = x;
+			}
+			else if (c < x)
+			{
+				c = x;
+			}
+		}
+
+		for (var i = 0; i < length; i++)
+		{
+			if (input[i] == '\n')
+			{
+				if (num > 0)
+				{
+					current += num;
+					num = 0;
+				}
+				else
+				{
+					Swap(current);
+					current = 0;
+				}
 			}
 			else
 			{
-				str = span[..newLine];
+				num = 10 * num + input[i] - '0';
 			}
-
-			var num = int.Parse(str);
-			current += num;
-
-			if (newLine == -1)
-			{
-				break;
-			}
-
-			span = span[(newLine + 1)..];
 		}
 
-		elves.Add(current);
+		Swap(current + num);
 
-		elves = elves.OrderDescending().ToList();
-
-		var part1 = elves[0];
-		var part2 = elves[0] + elves[1] + elves[2];
+		var part1 = a;
+		var part2 = a + b + c;
 
 		return (part1.ToString(), part2.ToString());
 	}
