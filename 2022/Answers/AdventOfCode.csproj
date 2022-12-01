@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <RootNamespace>AdventOfCode</RootNamespace>
+    <Nullable>enable</Nullable>
+    <TieredCompilationQuickJitForLoops>true</TieredCompilationQuickJitForLoops>
+    <NoWarn>CA1822</NoWarn>
+		<PublishTrimmed>true</PublishTrimmed>
+    <PublishAot>true</PublishAot>
+  </PropertyGroup>
+	<ItemGroup>
+	  <None Include="../Data/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="Data/" />
+	  <None Include="../DataExamples/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="DataExamples/" />
+	</ItemGroup>
+	<ItemGroup>
+    <ProjectReference Include="..\SolverGenerator\SolverGenerator.csproj"
+                      OutputItemType="Analyzer"
+                      ReferenceOutputAssembly="false" />
+</ItemGroup>
+</Project>
