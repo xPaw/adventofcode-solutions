@@ -6,14 +6,15 @@
     <Nullable>enable</Nullable>
     <TieredCompilationQuickJitForLoops>true</TieredCompilationQuickJitForLoops>
     <NoWarn>CA1822</NoWarn>
-		<PublishTrimmed>true</PublishTrimmed>
+    <PublishTrimmed>true</PublishTrimmed>
     <PublishAot>true</PublishAot>
+    <TieredPGO>true</TieredPGO>
   </PropertyGroup>
-	<ItemGroup>
-	  <None Include="../Data/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="Data/" />
-	  <None Include="../DataExamples/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="DataExamples/" />
-	</ItemGroup>
-	<ItemGroup>
+  <ItemGroup>
+    <None Include="../Data/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="Data/" />
+    <None Include="../DataExamples/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="DataExamples/" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\SolverGenerator\SolverGenerator.csproj"
                       OutputItemType="Analyzer"
                       ReferenceOutputAssembly="false" />
