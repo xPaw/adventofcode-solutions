@@ -3,3 +3,4 @@ obj/
 node_modules/
 yarn.lock
 *.log
+BenchmarkDotNet.Artifacts/

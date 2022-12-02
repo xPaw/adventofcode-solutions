@@ -4,6 +4,10 @@ using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using AdventOfCode;
+using BenchmarkDotNet.Configs;
+using BenchmarkDotNet.Reports;
+using BenchmarkDotNet.Running;
+using Perfolizer.Horology;
 
 Console.OutputEncoding = Encoding.UTF8;
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
@@ -16,6 +20,14 @@ if (args.Length > 0)
 	if (args[0] == "combined")
 	{
 		await BenchmarkAllDays();
+		return 0;
+	}
+
+	if (args[0] == "benchmark")
+	{
+		var config = ManualConfig.Create(DefaultConfig.Instance)
+			.WithSummaryStyle(SummaryStyle.Default.WithTimeUnit(TimeUnit.Millisecond));
+		BenchmarkRunner.Run<BenchmarkSolver>(config);
 		return 0;
 	}
 
@@ -141,12 +153,6 @@ static async Task BenchmarkAllDays()
 		var runs = 100;
 
 		Console.Write($"{day,-10} {runs,-10} ");
-
-		if (day == 23)
-		{
-			Console.WriteLine("* solved by hand");
-			continue;
-		}
 
 		var stopWatch = new Stopwatch();
 		double total = 0d;
