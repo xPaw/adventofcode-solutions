@@ -76,9 +76,12 @@ public class Day5 : IAnswer
 		i = input.IndexOf('m', length);
 		length = input.Length;
 
+		var temp = new char[48];
+
 		for (; i < length; i++)
 		{
 			var move = ParseIntUntilFromSpace(' ');
+			var moves = move;
 			var from = ParseIntUntilFromSpace(' ') - 1;
 			var to = ParseIntUntilFromSpace('\n') - 1;
 
@@ -86,17 +89,17 @@ public class Day5 : IAnswer
 			var toStack1 = stacks1[to];
 			var fromStack2 = stacks2[from];
 			var toStack2 = stacks2[to];
-			var temp = new Stack<char>();
+			//var temp = new char[move];
 
 			while (move-- > 0)
 			{
 				toStack1.Push(fromStack1.Pop());
-				temp.Push(fromStack2.Pop());
+				temp[move] = fromStack2.Pop();
 			}
 
-			while (temp.Count > 0)
+			for (var j = 0; j < moves; j++)
 			{
-				toStack2.Push(temp.Pop());
+				toStack2.Push(temp[j]);
 			};
 		}
 
