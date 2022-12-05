@@ -9,7 +9,7 @@ public partial class Solver
 	public static async Task<string> LoadData(int day)
 	{
 		var data = await File.ReadAllTextAsync($"{AppDomain.CurrentDomain.BaseDirectory}/Data/day{day}.txt");
-		return data.Trim();
+		return data.TrimEnd();
 	}
 
 	private static partial IAnswer CreateSolutionInstance(int day);
@@ -22,7 +22,7 @@ public partial class Solver
 
 	public static async Task<(string, string, string, string)> SolveExample(int day)
 	{
-		var data = (await File.ReadAllTextAsync($"{AppDomain.CurrentDomain.BaseDirectory}/DataExamples/day{day}.txt")).Trim();
+		var data = (await File.ReadAllTextAsync($"{AppDomain.CurrentDomain.BaseDirectory}/DataExamples/day{day}.txt")).TrimEnd();
 		var solution = CreateSolutionInstance(day);
 
 		var (part1, part2) = solution.Solve(data);
