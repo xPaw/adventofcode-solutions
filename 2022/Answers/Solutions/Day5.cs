@@ -79,7 +79,7 @@ public class Day5 : IAnswer
 			var toStack1 = stacks1[to];
 			var fromStack2 = stacks2[from];
 			var toStack2 = stacks2[to];
-			var queue = new LinkedList<char>();
+			var before = toStack2.First!;
 
 			while (move-- > 0)
 			{
@@ -88,13 +88,15 @@ public class Day5 : IAnswer
 
 				var item = fromStack2.First!.Value;
 				fromStack2.RemoveFirst();
-				queue.AddFirst(item);
-			}
 
-			while (queue.Count > 0)
-			{
-				toStack2.AddFirst(queue.First!.Value);
-				queue.RemoveFirst();
+				if (before == null)
+				{
+					toStack2.AddLast(item);
+				}
+				else
+				{
+					toStack2.AddBefore(before, item);
+				}
 			}
 		}
 
