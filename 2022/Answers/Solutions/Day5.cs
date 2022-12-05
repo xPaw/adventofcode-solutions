@@ -34,8 +34,8 @@ public class Day5 : IAnswer
 			return result;
 		}
 
-		var stacks1 = new LinkedList<char>[10];
-		var stacks2 = new LinkedList<char>[10];
+		var stacks1 = new Stack<char>[10];
+		var stacks2 = new Stack<char>[10];
 		var stack = 0;
 
 		for (i = 0; i < stacks1.Length; i++)
@@ -58,12 +58,19 @@ public class Day5 : IAnswer
 			{
 				if (c != ' ')
 				{
-					stacks1[stack].AddLast(c);
-					stacks2[stack].AddLast(c);
+					stacks1[stack].Push(c);
+					stacks2[stack].Push(c);
 				}
 
 				stack++;
 			}
+		}
+
+		// reverse the stacks
+		for (i = 0; i < stacks1.Length; i++)
+		{
+			stacks1[i] = new(stacks1[i]);
+			stacks2[i] = new(stacks2[i]);
 		}
 
 		i = input.IndexOf('m', length);
@@ -79,41 +86,27 @@ public class Day5 : IAnswer
 			var toStack1 = stacks1[to];
 			var fromStack2 = stacks2[from];
 			var toStack2 = stacks2[to];
-			var before = toStack2.First!;
+			var temp = new Stack<char>();
 
 			while (move-- > 0)
 			{
-				toStack1.AddFirst(fromStack1.First!.Value);
-				fromStack1.RemoveFirst();
-
-				var item = fromStack2.First!.Value;
-				fromStack2.RemoveFirst();
-
-				if (before == null)
-				{
-					toStack2.AddLast(item);
-				}
-				else
-				{
-					toStack2.AddBefore(before, item);
-				}
+				toStack1.Push(fromStack1.Pop());
+				temp.Push(fromStack2.Pop());
 			}
+
+			while (temp.Count > 0)
+			{
+				toStack2.Push(temp.Pop());
+			};
 		}
 
-		string GetResult(LinkedList<char>[] stacks)
+		string GetResult(Stack<char>[] stacks)
 		{
 			var result = new StringBuilder(stacks.Length);
 
-			for (i = 0; i < stacks.Length; i++)
+			for (i = 0; i < stacks.Length && stacks[i].Count > 0; i++)
 			{
-				var first = stacks[i].First;
-
-				if (first == null)
-				{
-					break;
-				}
-
-				result.Append(first.Value);
+				result.Append(stacks[i].Peek());
 			}
 
 			return result.ToString();
