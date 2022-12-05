@@ -6,7 +6,6 @@ namespace AdventOfCode;
 [MemoryDiagnoser]
 public class BenchmarkSolver
 {
-	[Params(1, 2)]
 	public int Day;
 
 	private string Data = string.Empty;
@@ -14,6 +13,7 @@ public class BenchmarkSolver
 	[GlobalSetup]
 	public async Task Setup()
 	{
+		Day = System.DateTime.Today.Day;
 		Data = await Solver.LoadData(Day);
 	}
 
