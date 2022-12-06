@@ -7,30 +7,34 @@ public class Day6 : IAnswer
 {
 	public (string Part1, string Part2) Solve(string input)
 	{
-		static int SlideThatWindow(ReadOnlySpan<char> span, int size)
+		int SlideThatWindow(int size)
 		{
 			var start = 0;
-			var end = 0;
 
-			do
+			for (var end = 0; end < input.Length; end++)
 			{
-				end++;
+				var c = input[end];
 
-				var duplicate = span[start..end].IndexOf(span[end]);
-
-				if (duplicate > -1)
+				for (var j = start; j < end; j++)
 				{
-					start += duplicate + 1;
+					if (c == input[j])
+					{
+						start = j + 1;
+						break;
+					}
+				}
+
+				if (1 + end - start == size)
+				{
+					return end + 1;
 				}
 			}
-			while (1 + end - start != size);
 
-			return end + 1;
+			return 0;
 		}
 
-		var span = input.AsSpan();
-		var part1 = SlideThatWindow(span, 4);
-		var part2 = SlideThatWindow(span, 14);
+		var part1 = SlideThatWindow(4);
+		var part2 = SlideThatWindow(14);
 
 		return (part1.ToString(), part2.ToString());
 	}
