@@ -1,3 +1,4 @@
+#if !NO_BENCHMARK
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
 
@@ -23,3 +24,4 @@ public class BenchmarkSolver
 		return Solver.Solve(Day, Data);
 	}
 }
+#endif

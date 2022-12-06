@@ -4,11 +4,13 @@
     <TargetFramework>net7.0</TargetFramework>
     <RootNamespace>AdventOfCode</RootNamespace>
     <Nullable>enable</Nullable>
-    <TieredCompilationQuickJitForLoops>true</TieredCompilationQuickJitForLoops>
+    <TieredCompilation>false</TieredCompilation>
     <NoWarn>CA1822</NoWarn>
     <PublishTrimmed>true</PublishTrimmed>
     <PublishAot>true</PublishAot>
+    <PublishReadyToRun>true</PublishReadyToRun>
     <TieredPGO>true</TieredPGO>
+    <DefineConstants Condition=" '$(NO_BENCHMARK)' != '' ">$(DefineConstants);NO_BENCHMARK</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <None Include="../Data/*.txt" CopyToOutputDirectory="PreserveNewest" LinkBase="Data/" />

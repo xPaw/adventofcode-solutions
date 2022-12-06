@@ -4,10 +4,13 @@ using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using AdventOfCode;
+
+#if !NO_BENCHMARK
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Reports;
 using BenchmarkDotNet.Running;
 using Perfolizer.Horology;
+#endif
 
 Console.OutputEncoding = Encoding.UTF8;
 CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
@@ -23,6 +26,7 @@ if (args.Length > 0)
 		return 0;
 	}
 
+#if !NO_BENCHMARK
 	if (args[0] == "benchmark")
 	{
 		var config = ManualConfig.Create(DefaultConfig.Instance)
@@ -30,6 +34,7 @@ if (args.Length > 0)
 		BenchmarkRunner.Run<BenchmarkSolver>(config);
 		return 0;
 	}
+#endif
 
 	if (args[0] != "today" && !int.TryParse(args[0], out day))
 	{
