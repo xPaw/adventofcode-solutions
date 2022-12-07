@@ -67,25 +67,33 @@ double min = double.MaxValue;
 
 var stopWatch = new Stopwatch();
 
-stopWatch.Restart();
-var (part1, part2) = Solver.Solve(day, data);
-stopWatch.Stop();
-total += stopWatch.Elapsed.TotalMilliseconds;
+if (runs > 0)
+{
+	stopWatch.Restart();
+	var (part1, part2) = Solver.Solve(day, data);
+	stopWatch.Stop();
+	total += stopWatch.Elapsed.TotalMilliseconds;
 
-Console.Write("Part 1: ");
-Console.ForegroundColor = ConsoleColor.Green;
-Console.WriteLine(part1);
-Console.ResetColor();
+	Console.Write("Part 1: ");
+	Console.ForegroundColor = ConsoleColor.Green;
+	Console.WriteLine(part1);
+	Console.ResetColor();
 
-Console.Write("Part 2: ");
-Console.ForegroundColor = ConsoleColor.Green;
-Console.WriteLine(part2);
-Console.ResetColor();
+	Console.Write("Part 2: ");
+	Console.ForegroundColor = ConsoleColor.Green;
+	Console.WriteLine(part2);
+	Console.ResetColor();
+
+	if (part1 == part2)
+	{
+		Console.WriteLine("This should never happen, just here so compiler doesn't optimize away");
+	}
+}
 
 for (var i = 1; i < runs; i++)
 {
 	stopWatch.Restart();
-	(part1, part2) = Solver.Solve(day, data);
+	var (part1, part2) = Solver.Solve(day, data);
 	stopWatch.Stop();
 
 	var elapsed = stopWatch.Elapsed.TotalMilliseconds;
@@ -100,11 +108,6 @@ for (var i = 1; i < runs; i++)
 	{
 		max = elapsed;
 	}
-}
-
-if (part1 == part2)
-{
-	Console.WriteLine("This should never happen, just here so compiler doesn't optimize away");
 }
 
 Console.WriteLine();
