@@ -88,6 +88,24 @@ if (runs > 0)
 	{
 		Console.WriteLine("This should never happen, just here so compiler doesn't optimize away");
 	}
+
+	var (correctPart1, correctPart2) = await Solver.GetAnswers(day);
+
+	if (correctPart1 != part1)
+	{
+		Console.ForegroundColor = ConsoleColor.Yellow;
+		Console.Write("Part 1 answer is wrong, expected: ");
+		Console.WriteLine(correctPart1);
+		Console.ResetColor();
+	}
+
+	if (correctPart2 != part2)
+	{
+		Console.ForegroundColor = ConsoleColor.Yellow;
+		Console.Write("Part 2 answer is wrong, expected: ");
+		Console.WriteLine(correctPart2);
+		Console.ResetColor();
+	}
 }
 
 for (var i = 1; i < runs; i++)

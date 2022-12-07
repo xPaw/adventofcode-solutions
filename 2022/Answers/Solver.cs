@@ -6,6 +6,11 @@ namespace AdventOfCode;
 
 public partial class Solver
 {
+	private static string[]? Answers;
+	private static string[]? AnswersExample;
+
+	public static int AvailableDays => Answers?.Length ?? 0;
+
 	public static async Task<string> LoadData(int day)
 	{
 		var data = await File.ReadAllTextAsync($"{AppDomain.CurrentDomain.BaseDirectory}/Data/day{day}.txt");
@@ -57,8 +62,21 @@ public partial class Solver
 
 	public static async Task<(string Part1, string Part2)> GetExampleAnswers(int day)
 	{
-		var data = await File.ReadAllLinesAsync($"{AppDomain.CurrentDomain.BaseDirectory}/DataExamples/answers.txt");
-		var answers = data[day - 1].Split(" | ");
+		AnswersExample ??= await File.ReadAllLinesAsync($"{AppDomain.CurrentDomain.BaseDirectory}/DataExamples/answers.txt");
+
+		return GetAnswers(day, AnswersExample);
+	}
+
+	public static async Task<(string Part1, string Part2)> GetAnswers(int day)
+	{
+		Answers ??= await File.ReadAllLinesAsync($"{AppDomain.CurrentDomain.BaseDirectory}/Data/answers.txt");
+
+		return GetAnswers(day, Answers);
+	}
+
+	private static (string Part1, string Part2) GetAnswers(int day, string[] days)
+	{
+		var answers = days[day - 1].Split(" | ");
 
 		var GetAnswer = (int id) =>
 		{
