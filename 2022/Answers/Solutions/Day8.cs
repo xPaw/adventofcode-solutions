@@ -5,21 +5,8 @@ public class Day8 : IAnswer
 {
 	public (string Part1, string Part2) Solve(string input)
 	{
-		var width = 0;
-		var height = 1;
-
-		for (var a = 0; a < input.Length; a++)
-		{
-			if (input[a] == '\n')
-			{
-				height++;
-
-				if (width == 0)
-				{
-					width = a;
-				}
-			}
-		}
+		var width = input.IndexOf('\n');
+		var height = input.Length / width;
 
 		var part1 = width + width + height + height - 4;
 		var part2 = 0;
