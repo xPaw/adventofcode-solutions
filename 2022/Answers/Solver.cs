@@ -76,6 +76,11 @@ public partial class Solver
 
 	private static (string Part1, string Part2) GetAnswers(int day, string[] days)
 	{
+		if (day > days.Length)
+		{
+			return (string.Empty, string.Empty);
+		}
+
 		var answers = days[day - 1].Split(" | ");
 
 		var GetAnswer = (int id) =>
