@@ -9,8 +9,7 @@
 	},
 	"ava": {
 		"files": [
-			"2020/test.js",
-			"2019/test.js"
+			"test.js"
 		]
 	}
 }

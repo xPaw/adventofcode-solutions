@@ -5,8 +5,8 @@
 		<meta http-equiv="X-UA-Compatible" content="chrome=1">
 
 		<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:300,400">
-		<link rel="stylesheet" type="text/css" href="../css/hacker.css">
-		<link rel="stylesheet" type="text/css" href="../css/styles.css">
+		<link rel="stylesheet" type="text/css" href="css/hacker.css">
+		<link rel="stylesheet" type="text/css" href="css/styles.css">
 		<link rel="icon" type="image/png" href="https://assets-cdn.github.com/images/icons/emoji/unicode/1f384.png">
 
 		<title>Advent of Code Solutions by xPaw</title>
@@ -20,41 +20,41 @@
 				</p>
 			</div>
 		</div>
-		
+
 		<div class="container" id="js-forms">
 			<div class="alert alert-dismissible alert-warning">
 				<h4>You must enable javascript for this to work</h4>
 				<p>All solutions are done in javascript, what did you expect? :)</p>
 			</div>
 		</div>
-		
+
 		<script src="https://peterolson.github.io/BigInteger.js/BigInteger.min.js" async></script>
 		<script>
 			window.AdventOfCode = {};
-			
+
 			(function()
 			{
 				var solvedDays = 25;
 				var container = document.getElementById( 'js-forms' );
-				
+
 				container.innerHTML = '';
-				
+
 				var RequestIdleCallback = window.requestIdleCallback || function( cb ) { return setTimeout( cb, 1 ); };
-				
+
 				var OnButtonClick = function()
 				{
 					var that = this;
 					var i = that.dataset.day;
 					var input = document.getElementById( 'day' + i + '-textarea' ).value.trim();
-					
+
 					if( input.length === 0 )
 					{
 						return;
 					}
-					
+
 					that.disabled = true;
 					that.textContent = 'Calculating...';
-					
+
 					if( that.dataset.loaded )
 					{
 						CalculateAnswer( i, input, that );
@@ -65,14 +65,14 @@
 						script.onload = function()
 						{
 							that.dataset.loaded = true;
-							
+
 							CalculateAnswer( i, input, that );
 						};
 						script.src = 'js/day' + i + '.js';
 						document.head.appendChild( script );
 					}
 				};
-				
+
 				var CalculateAnswer = function( i, input, button )
 				{
 					RequestIdleCallback( function()
@@ -81,27 +81,27 @@
 						{
 							console.time( 'Day' + i );
 						}
-						
+
 						var solution = window.AdventOfCode[ 'Day' + i ]( input );
-						
+
 						if( console.timeEnd )
 						{
 							console.timeEnd( 'Day' + i );
 						}
-						
+
 						document.getElementById( 'day' + i + '-partone' ).value = solution[ 0 ];
 						document.getElementById( 'day' + i + '-parttwo' ).value = solution[ 1 ];
-						
+
 						button.disabled = false;
 						button.textContent = 'Find the answer';
 					} );
 				};
-				
+
 				var OnFocus = function()
 				{
 					this.select();
 				};
-				
+
 				for( var i = solvedDays; i > 0; i-- )
 				{
 					var panel = document.createElement( 'div' );
@@ -132,14 +132,14 @@
 							</form>\
 						</div>\
 					';
-					
+
 					container.appendChild( panel );
-					
+
 					document.getElementById( 'day' + i + '-button' ).addEventListener( 'click', OnButtonClick );
 					document.getElementById( 'day' + i + '-partone' ).addEventListener( 'focus', OnFocus );
 					document.getElementById( 'day' + i + '-parttwo' ).addEventListener( 'focus', OnFocus );
 				}
-				
+
 				// Focus on the latest day
 				document.querySelector( 'textarea:first-child' ).focus();
 			}());
