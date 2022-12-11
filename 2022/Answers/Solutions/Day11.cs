@@ -79,12 +79,19 @@ public class Day11 : IAnswer
 					case 3:
 						if (line[25] == 'o')
 						{
-							if (line[23] != '*')
+							if (line[23] == '*')
+							{
+								monkey.Operation = Operator.Power;
+							}
+							else if (line[23] == '+')
+							{
+								monkey.Operation = Operator.Multiply;
+								monkey.OperationVariable = 2;
+							}
+							else
 							{
 								throw new NotImplementedException();
 							}
-
-							monkey.Operation = Operator.Power;
 						}
 						else
 						{
