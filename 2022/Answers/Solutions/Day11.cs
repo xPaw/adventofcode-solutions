@@ -16,7 +16,8 @@ public class Day11 : IAnswer
 
 	class Monkey
 	{
-		public List<ulong> Items = new();
+		public ulong[] Items = new ulong[64];
+		public int ItemsCount = 0;
 		public Operator Operation;
 		public uint OperationVariable;
 		public uint DivisibleTest;
@@ -70,7 +71,7 @@ public class Day11 : IAnswer
 						{
 							var (index, result) = ParseIntUntil(numbers);
 							numbers = numbers[index..];
-							monkey.Items.Add(result);
+							monkey.Items[monkey.ItemsCount++] = result;
 						}
 						while (numbers.Length > 0);
 
@@ -135,8 +136,9 @@ public class Day11 : IAnswer
 			{
 				foreach (var monkey in monkeys)
 				{
-					foreach (var oldItem in monkey.Items)
+					for (var i = 0; i < monkey.ItemsCount; i++)
 					{
+						var oldItem = monkey.Items[i];
 						var newItem = monkey.Operation switch
 						{
 							Operator.Power => oldItem * oldItem,
@@ -156,11 +158,12 @@ public class Day11 : IAnswer
 
 						var throwTo = newItem % monkey.DivisibleTest == 0 ? monkey.MonkeyIfTrue : monkey.MonkeyIfFalse;
 
-						monkeys[throwTo].Items.Add(newItem);
+						var newMonkey = monkeys[throwTo];
+						newMonkey.Items[newMonkey.ItemsCount++] = newItem;
 						monkey.Inspections++;
 					}
 
-					monkey.Items.Clear();
+					monkey.ItemsCount = 0;
 				}
 			}
 
@@ -173,15 +176,19 @@ public class Day11 : IAnswer
 
 		foreach (var monkey in monkeys)
 		{
-			monkeys2.Add(new Monkey
+			var newMonkey = new Monkey
 			{
-				Items = monkey.Items.ToList(),
+				ItemsCount = monkey.ItemsCount,
 				MonkeyIfTrue = monkey.MonkeyIfTrue,
 				MonkeyIfFalse = monkey.MonkeyIfFalse,
 				DivisibleTest = monkey.DivisibleTest,
 				Operation = monkey.Operation,
 				OperationVariable = monkey.OperationVariable,
-			});
+			};
+
+			Array.Copy(monkey.Items, newMonkey.Items, monkey.ItemsCount);
+
+			monkeys2.Add(newMonkey);
 		}
 
 		var part1 = Simulate(monkeys, false);
