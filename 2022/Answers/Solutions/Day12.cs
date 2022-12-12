@@ -10,13 +10,12 @@ public class Day12 : IAnswer
 
 	public (string Part1, string Part2) Solve(string input)
 	{
-		var size = input.IndexOf('\n');
-		var sizeHeight = input.Length / size;
-		var map = new int[size * sizeHeight];
+		var width = input.IndexOf('\n');
+		var height = input.Length / width;
+		var map = new int[width * height];
 		var offset = 0;
 		var start = 0;
 		var finish = 0;
-		var alternateStarts = new List<int>();
 
 		foreach (var c in input)
 		{
@@ -29,54 +28,35 @@ public class Day12 : IAnswer
 
 			if (c == 'S')
 			{
-				start = offset;
+				finish = offset;
 				letter = 'a';
 			}
 			else if (c == 'E')
 			{
-				finish = offset;
+				start = offset;
 				letter = 'z';
 			}
 
-			var height = letter - 'a';
-
-			if (height == 0)
-			{
-				alternateStarts.Add(offset);
-			}
-
-			map[offset++] = height;
+			map[offset++] = letter - 'a';
 		}
 
-		var part1 = Solve(map, size, start, finish, sizeHeight);
-		var part2 = Solve(map, size, finish, finish, sizeHeight, true);
+		var part1 = 0;
+		var part2 = 0;
 
-		return (part1.ToString(), part2.ToString());
-	}
-
-	private int Solve(int[] map, int size, int start, int finish, int height, bool backwards = false)
-	{
 		int hash;
 		var visitedTiles = new HashSet<int>();
 		var activeTiles = new PriorityQueue<Tile, int>();
-		activeTiles.Enqueue(new Tile(start % size, start / size), 0);
+		activeTiles.Enqueue(new Tile(start % width, start / width), 0);
 
 		visitedTiles.Add(start);
 
 		void Enqueue(int tileX, int tileY, int cost)
 		{
 			var tile1 = map[hash];
-			var newHash = tileY * size + tileX;
+			var newHash = tileY * width + tileX;
 			var tile2 = map[newHash];
 
-			if (backwards)
-			{
-				if (tile1 - tile2 > 1)
-				{
-					return;
-				}
-			}
-			else if (tile2 - tile1 > 1)
+			if (tile1 - tile2 > 1)
 			{
 				return;
 			}
@@ -91,18 +71,17 @@ public class Day12 : IAnswer
 
 		while (activeTiles.TryDequeue(out var checkTile, out var cost))
 		{
-			hash = checkTile.Y * size + checkTile.X;
+			hash = checkTile.Y * width + checkTile.X;
 
-			if (backwards)
+			if (hash == finish)
 			{
-				if (map[hash] == 0)
-				{
-					return cost;
-				}
+				part1 = cost;
+				break;
 			}
-			else if (hash == finish)
+
+			if (part2 == 0 && map[hash] == 0)
 			{
-				return cost;
+				part2 = cost;
 			}
 
 			if (checkTile.Y > 0)
@@ -120,12 +99,12 @@ public class Day12 : IAnswer
 				Enqueue(checkTile.X - 1, checkTile.Y, cost);
 			}
 
-			if (checkTile.X + 1 < size)
+			if (checkTile.X + 1 < width)
 			{
 				Enqueue(checkTile.X + 1, checkTile.Y, cost);
 			}
 		}
 
-		return int.MaxValue;
+		return (part1.ToString(), part2.ToString());
 	}
 }
