@@ -6,13 +6,13 @@ namespace AdventOfCode;
 [Answer(12)]
 public class Day12 : IAnswer
 {
-	record Tile(int X, int Y);
+	record Tile(int X, int Y, int Cost);
 
 	public (string Part1, string Part2) Solve(string input)
 	{
 		var width = input.IndexOf('\n');
 		var height = input.Length / width;
-		var map = new int[width * height];
+		var map = new byte[width * height];
 		var offset = 0;
 		var start = 0;
 		var finish = 0;
@@ -37,18 +37,18 @@ public class Day12 : IAnswer
 				letter = 'z';
 			}
 
-			map[offset++] = letter - 'a';
+			map[offset++] = (byte)(letter - 'a');
 		}
 
 		var part1 = 0;
 		var part2 = 0;
 
 		int hash;
-		var visitedTiles = new HashSet<int>();
-		var activeTiles = new PriorityQueue<Tile, int>();
-		activeTiles.Enqueue(new Tile(start % width, start / width), 0);
+		var visitedTiles = new byte[map.Length];
+		var activeTiles = new Queue<Tile>();
+		activeTiles.Enqueue(new Tile(start % width, start / width, 0));
 
-		visitedTiles.Add(start);
+		visitedTiles[start] = 1;
 
 		void Enqueue(int tileX, int tileY, int cost)
 		{
@@ -61,47 +61,49 @@ public class Day12 : IAnswer
 				return;
 			}
 
-			if (!visitedTiles.Add(newHash))
+			if (visitedTiles[newHash] == 1)
 			{
 				return;
 			}
 
-			activeTiles.Enqueue(new Tile(tileX, tileY), cost + 1);
+			visitedTiles[newHash] = 1;
+
+			activeTiles.Enqueue(new Tile(tileX, tileY, cost + 1));
 		}
 
-		while (activeTiles.TryDequeue(out var checkTile, out var cost))
+		while (activeTiles.TryDequeue(out var checkTile))
 		{
 			hash = checkTile.Y * width + checkTile.X;
 
 			if (hash == finish)
 			{
-				part1 = cost;
+				part1 = checkTile.Cost;
 				break;
 			}
 
 			if (part2 == 0 && map[hash] == 0)
 			{
-				part2 = cost;
+				part2 = checkTile.Cost;
 			}
 
 			if (checkTile.Y > 0)
 			{
-				Enqueue(checkTile.X, checkTile.Y - 1, cost);
+				Enqueue(checkTile.X, checkTile.Y - 1, checkTile.Cost);
 			}
 
 			if (checkTile.Y + 1 < height)
 			{
-				Enqueue(checkTile.X, checkTile.Y + 1, cost);
+				Enqueue(checkTile.X, checkTile.Y + 1, checkTile.Cost);
 			}
 
 			if (checkTile.X > 0)
 			{
-				Enqueue(checkTile.X - 1, checkTile.Y, cost);
+				Enqueue(checkTile.X - 1, checkTile.Y, checkTile.Cost);
 			}
 
 			if (checkTile.X + 1 < width)
 			{
-				Enqueue(checkTile.X + 1, checkTile.Y, cost);
+				Enqueue(checkTile.X + 1, checkTile.Y, checkTile.Cost);
 			}
 		}
 
