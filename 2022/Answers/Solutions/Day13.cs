@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json.Nodes;
 
 namespace AdventOfCode;
 
@@ -10,89 +7,91 @@ public class Day13 : IAnswer
 {
 	public (string Part1, string Part2) Solve(string input)
 	{
-		JsonNode? left = null;
-		JsonNode? right = null;
-		var nodes = new List<JsonNode>();
+		input = input.Replace("10", ":");
+
+		ReadOnlySpan<char> previous = string.Empty;
 		var i = 0;
 		var pair = 1;
 		var part1 = 0;
+
+		var div1 = "[[2]]".AsSpan();
+		var div2 = "[[6]]".AsSpan();
+		var div1pos = 1;
+		var div2pos = 2;
 
 		foreach (var line in input.AsSpan().EnumerateLines())
 		{
 			if (i == 2)
 			{
-				if (ComparePackets(left!, right!) < 0)
-				{
-					part1 += pair;
-				}
-
 				i = 0;
 				pair++;
 				continue;
 			}
 
-			var node = JsonNode.Parse(line.ToString());
-			nodes.Add(node!);
-
 			if (i++ == 0)
 			{
-				left = node;
+				previous = line;
 			}
 			else
 			{
-				right = node;
+				if (ComparePackets(previous, line))
+				{
+					part1 += pair;
+				}
+			}
+
+			if (!ComparePackets(div2, line))
+			{
+				div2pos++;
+
+				if (!ComparePackets(div1, line))
+				{
+					div1pos++;
+				}
 			}
 		}
 
-		if (ComparePackets(left!, right!) < 0)
-		{
-			part1 += pair;
-		}
-
-		var div1 = JsonNode.Parse("[[2]]")!;
-		var div2 = JsonNode.Parse("[[6]]")!;
-
-		nodes.Add(div1);
-		nodes.Add(div2);
-		nodes.Sort(ComparePackets);
-
-		var part2 = (nodes.IndexOf(div1) + 1) * (nodes.IndexOf(div2) + 1);
+		var part2 = div1pos * div2pos;
 
 		return (part1.ToString(), part2.ToString());
 	}
 
-	int ComparePackets(JsonNode left, JsonNode right)
+	bool ComparePackets(ReadOnlySpan<char> left, ReadOnlySpan<char> right)
 	{
-		if (left is JsonValue && right is JsonValue)
+		while (true)
 		{
-			return (int)left - (int)right;
-		}
-
-		if (left is not JsonArray leftArray)
-		{
-			leftArray = new JsonArray((int)left);
-		}
-
-		if (right is not JsonArray rightArray)
-		{
-			rightArray = new JsonArray((int)right);
-		}
-
-		foreach (var (leftZip, rightZip) in leftArray.Zip(rightArray))
-		{
-			var result = ComparePackets(leftZip!, rightZip!);
-
-			if (result != 0)
+			if (left[0] == right[0])
 			{
-				return result;
+				left = left[1..];
+				right = right[1..];
+				continue;
 			}
-		}
 
-		if (leftArray.Count != rightArray.Count)
-		{
-			return leftArray.Count - rightArray.Count;
-		}
+			if (left[0] == ']')
+			{
+				return true;
+			}
 
-		return 0;
+			if (right[0] == ']')
+			{
+				return false;
+			}
+
+			if (left[0] == '[')
+			{
+				left = left[1..];
+				right = string.Concat(right[0..1], "]".AsSpan(), right[1..]);
+				continue;
+			}
+
+			if (right[0] == '[')
+			{
+				left = string.Concat(left[0..1], "]".AsSpan(), left[1..]);
+				right = right[1..];
+				continue;
+			}
+
+			return left[0] < right[0];
+		}
 	}
 }
