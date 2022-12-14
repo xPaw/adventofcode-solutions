@@ -78,19 +78,27 @@ public class Day14 : IAnswer
 		var landed = true;
 		var countp1 = true;
 
+		var fall = 1;
+		var path = new (short X, short Y)[maxY];
+		path[0] = (500, 0);
+
 		do
 		{
-			var sandX = 500;
-			var sandY = 0;
+			var (prevX, prevY) = path[--fall];
+			var sandX = prevX;
+			var sandY = prevY;
 			landed = false;
 
 			while (true)
 			{
+				path[fall++] = (sandX, sandY);
+
 				if (sandY == maxY - 1)
 				{
 					countp1 = false;
 					landed = true;
 					part2++;
+					fall--;
 					map[sandY * maxX + sandX] = true;
 					break;
 				}
@@ -122,6 +130,7 @@ public class Day14 : IAnswer
 
 				landed = true;
 				part2++;
+				fall--;
 				map[sandY * maxX + sandX] = true;
 				break;
 			}
