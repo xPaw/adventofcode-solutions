@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AdventOfCode;
 
@@ -12,6 +11,8 @@ public class Day15 : IAnswer
 		var i = 0;
 		var length = input.Length;
 		var sensors = new List<(int X, int Y, int Manhattan)>();
+		var acoeffs = new HashSet<int>();
+		var bcoeffs = new HashSet<int>();
 
 		int ParseInt()
 		{
@@ -74,63 +75,64 @@ public class Day15 : IAnswer
 
 			if (manhattan > dY)
 			{
-				manhattan -= dY;
-				minX = Math.Min(minX, sensorX - manhattan);
-				maxX = Math.Max(maxX, sensorX + manhattan);
+				minX = Math.Min(minX, sensorX - (manhattan - dY));
+				maxX = Math.Max(maxX, sensorX + (manhattan - dY));
 			}
+
+			acoeffs.Add(sensorY - sensorX + manhattan + 1);
+			acoeffs.Add(sensorY - sensorX - manhattan - 1);
+			bcoeffs.Add(sensorX + sensorY + manhattan + 1);
+			bcoeffs.Add(sensorX + sensorY - manhattan - 1);
 		}
 
+		var part1 = Math.Abs(maxX - minX);
 		var part2 = 0ul;
 
-		for (var id = 0; id < sensors.Count; id++)
+		foreach (var a in acoeffs)
 		{
-			var (sensorX, sensorY, manhattan) = sensors[id];
-			var sortedSensors = sensors
-				.Where((s, i) => i != id)
-				.OrderBy(s => Math.Abs(sensorX - s.X) + Math.Abs(sensorY - s.Y))
-				.ToList();
-
-			for (var signX = -1; signX <= 1; signX += 2)
+			foreach (var b in bcoeffs)
 			{
-				for (var signY = -1; signY <= 1; signY += 2)
+				if ((b - a) % 2 == 1)
 				{
-					for (var width = 0; width <= manhattan + 1; width++)
+					continue;
+				}
+
+				var x = (b - a) / 2;
+				var y = (b + a) / 2;
+
+				if (x < 0 || y < 0 || x > max2 || y > max2)
+				{
+					continue;
+				}
+
+				var noOverlaps = true;
+
+				foreach (var (sensorX, sensorY, manhattan) in sensors)
+				{
+					var manhattanPoint = Math.Abs(sensorX - x) + Math.Abs(sensorY - y);
+
+					if (manhattanPoint <= manhattan)
 					{
-						var height = manhattan + 1 - width;
-						var x = sensorX + width * signX;
-						var y = sensorY + height * signY;
-
-						if (x < 0 || y < 0 || x > max2 || y > max2)
-						{
-							break;
-						}
-
-						var noOverlaps = true;
-
-						foreach (var (sensorX2, sensorY2, manhattan2) in sortedSensors)
-						{
-							var manhattanPoint = Math.Abs(sensorX2 - x) + Math.Abs(sensorY2 - y);
-
-							if (manhattanPoint <= manhattan2)
-							{
-								noOverlaps = false;
-								break;
-							}
-						}
-
-						if (noOverlaps)
-						{
-							part2 = (ulong)x * 4_000_000ul + (ulong)y;
-							goto stop;
-						}
+						noOverlaps = false;
+						break;
 					}
+				}
+
+				if (noOverlaps)
+				{
+					part2 = (ulong)x * 4_000_000ul + (ulong)y;
+
+					if (y == wantedY)
+					{
+						part1--;
+					}
+
+					goto stop;
 				}
 			}
 		}
 
 	stop:
-		var part1 = Math.Abs(maxX - minX);
-
 		return (part1.ToString(), part2.ToString());
 	}
 }
