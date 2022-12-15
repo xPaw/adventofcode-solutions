@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AdventOfCode;
 
@@ -81,8 +82,14 @@ public class Day15 : IAnswer
 
 		var part2 = 0ul;
 
-		foreach (var (sensorX, sensorY, manhattan) in sensors)
+		for (var id = 0; id < sensors.Count; id++)
 		{
+			var (sensorX, sensorY, manhattan) = sensors[id];
+			var sortedSensors = sensors
+				.Where((s, i) => i != id)
+				.OrderBy(s => Math.Abs(sensorX - s.X) + Math.Abs(sensorY - s.Y))
+				.ToList();
+
 			for (var signX = -1; signX <= 1; signX += 2)
 			{
 				for (var signY = -1; signY <= 1; signY += 2)
@@ -100,7 +107,7 @@ public class Day15 : IAnswer
 
 						var noOverlaps = true;
 
-						foreach (var (sensorX2, sensorY2, manhattan2) in sensors)
+						foreach (var (sensorX2, sensorY2, manhattan2) in sortedSensors)
 						{
 							var manhattanPoint = Math.Abs(sensorX2 - x) + Math.Abs(sensorY2 - y);
 
