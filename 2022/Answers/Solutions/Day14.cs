@@ -49,27 +49,27 @@ public class Day14 : IAnswer
 		{
 			for (var i = 1; i < line.Length; i++)
 			{
-				var start = line[i - 1];
-				var end = line[i];
+				var (startX, startY) = line[i - 1];
+				var (endX, endY) = line[i];
 
-				if (start.X == end.X)
+				if (startX == endX)
 				{
-					var startY = Math.Min(start.Y, end.Y);
-					var endY = Math.Max(start.Y, end.Y);
+					var start = Math.Min(startY, endY);
+					var end = Math.Max(startY, endY);
 
-					for (var y = startY; y <= endY; y++)
+					for (var y = start; y <= end; y++)
 					{
-						map[y * maxX + start.X] = true;
+						map[y * maxX + startX] = true;
 					}
 				}
 				else
 				{
-					var startX = Math.Min(start.X, end.X);
-					var endX = Math.Max(start.X, end.X);
+					var start = Math.Min(startX, endX);
+					var end = Math.Max(startX, endX);
 
-					for (var x = startX; x <= endX; x++)
+					for (var x = start; x <= end; x++)
 					{
-						map[start.Y * maxX + x] = true;
+						map[startY * maxX + x] = true;
 					}
 				}
 			}
