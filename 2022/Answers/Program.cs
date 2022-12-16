@@ -57,7 +57,14 @@ Console.WriteLine(day);
 
 var data = await Solver.LoadData(day);
 
-await Solver.SolveExample(day);
+if (runs >= 0)
+{
+	await Solver.SolveExample(day);
+}
+else
+{
+	runs = 1;
+}
 
 Console.WriteLine();
 
