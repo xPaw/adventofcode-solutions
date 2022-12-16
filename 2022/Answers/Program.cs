@@ -166,7 +166,7 @@ else
 	Console.ForegroundColor = ConsoleColor.Blue;
 	Console.Write("{0:N6}", stopWatch.Elapsed.TotalMilliseconds);
 	Console.ResetColor();
-	Console.WriteLine("ms");
+	Console.WriteLine($"ms ({stopWatch.Elapsed})");
 }
 
 return 0;
