@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -30,13 +31,20 @@ public partial class Solver
 		var data = (await File.ReadAllTextAsync($"{AppDomain.CurrentDomain.BaseDirectory}/DataExamples/day{day}.txt")).TrimEnd();
 		var solution = CreateSolutionInstance(day);
 
+		var stopWatch = new Stopwatch();
+		stopWatch.Start();
 		var (part1, part2) = solution.Solve(data);
+		stopWatch.Stop();
 
-		Console.ForegroundColor = ConsoleColor.DarkBlue;
 		Console.Write("Example solution: ");
+		Console.ForegroundColor = ConsoleColor.DarkBlue;
 		Console.Write(part1);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
 		Console.Write(" | ");
-		Console.WriteLine(part2);
+		Console.ForegroundColor = ConsoleColor.DarkBlue;
+		Console.Write(part2);
+		Console.ForegroundColor = ConsoleColor.DarkGray;
+		Console.WriteLine($" ({stopWatch.Elapsed})");
 		Console.ResetColor();
 
 		var (correctPart1, correctPart2) = await GetExampleAnswers(day);

@@ -53,7 +53,9 @@ if (args.Length > 0)
 }
 
 Console.Write("Day: ");
+Console.ForegroundColor = ConsoleColor.Blue;
 Console.WriteLine(day);
+Console.ResetColor();
 
 var data = await Solver.LoadData(day);
 
@@ -166,7 +168,10 @@ else
 	Console.ForegroundColor = ConsoleColor.Blue;
 	Console.Write("{0:N6}", stopWatch.Elapsed.TotalMilliseconds);
 	Console.ResetColor();
-	Console.WriteLine($"ms ({stopWatch.Elapsed})");
+	Console.Write("ms");
+	Console.ForegroundColor = ConsoleColor.DarkGray;
+	Console.WriteLine($" ({stopWatch.Elapsed})");
+	Console.ResetColor();
 }
 
 return 0;
