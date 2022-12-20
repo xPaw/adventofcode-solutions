@@ -50,11 +50,19 @@ public class Day20 : IAnswer
 
 	static long Solve(Node[] list, int rounds)
 	{
+		var length = list.Length - 1;
+		var half = length / 2;
+
 		for (var round = 0; round < rounds; round++)
 		{
 			foreach (var node in list)
 			{
-				var move = Mod(node.Value, list.Length - 1);
+				var move = node.Value % length;
+
+				if (move < 0)
+				{
+					move += length;
+				}
 
 				node.Prev.Next = node.Next;
 				node.Next.Prev = node.Prev;
@@ -62,10 +70,23 @@ public class Day20 : IAnswer
 				var prev = node.Prev;
 				var next = node.Next;
 
-				while (move-- > 0)
+				if (move >= half)
 				{
-					prev = prev.Next;
-					next = next.Next;
+					move = length - move;
+
+					while (move-- > 0)
+					{
+						prev = prev.Prev;
+						next = next.Prev;
+					}
+				}
+				else
+				{
+					while (move-- > 0)
+					{
+						prev = prev.Next;
+						next = next.Next;
+					}
 				}
 
 				prev.Next = node;
