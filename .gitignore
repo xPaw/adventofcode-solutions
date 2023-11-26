@@ -1,6 +1,8 @@
 bin/
 obj/
 node_modules/
+.vs/
 yarn.lock
 *.log
 BenchmarkDotNet.Artifacts/
+.cookie
