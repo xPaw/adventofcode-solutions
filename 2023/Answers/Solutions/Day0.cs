@@ -1,3 +1,5 @@
+using System;
+
 namespace AdventOfCode;
 
 [Answer(0)]

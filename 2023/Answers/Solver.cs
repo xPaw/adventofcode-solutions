@@ -5,7 +5,7 @@ namespace AdventOfCode;
 
 public partial class Solver
 {
-	public static int AvailableDays => Answers?.Length ?? 0;
+	public static int AvailableDays => Answers.Length - 1;
 
 	private static partial IAnswer CreateSolutionInstance(int day);
 

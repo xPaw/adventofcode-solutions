@@ -1,5 +1,3 @@
-using System;
-
 namespace AdventOfCode;
 
 public interface IAnswer
