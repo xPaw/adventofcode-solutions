@@ -3,7 +3,7 @@ using System;
 namespace AdventOfCode;
 
 [Answer(0)]
-public class Day0() : IAnswer
+public class Day0 : IAnswer
 {
 	public Solution Solve(string input)
 	{

@@ -4,7 +4,7 @@ using System.Text;
 namespace AdventOfCode;
 
 [Answer(1)]
-public class Day1() : IAnswer
+public class Day1 : IAnswer
 {
 	public Solution Solve(string input)
 	{
@@ -19,13 +19,13 @@ public class Day1() : IAnswer
 		var sb = new StringBuilder(input)
 			.Replace("one", "o1e")
 			.Replace("two", "t2o")
-			.Replace("three", "t3e")
-			.Replace("four", "f4r")
-			.Replace("five", "f5e")
+			.Replace("three", "thr3e")
+			.Replace("four", "fo4r")
+			.Replace("five", "fi5e")
 			.Replace("six", "s6x")
-			.Replace("seven", "s7n")
-			.Replace("eight", "e8t")
-			.Replace("nine", "n9e");
+			.Replace("seven", "se7en")
+			.Replace("eight", "ei8ht")
+			.Replace("nine", "n9ne");
 
 		foreach (var line in sb.ToString().AsSpan().EnumerateLines())
 		{
