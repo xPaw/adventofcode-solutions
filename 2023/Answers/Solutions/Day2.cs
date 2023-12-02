@@ -14,9 +14,7 @@ public class Day2 : IAnswer
 
 		foreach (var line in input.AsSpan().EnumerateLines())
 		{
-			gameId++;
-
-			var possible = true;
+			var part1Score = ++gameId;
 			var maxR = 0;
 			var maxG = 0;
 			var maxB = 0;
@@ -38,19 +36,19 @@ public class Day2 : IAnswer
 					case 'r':
 						i += 6;
 						limit = 12;
-						if (maxR < num) maxR = num;
+						maxR = Math.Max(maxR, num);
 						break;
 
 					case 'g':
 						i += 8;
 						limit = 13;
-						if (maxG < num) maxG = num;
+						maxG = Math.Max(maxG, num);
 						break;
 
 					case 'b':
 						i += 7;
 						limit = 14;
-						if (maxB < num) maxB = num;
+						maxB = Math.Max(maxB, num);
 						break;
 
 					default:
@@ -59,16 +57,12 @@ public class Day2 : IAnswer
 
 				if (num > limit)
 				{
-					possible = false;
+					part1Score = 0;
 				}
 			}
 
+			part1 += part1Score;
 			part2 += maxR * maxG * maxB;
-
-			if (possible)
-			{
-				part1 += gameId;
-			}
 		}
 
 		return new(part1.ToString(), part2.ToString());
