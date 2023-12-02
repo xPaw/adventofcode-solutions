@@ -10,82 +10,66 @@ public class Day2 : IAnswer
 	{
 		var part1 = 0;
 		var part2 = 0;
-		var i = input.IndexOf(':');
-		var length = input.Length;
-		var gameId = 1;
-		var currentBag = new int[3];
-		var possible = true;
+		var gameId = 0;
 
-		int ParseInt()
+		foreach (var line in input.AsSpan().EnumerateLines())
 		{
-			var result = 0;
+			gameId++;
 
-			do
+			var possible = true;
+			var maxR = 0;
+			var maxG = 0;
+			var maxB = 0;
+			int limit;
+
+			for (var i = line.IndexOf(':') + 2; i < line.Length; i++)
 			{
-				result = 10 * result + input[i++] - '0';
+				var num = line[i] - '0';
+				var next = line[i + 1];
+
+				if (next != ' ')
+				{
+					i++;
+					num = 10 * num + next - '0';
+				}
+
+				switch (line[i + 2])
+				{
+					case 'r':
+						i += 6;
+						limit = 12;
+						if (maxR < num) maxR = num;
+						break;
+
+					case 'g':
+						i += 8;
+						limit = 13;
+						if (maxG < num) maxG = num;
+						break;
+
+					case 'b':
+						i += 7;
+						limit = 14;
+						if (maxB < num) maxB = num;
+						break;
+
+					default:
+						throw new UnreachableException();
+				}
+
+				if (num > limit)
+				{
+					possible = false;
+				}
 			}
-			while (char.IsAsciiDigit(input[i]));
 
-			return result;
-		}
-
-		void Score()
-		{
-			part2 += currentBag[0] * currentBag[1] * currentBag[2];
+			part2 += maxR * maxG * maxB;
 
 			if (possible)
 			{
 				part1 += gameId;
 			}
 		}
-
-		while (i < length)
-		{
-			var t = input[i];
-
-			if (t == '\n')
-			{
-				Score();
-
-				gameId++;
-				possible = true;
-				currentBag[0] = 0;
-				currentBag[1] = 0;
-				currentBag[2] = 0;
-
-				i = input.IndexOf(':', i);
-
-				continue;
-			}
-
-			if (!char.IsAsciiDigit(t))
-			{
-				i++;
-				continue;
-			}
-
-			var num = ParseInt();
-
-			var color = input[++i] switch
-			{
-				'r' => 0,
-				'g' => 1,
-				'b' => 2,
-				_ => throw new UnreachableException(),
-			};
-
-			if (num > (12 + color))
-			{
-				possible = false;
-			}
-
-			if (currentBag[color] < num)
-			{
-				currentBag[color] = num;
-			}
-		}
-
-		Score();
 
 		return new(part1.ToString(), part2.ToString());
 	}
