@@ -10,9 +10,9 @@ public class Day2 : IAnswer
 	{
 		var part1 = 0;
 		var part2 = 0;
-		var i = 0;
+		var i = input.IndexOf(':');
 		var length = input.Length;
-		var gameId = 0;
+		var gameId = 1;
 		var currentBag = new int[3];
 		var possible = true;
 
@@ -46,8 +46,15 @@ public class Day2 : IAnswer
 			if (t == '\n')
 			{
 				Score();
-				i++;
-				gameId = 0;
+
+				gameId++;
+				possible = true;
+				currentBag[0] = 0;
+				currentBag[1] = 0;
+				currentBag[2] = 0;
+
+				i = input.IndexOf(':', i);
+
 				continue;
 			}
 
@@ -58,16 +65,6 @@ public class Day2 : IAnswer
 			}
 
 			var num = ParseInt();
-
-			if (gameId == 0)
-			{
-				gameId = num;
-				possible = true;
-				currentBag[0] = 0;
-				currentBag[1] = 0;
-				currentBag[2] = 0;
-				continue;
-			}
 
 			var color = input[++i] switch
 			{
