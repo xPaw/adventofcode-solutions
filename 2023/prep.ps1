@@ -4,6 +4,8 @@ $Cookie = (Get-Content -Path .\.cookie).Trim()
 
 New-Item -Path "Data" -Name "day$Day.txt" -ItemType "file"
 New-Item -Path "DataExamples" -Name "day$Day.txt" -ItemType "file"
+Add-Content -Path "Data\answers.txt" -Value "0 | 0"
+Add-Content -Path "DataExamples\answers.txt" -Value "0 | 0"
 
 $Path = "Answers\Solutions\Day$Day.cs"
 

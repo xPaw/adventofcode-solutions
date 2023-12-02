@@ -6,7 +6,7 @@ namespace AdventOfCode;
 [MemoryDiagnoser]
 public class BenchmarkSolver
 {
-	[Params(1)]
+	//[Params(1)]
 	public int Day { get; set; }
 
 	private string Data = string.Empty;
