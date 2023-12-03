@@ -12,30 +12,8 @@ public class Day3 : IAnswer
 		var part2 = 0;
 
 		var size = input.IndexOf('\n') + 1;
-		var seen = new HashSet<int>(size * 15);
 
 		char GetAtPosition(int x, int y) => input[y * size + x];
-
-		(int Number, int NumberZeroIfSeen) SumNumber(bool isGear, int x, int y)
-		{
-			while (--x >= 0 && char.IsAsciiDigit(GetAtPosition(x, y)))
-			{
-				//
-			}
-
-			var number = 0;
-
-			do
-			{
-				number = number * 10 + (GetAtPosition(++x, y) - '0');
-			}
-			while (char.IsAsciiDigit(GetAtPosition(x + 1, y)));
-
-			var leftReturn = seen.Add(x * size + y) ? number : 0;
-			var rightReturn = isGear && seen.Add(x * size * 1000 + y) ? number : 0;
-
-			return (leftReturn, rightReturn);
-		}
 
 		for (var i = 0; i < input.Length; i++)
 		{
@@ -52,27 +30,38 @@ public class Day3 : IAnswer
 				var isGear = c == '*';
 				var leftNumber = 0;
 
-				for (int x2 = x - 1; x2 <= x + 1; x2++)
+				for (int y2 = y - 1; y2 <= y + 1; y2++)
 				{
-					for (int y2 = y - 1; y2 <= y + 1; y2++)
+					for (int x2 = x - 1; x2 <= x + 1; x2++)
 					{
 						var c2 = GetAtPosition(x2, y2);
 
 						if (char.IsAsciiDigit(c2))
 						{
-							var (leftReturn, rightReturn) = SumNumber(isGear, x2, y2);
+							while (--x2 >= 0 && char.IsAsciiDigit(GetAtPosition(x2, y2)))
+							{
+								//
+							}
 
-							part1 += leftReturn;
+							var number = 0;
 
-							if (rightReturn > 0)
+							do
+							{
+								number = number * 10 + (GetAtPosition(++x2, y2) - '0');
+							}
+							while (char.IsAsciiDigit(GetAtPosition(x2 + 1, y2)));
+
+							part1 += number;
+
+							if (isGear)
 							{
 								if (leftNumber > 0)
 								{
-									part2 += leftNumber * rightReturn;
+									part2 += leftNumber * number;
 								}
 								else
 								{
-									leftNumber = rightReturn;
+									leftNumber = number;
 								}
 							}
 						}
