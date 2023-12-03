@@ -1,43 +1,42 @@
 using System;
-using System.Collections.Generic;
+using System.Buffers;
 
 namespace AdventOfCode;
 
 [Answer(3)]
 public class Day3 : IAnswer
 {
-	public Solution Solve(string input)
+	public Solution Solve(string l)
 	{
 		var part1 = 0;
 		var part2 = 0;
 
+		var input = l.AsSpan();
 		var size = input.IndexOf('\n') + 1;
+		var search = SearchValues.Create("\n.0123456789");
+		var offset = 0;
+		int index;
 
-		char GetAtPosition(int x, int y) => input[y * size + x];
-
-		for (var i = 0; i < input.Length; i++)
+		while ((index = input[offset..].IndexOfAnyExcept(search)) != -1)
 		{
-			var c = input[i];
+			offset += index;
 
-			if (c == '\n' || c == '.' || char.IsAsciiDigit(c))
-			{
-				continue;
-			}
-
-			var (y, x) = Math.DivRem(i, size);
-			var isGear = c == '*';
+			var (y, x) = Math.DivRem(offset, size);
+			var isGear = input[offset] == '*';
 			var leftNumber = 0;
+
+			offset += 1;
 
 			for (int y2 = y - 1; y2 <= y + 1; y2++)
 			{
 				for (int x2 = x - 1; x2 <= x + 1; x2++)
 				{
-					if (!char.IsAsciiDigit(GetAtPosition(x2, y2)))
+					if (!char.IsAsciiDigit(input[y2 * size + x2]))
 					{
 						continue;
 					}
 
-					while (--x2 >= 0 && char.IsAsciiDigit(GetAtPosition(x2, y2)))
+					while (--x2 >= 0 && char.IsAsciiDigit(input[y2 * size + x2]))
 					{
 						//
 					}
@@ -46,9 +45,9 @@ public class Day3 : IAnswer
 
 					do
 					{
-						number = number * 10 + (GetAtPosition(++x2, y2) - '0');
+						number = number * 10 + (input[y2 * size + ++x2] - '0');
 					}
-					while (char.IsAsciiDigit(GetAtPosition(x2 + 1, y2)));
+					while (char.IsAsciiDigit(input[y2 * size + x2 + 1]));
 
 					part1 += number;
 
