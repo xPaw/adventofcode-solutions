@@ -38,6 +38,10 @@ if (args.Length > 0)
 	if (args[0] != "today" && !int.TryParse(args[0], out day))
 	{
 		Console.Error.WriteLine("Usage: [day [runs]]");
+		Console.Error.WriteLine("       today 0   - Run only the today's example");
+		Console.Error.WriteLine("       20 100    - Run day 20 for 100 times");
+		Console.Error.WriteLine("       combined  - Benchmark all days");
+		Console.Error.WriteLine("       benchmark - Benchmark today");
 		return 1;
 	}
 
