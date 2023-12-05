@@ -1,19 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace AdventOfCode;
 
 [Answer(5)]
 public class Day5 : IAnswer
 {
-	public record RangeLong(long Start, long Length)
+	public record struct RangeLong(long Start, long Length)
 	{
-		public long End => Start + Length - 1;
+		public readonly long End => Start + Length - 1;
 	}
 
-	public record RemappedRange(RangeLong Source, RangeLong Destination);
+	public record struct RemappedRange(RangeLong Source, RangeLong Destination);
+
+	readonly List<RangeLong> ReusedList = new(2);
 
 	public Solution Solve(string input)
 	{
@@ -101,9 +102,9 @@ public class Day5 : IAnswer
 		{
 			foreach (var r in unmapped)
 			{
-				var (m, u) = Map(r, mapping);
-				if (m != null) result.Add(m);
-				next.AddRange(u);
+				var m = Map(r, mapping);
+				if (m != null) result.Add(m.Value);
+				next.AddRange(ReusedList);
 			}
 			unmapped = next;
 			next = [];
@@ -113,24 +114,25 @@ public class Day5 : IAnswer
 		return result;
 	}
 
-	private (RangeLong? Mapped, List<RangeLong> Unmapped) Map(RangeLong range, RemappedRange mapping)
+	private RangeLong? Map(RangeLong range, RemappedRange mapping)
 	{
 		var headingNum = mapping.Source.Start - range.Start;
 		var trailingNum = range.End - mapping.Source.End;
 
+		ReusedList.Clear();
+
 		if (mapping.Source.Start <= range.Start && mapping.Source.End >= range.End)
 		{
-			return (new RangeLong(range.Start + (mapping.Destination.Start - mapping.Source.Start), range.Length), new List<RangeLong>());
+			return new RangeLong(range.Start + (mapping.Destination.Start - mapping.Source.Start), range.Length);
 		}
 
 		if (mapping.Source.Start >= range.Start && mapping.Source.End <= range.End)
 		{
 			// ====|****|=====
 			var mappedRange = mapping.Destination; // source range is equal to mapping, so destination range is also equal
-			var unmapped = new List<RangeLong>();
-			if (headingNum > 0) unmapped.Add(new(range.Start, headingNum));
-			if (trailingNum > 0) unmapped.Add(new(mapping.Source.End + 1, trailingNum));
-			return (mappedRange, unmapped);
+			if (headingNum > 0) ReusedList.Add(new(range.Start, headingNum));
+			if (trailingNum > 0) ReusedList.Add(new(mapping.Source.End + 1, trailingNum));
+			return mappedRange;
 		}
 		else if (mapping.Source.Start >= range.Start && mapping.Source.Start <= range.End)
 		{
@@ -138,7 +140,9 @@ public class Day5 : IAnswer
 			var length = range.End - mapping.Source.Start + 1;
 			var mappedRange = new RangeLong(mapping.Destination.Start, length);
 
-			return (mappedRange, new List<RangeLong> { new(range.Start, range.Length - length) });
+			ReusedList.Add(new(range.Start, range.Length - length));
+
+			return mappedRange;
 		}
 		else if (mapping.Source.End >= range.Start && mapping.Source.End <= range.End)
 		{
@@ -146,9 +150,13 @@ public class Day5 : IAnswer
 			var length = mapping.Source.End - range.Start + 1;
 			var mappedRange = new RangeLong(mapping.Destination.Start + (range.Start - mapping.Source.Start), length);
 
-			return (mappedRange, new List<RangeLong> { new(mapping.Source.End + 1, range.Length - length) });
+			ReusedList.Add(new(mapping.Source.End + 1, range.Length - length));
+
+			return mappedRange;
 		}
 
-		return (null, [range]);
+		ReusedList.Add(range);
+
+		return null;
 	}
 }
