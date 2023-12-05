@@ -8,18 +8,6 @@ namespace AdventOfCode;
 [Answer(5)]
 public class Day5 : IAnswer
 {
-	enum ThingType
-	{
-		Seed,
-		Soil,
-		Fertilizer,
-		Water,
-		Light,
-		Temperature,
-		Humidity,
-		Location,
-	}
-
 	public record RangeLong(long Start, long Length)
 	{
 		public long End => Start + Length - 1;
@@ -31,14 +19,7 @@ public class Day5 : IAnswer
 	{
 		var part1 = long.MaxValue;
 		var seeds = new List<long>();
-		var ranges = new Dictionary<ThingType, List<RemappedRange>>(); // todo: list
-		var fromType = ThingType.Seed;
-		var toType = ThingType.Seed;
-
-		for (ThingType thing = ThingType.Seed; thing <= ThingType.Location; thing++)
-		{
-			ranges[thing] = [];
-		}
+		var ranges = new List<List<RemappedRange>>();
 
 		foreach (var line in input.AsSpan().EnumerateLines())
 		{
@@ -54,7 +35,7 @@ public class Day5 : IAnswer
 				var src = new RangeLong(numbers[1], numbers[2]);
 				var dst = new RangeLong(numbers[0], numbers[2]);
 
-				ranges[fromType].Add(new RemappedRange(src, dst));
+				ranges[^1].Add(new RemappedRange(src, dst));
 
 				continue;
 			}
@@ -67,12 +48,7 @@ public class Day5 : IAnswer
 				continue;
 			}
 
-			var end = line[split..].IndexOf(' ');
-			var from = line[..split];
-			var to = line[(split + 4)..(split + end)];
-
-			_ = Enum.TryParse(from, true, out fromType);
-			_ = Enum.TryParse(to, true, out toType);
+			ranges.Add([]);
 		}
 
 		var seedRanges = new List<RangeLong>(seeds.Count / 2);
@@ -87,9 +63,9 @@ public class Day5 : IAnswer
 				seedRanges.Add(new RangeLong(prevSeed, location));
 			}
 
-			for (ThingType thing = ThingType.Seed; thing <= ThingType.Location; thing++)
+			foreach (var thingsRanges2 in ranges)
 			{
-				foreach (var thingRanges in ranges[thing])
+				foreach (var thingRanges in thingsRanges2)
 				{
 					if (thingRanges.Source.Start <= location && thingRanges.Source.End >= location)
 					{
@@ -105,9 +81,9 @@ public class Day5 : IAnswer
 			}
 		}
 
-		for (ThingType thing = ThingType.Seed; thing <= ThingType.Location; thing++)
+		foreach (var thingsRanges2 in ranges)
 		{
-			seedRanges = Map(seedRanges, ranges[thing]);
+			seedRanges = Map(seedRanges, thingsRanges2);
 		}
 
 		var part2 = seedRanges.MinBy(r => r.Start)!.Start;
