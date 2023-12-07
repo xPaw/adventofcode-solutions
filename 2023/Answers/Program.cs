@@ -73,9 +73,9 @@ else
 
 Console.WriteLine();
 
-double total = 0;
-double max = 0;
-double min = double.MaxValue;
+var runTimes = new double[runs];
+var min = double.MaxValue;
+var max = 0d;
 
 var stopWatch = new Stopwatch();
 
@@ -84,7 +84,10 @@ if (runs > 0)
 	stopWatch.Restart();
 	var solution = Solver.Solve(day, data);
 	stopWatch.Stop();
-	total += stopWatch.Elapsed.TotalMilliseconds;
+
+	max = stopWatch.Elapsed.TotalMilliseconds;
+	min = max;
+	runTimes[0] = max;
 
 	Console.Write("Part 1: ");
 	Console.ForegroundColor = ConsoleColor.Green;
@@ -127,7 +130,7 @@ for (var i = 1; i < runs; i++)
 	stopWatch.Stop();
 
 	var elapsed = stopWatch.Elapsed.TotalMilliseconds;
-	total += elapsed;
+	runTimes[i] = elapsed;
 
 	if (min > elapsed)
 	{
@@ -145,10 +148,12 @@ Console.Write("Time: ");
 
 if (runs > 1)
 {
+	Array.Sort(runTimes);
+
 	Console.ForegroundColor = ConsoleColor.Blue;
-	Console.Write("{0:N6}", total / runs);
+	Console.Write("{0:N6}", runTimes[runTimes.Length / 2]);
 	Console.ResetColor();
-	Console.Write("ms average for ");
+	Console.Write("ms mean for ");
 	Console.ForegroundColor = ConsoleColor.Blue;
 	Console.Write(runs);
 	Console.ResetColor();
