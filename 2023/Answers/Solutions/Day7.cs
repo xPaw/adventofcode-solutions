@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AdventOfCode;
 
@@ -22,7 +21,13 @@ public class Day7 : IAnswer
 		}
 	}
 
-	record struct Occurance(char Label, int Count);
+	class Occurance(char label, int count) : IComparable<Occurance>
+	{
+		public char Label = label;
+		public int Count = count;
+
+		public int CompareTo(Occurance? other) => other!.Count.CompareTo(Count);
+	}
 
 	public Solution Solve(string input)
 	{
@@ -30,10 +35,10 @@ public class Day7 : IAnswer
 		var part2 = 0;
 
 		var scores = "23456789TJQKA".AsSpan();
-		var hands1 = new List<Hand>();
-		var hands2 = new List<Hand>();
+		var hands1 = new List<Hand>(1000);
+		var hands2 = new List<Hand>(1000);
 
-		static int GetHandRank(List<Occurance> occurances)
+		static int GetHandRank(Occurance[] occurances)
 		{
 			return occurances[0].Count switch
 			{
@@ -46,6 +51,8 @@ public class Day7 : IAnswer
 				_ => 0, // High card
 			};
 		}
+
+		var occurances = new Occurance[5] { new(' ', 1), new(' ', 1), new(' ', 1), new(' ', 1), new(' ', 1) };
 
 		foreach (var line in input.AsSpan().EnumerateLines())
 		{
@@ -62,6 +69,7 @@ public class Day7 : IAnswer
 
 			var score1 = 0; // AAAAA = 1156111055
 			var score2 = 0;
+			var unique = 0;
 
 			for (i = 0; i < 5; i++)
 			{
@@ -70,38 +78,71 @@ public class Day7 : IAnswer
 
 				score1 += score1 * 100 + s;
 				score2 += score2 * 100 + (c == 'J' ? 0 : s + 1);
+
+				Occurance? existing = null;
+
+				for (var j = 0; j < 5; j++)
+				{
+					if (occurances[j].Label == c)
+					{
+						existing = occurances[j];
+						break;
+					}
+				}
+
+				if (existing == null)
+				{
+					var o = occurances[unique++];
+					o.Label = c;
+					o.Count = 1;
+				}
+				else
+				{
+					existing.Count++;
+				}
 			}
 
-			var occurances = hand
-				.ToArray()
-				.GroupBy(c => c)
-				.Select(c => new Occurance(c.Key, c.Count()))
-				.OrderByDescending(c => c.Count)
-				.ToList();
+			Array.Sort(occurances);
 
 			var rank = GetHandRank(occurances);
 			hands1.Add(new(bid, rank, score1));
 
-			i = occurances.FindIndex(c => c.Label == 'J');
+			i = Array.FindIndex(occurances, static c => c.Label == 'J');
 
 			if (i > -1)
 			{
-				if (occurances.Count == 1)
+				if (unique == 1)
 				{
 					rank = 6; // JJJJJ
 				}
 				else
 				{
 					var jokers = occurances[i].Count;
-					occurances.RemoveAt(i);
 
-					occurances[0] = new('J', occurances[0].Count + jokers);
+					// Remove joker if most common
+					if (i == 0)
+					{
+						occurances[0].Count = occurances[1].Count;
+					}
+					// Remove joker if it was second common
+					else if (i == 1)
+					{
+						occurances[1].Count = occurances[2].Count;
+					}
+
+					// Add jokers to most common card
+					occurances[0].Count += jokers;
 
 					rank = GetHandRank(occurances);
 				}
 			}
 
 			hands2.Add(new(bid, rank, score2));
+
+			for (i = 0; i < 5; i++)
+			{
+				occurances[i].Label = ' ';
+			}
 		}
 
 		hands1.Sort();
