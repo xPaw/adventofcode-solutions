@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace AdventOfCode;
 
@@ -10,54 +9,47 @@ public class Day7 : IAnswer
 	{
 		public readonly int CompareTo(Hand other)
 		{
-			var rank = Rank.CompareTo(other.Rank);
-
-			if (rank != 0)
-			{
-				return rank;
-			}
-
-			return Score.CompareTo(other.Score);
+			var rank = Rank - other.Rank;
+			return rank != 0 ? rank : Score - other.Score;
 		}
 	}
 
-	class Occurance(char label, int count) : IComparable<Occurance>
+	class Occurrence(char label, int count) : IComparable<Occurrence>
 	{
 		public char Label = label;
 		public int Count = count;
 
-		public int CompareTo(Occurance? other) => other!.Count.CompareTo(Count);
+		public int CompareTo(Occurrence? other) => other!.Count - Count;
+	}
+	static int GetHandRank(Occurrence[] occurances)
+	{
+		return occurances[0].Count switch
+		{
+			5 => 6, // Five of a kind
+			4 => 5, // Four of a kind
+			3 when occurances[1].Count == 2 => 4, // Full house
+			3 => 3, // Three of a kind
+			2 when occurances[1].Count == 2 => 2, // Two pair
+			2 => 1, // One pair
+			_ => 0, // High card
+		};
 	}
 
-	public Solution Solve(string input)
+	public Solution Solve(string inputStr)
 	{
 		var part1 = 0;
 		var part2 = 0;
 
-		var scores = "23456789TJQKA".AsSpan();
-		var hands1 = new List<Hand>(1000);
-		var hands2 = new List<Hand>(1000);
+		var input = inputStr.AsSpan();
+		var totalHands = input.Count('\n') + 1;
+		var hands1 = new Hand[totalHands];
+		var hands2 = new Hand[totalHands];
+		var hand = 0;
 
-		static int GetHandRank(Occurance[] occurances)
+		var occurances = new Occurrence[5] { new(' ', 1), new(' ', 1), new(' ', 1), new(' ', 1), new(' ', 1) };
+
+		foreach (var line in input.EnumerateLines())
 		{
-			return occurances[0].Count switch
-			{
-				5 => 6, // Five of a kind
-				4 => 5, // Four of a kind
-				3 when occurances[1].Count == 2 => 4, // Full house
-				3 => 3, // Three of a kind
-				2 when occurances[1].Count == 2 => 2, // Two pair
-				2 => 1, // One pair
-				_ => 0, // High card
-			};
-		}
-
-		var occurances = new Occurance[5] { new(' ', 1), new(' ', 1), new(' ', 1), new(' ', 1), new(' ', 1) };
-
-		foreach (var line in input.AsSpan().EnumerateLines())
-		{
-			var hand = line[0..5];
-
 			var bid = 0;
 			var i = 6;
 
@@ -73,83 +65,97 @@ public class Day7 : IAnswer
 
 			for (i = 0; i < 5; i++)
 			{
-				var c = hand[i];
-				var s = scores.IndexOf(c);
+				var c = line[i];
+				var s = c switch
+				{
+					'A' => 14,
+					'K' => 13,
+					'Q' => 12,
+					'J' => 11,
+					'T' => 10,
+					_ => c - '0'
+				};
 
 				score1 += score1 * 100 + s;
 				score2 += score2 * 100 + (c == 'J' ? 0 : s + 1);
 
-				Occurance? existing = null;
+				var notFound = true;
 
-				for (var j = 0; j < 5; j++)
+				for (var j = 0; j < unique; j++)
 				{
-					if (occurances[j].Label == c)
+					var o = occurances[j];
+
+					if (o.Label == c)
 					{
-						existing = occurances[j];
+						o.Count++;
+						notFound = false;
 						break;
 					}
 				}
 
-				if (existing == null)
+				if (notFound)
 				{
 					var o = occurances[unique++];
 					o.Label = c;
 					o.Count = 1;
-				}
-				else
-				{
-					existing.Count++;
 				}
 			}
 
 			Array.Sort(occurances);
 
 			var rank = GetHandRank(occurances);
-			hands1.Add(new(bid, rank, score1));
+			hands1[hand] = new(bid, rank, score1);
 
-			i = Array.FindIndex(occurances, static c => c.Label == 'J');
-
-			if (i > -1)
+			if (unique == 1)
 			{
-				if (unique == 1)
+				rank = 6; // JJJJJ
+			}
+			else
+			{
+				for (i = 0; i < 5; i++)
 				{
-					rank = 6; // JJJJJ
-				}
-				else
-				{
-					var jokers = occurances[i].Count;
+					var joker = occurances[i];
 
-					// Remove joker if most common
-					if (i == 0)
+					if (joker.Label == 'J')
 					{
-						occurances[0].Count = occurances[1].Count;
-						occurances[1].Count = occurances[2].Count;
-					}
-					// Remove joker if it was second common
-					else if (i == 1)
-					{
-						occurances[1].Count = occurances[2].Count;
-					}
+						var jokers = joker.Count;
 
-					// Add jokers to most common card
-					occurances[0].Count += jokers;
+						// Remove joker if most common
+						if (i == 0)
+						{
+							occurances[0].Count = occurances[1].Count;
+							occurances[1].Count = occurances[2].Count;
+						}
+						// Remove joker if it was second common
+						else if (i == 1)
+						{
+							occurances[1].Count = occurances[2].Count;
+						}
 
-					rank = GetHandRank(occurances);
+						// Add jokers to most common card
+						occurances[0].Count += jokers;
+
+						rank = GetHandRank(occurances);
+
+						break;
+					}
 				}
 			}
 
-			hands2.Add(new(bid, rank, score2));
+			hands2[hand] = new(bid, rank, score2);
 
-			for (i = 0; i < 5; i++)
+			for (i = 0; i < unique; i++)
 			{
 				occurances[i].Label = ' ';
 			}
+
+			hand++;
 		}
 
-		hands1.Sort();
-		hands2.Sort();
+		Array.Sort(hands1);
+		Array.Sort(hands2);
 
-		for (var i = 0; i < hands1.Count; i++)
+		for (var i = 0; i < totalHands; i++)
 		{
 			part1 += hands1[i].Bid * (i + 1);
 			part2 += hands2[i].Bid * (i + 1);
