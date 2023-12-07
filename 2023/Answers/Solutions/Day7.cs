@@ -5,13 +5,9 @@ namespace AdventOfCode;
 [Answer(7)]
 public class Day7 : IAnswer
 {
-	record struct Hand(int Bid, int Rank, int Score) : IComparable<Hand>
+	record struct Hand(int Bid, int Score) : IComparable<Hand>
 	{
-		public readonly int CompareTo(Hand other)
-		{
-			var rank = Rank - other.Rank;
-			return rank != 0 ? rank : Score - other.Score;
-		}
+		public readonly int CompareTo(Hand other) => Score - other.Score;
 	}
 
 	class Occurrence(char label, int count) : IComparable<Occurrence>
@@ -21,6 +17,7 @@ public class Day7 : IAnswer
 
 		public int CompareTo(Occurrence? other) => other!.Count - Count;
 	}
+
 	static int GetHandRank(Occurrence[] occurances)
 	{
 		return occurances[0].Count switch
@@ -59,8 +56,8 @@ public class Day7 : IAnswer
 			}
 			while (++i < line.Length);
 
-			var score1 = 0; // AAAAA = 1156111055
-			var score2 = 0;
+			var score1 = 0;
+			var score2 = 0; // AAAAA = 1048575
 			var unique = 0;
 
 			for (i = 0; i < 5; i++)
@@ -76,8 +73,8 @@ public class Day7 : IAnswer
 					_ => c - '0'
 				};
 
-				score1 += score1 * 100 + s;
-				score2 += score2 * 100 + (c == 'J' ? 0 : s + 1);
+				score1 += score1 * 15 + s;
+				score2 += score2 * 15 + (c == 'J' ? 0 : s + 1);
 
 				var notFound = true;
 
@@ -104,7 +101,7 @@ public class Day7 : IAnswer
 			Array.Sort(occurances);
 
 			var rank = GetHandRank(occurances);
-			hands1[hand] = new(bid, rank, score1);
+			hands1[hand] = new(bid, rank * 10_000_000 + score1);
 
 			if (unique == 1)
 			{
@@ -142,7 +139,7 @@ public class Day7 : IAnswer
 				}
 			}
 
-			hands2[hand] = new(bid, rank, score2);
+			hands2[hand] = new(bid, rank * 10_000_000 + score2);
 
 			for (i = 0; i < unique; i++)
 			{
