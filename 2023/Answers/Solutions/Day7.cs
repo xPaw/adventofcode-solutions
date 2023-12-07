@@ -123,6 +123,7 @@ public class Day7 : IAnswer
 					if (i == 0)
 					{
 						occurances[0].Count = occurances[1].Count;
+						occurances[1].Count = occurances[2].Count;
 					}
 					// Remove joker if it was second common
 					else if (i == 1)
