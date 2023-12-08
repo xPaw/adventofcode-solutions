@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace AdventOfCode;
 
@@ -32,34 +33,37 @@ public class Day8 : IAnswer
 			}
 		}
 
-		var instructions = input[..nl];
-		var current = "AAA";
-		var i = 0;
+		var instructions = input[..nl].ToArray();
 
-		do
 		{
-			var node = map[current];
-			current = instructions[i] == 'R' ? node.Right : node.Left;
+			var current = "AAA";
+			var i = 0;
 
-			part1++;
-
-			if (current == "ZZZ")
+			do
 			{
-				break;
+				var node = map[current];
+				current = instructions[i] == 'R' ? node.Right : node.Left;
+
+				part1++;
+
+				if (current == "ZZZ")
+				{
+					break;
+				}
+
+				i++;
+				i %= instructions.Length;
 			}
-
-			i++;
-			i %= instructions.Length;
+			while (true);
 		}
-		while (true);
 
-		var test = new List<long>(alphaStarts.Count);
+		var alphaToZulu = new List<long>(alphaStarts.Count);
 
-		foreach (var start in alphaStarts)
+		Parallel.ForEach(alphaStarts, (start) =>
 		{
-			i = 0;
+			var i = 0;
 			var steps = 0;
-			current = start;
+			var current = start;
 
 			do
 			{
@@ -78,10 +82,13 @@ public class Day8 : IAnswer
 			}
 			while (true);
 
-			test.Add(steps);
-		}
+			lock (alphaToZulu)
+			{
+				alphaToZulu.Add(steps);
+			}
+		});
 
-		var part2 = test.Aggregate((S, val) => S * val / Gcd(S, val));
+		var part2 = alphaToZulu.Aggregate((S, val) => S * val / Gcd(S, val));
 
 		return new(part1.ToString(), part2.ToString());
 	}
