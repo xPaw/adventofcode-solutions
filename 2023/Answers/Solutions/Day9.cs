@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AdventOfCode;
 
@@ -12,49 +11,73 @@ public class Day9 : IAnswer
 		var part1 = 0;
 		var part2 = 0;
 
-		var list = new List<List<int>>(32);
+		var sequence = new List<int>(32);
 
 		foreach (var line in input.AsSpan().EnumerateLines())
 		{
-			var original = line.ToString().Split(' ').Select(int.Parse).ToList();
-			var previous = original;
-			bool nonZero;
+			var remainder = line;
 
 			do
 			{
-				var current = new List<int>(previous.Count + 2);
-				list.Add(current);
+				var result = 0;
+				var i = 0;
+				var sign = 1;
 
-				nonZero = false;
-
-				for (var i = 1; i < previous.Count; i++)
+				if (remainder[0] == '-')
 				{
-					var diff = previous[i] - previous[i - 1];
-					nonZero |= diff != 0;
-
-					current.Add(diff);
+					i++;
+					sign = -1;
 				}
 
-				previous = current;
+				do
+				{
+					var t = remainder[i++];
+
+					if (t == ' ')
+					{
+						break;
+					}
+
+					result = 10 * result + t - '0';
+				}
+				while (i < remainder.Length);
+
+				result *= sign;
+
+				sequence.Add(result);
+
+				remainder = remainder[i..];
 			}
-			while (nonZero);
+			while (remainder.Length > 0);
 
-			var up = 0;
-			var down = 0;
+			part2 += sequence[0];
+			part1 += sequence[^1];
+			var mul = -1;
 
-			for (var i = list.Count - 2; i >= 0; i--)
+			var length = sequence.Count;
+
+			while (true)
 			{
-				up = list[i + 1][^1] + list[i][^1];
-				list[i].Add(up);
+				for (var s = 0; s < length - 1; s++)
+				{
+					sequence[s] = sequence[s + 1] - sequence[s];
+				}
 
-				down = list[i][0] - list[i + 1][0];
-				list[i].Insert(0, down);
+				length -= 1;
+				var start = sequence[0];
+				var end = sequence[length - 1];
+
+				if (start == 0 && end == 0)
+				{
+					break;
+				}
+
+				part1 += end;
+				part2 += start * mul;
+				mul *= -1;
 			}
 
-			list.Clear();
-
-			part1 += original[^1] + up;
-			part2 += original[0] - down;
+			sequence.Clear();
 		}
 
 		return new(part1.ToString(), part2.ToString());
