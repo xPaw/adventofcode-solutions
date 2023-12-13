@@ -1,3 +1,5 @@
+using System;
+
 namespace AdventOfCode;
 
 [Answer(13)]
@@ -8,13 +10,26 @@ public class Day13 : IAnswer
 		var part1 = 0;
 		var part2 = 0;
 
-		var mazes = input.Split("\n\n");
+		var remainder = input.AsSpan();
 
-		foreach (var lines in mazes)
+		do
 		{
-			var maze = lines.Split('\n');
-			var height = maze.Length;
-			var width = maze[0].Length;
+			var maze = remainder;
+			var nl = remainder.IndexOf("\n\n");
+
+			if (nl == -1)
+			{
+				remainder = null;
+			}
+			else
+			{
+				maze = remainder[0..nl];
+				remainder = remainder[(nl + 2)..];
+			}
+
+			var width = maze.IndexOf('\n');
+			var stride = width + 1;
+			var height = (maze.Length + 1) / stride;
 
 			for (var x = 0; x < width - 1; x++)
 			{
@@ -24,7 +39,7 @@ public class Day13 : IAnswer
 				{
 					for (var d = 0; x >= d && x + d + 1 < width; d++)
 					{
-						if (maze[y][x - d] != maze[y][x + d + 1] && ++diff > 0)
+						if (maze[y * stride + x - d] != maze[y * stride + x + d + 1] && ++diff > 0)
 						{
 							break;
 						}
@@ -49,7 +64,7 @@ public class Day13 : IAnswer
 				{
 					for (var d = 0; y >= d && y + d + 1 < height; d++)
 					{
-						if (maze[y - d][x] != maze[y + d + 1][x] && ++diff > 0)
+						if (maze[(y - d) * stride + x] != maze[(y + d + 1) * stride + x] && ++diff > 0)
 						{
 							break;
 						}
@@ -66,6 +81,7 @@ public class Day13 : IAnswer
 				}
 			}
 		}
+		while (remainder != null);
 
 		return new(part1.ToString(), part2.ToString());
 	}
