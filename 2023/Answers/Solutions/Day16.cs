@@ -14,9 +14,7 @@ public class Day16 : IAnswer
 	{
 		var part1 = 0;
 		var part2 = 0;
-
-		var grid = input.Split('\n').Select(l => l.ToCharArray()).ToArray();
-		var size = grid.Length;
+		var grid = new ReadOnlyGrid(input);
 
 		int Solve(Vector2i pos, Vector2i delta)
 		{
@@ -36,13 +34,11 @@ public class Day16 : IAnswer
 
 				var posNext = new Vector2i(pos.X + delta.X, pos.Y + delta.Y);
 
-				if (posNext.X < 0 || posNext.Y < 0 || posNext.X >= size || posNext.Y >= size)
+				switch (grid[posNext.Y, posNext.X])
 				{
-					continue;
-				}
+					case '\0':
+						break; // Out of bounds
 
-				switch (grid[posNext.Y][posNext.X])
-				{
 					case '\\':
 						stack.Push(new(posNext, new(delta.Y, delta.X)));
 						break;
@@ -71,12 +67,12 @@ public class Day16 : IAnswer
 		}
 
 		part1 = Solve(new(-1, 0), new(1, 0));
-		part2 = Enumerable.Range(0, size).AsParallel().Select(i =>
+		part2 = Enumerable.Range(0, grid.Width).AsParallel().Select(i =>
 		{
 			var max = Solve(new(i, -1), new(0, 1)); // top
 			max = Math.Max(max, Solve(new(-1, i), new(1, 0))); // left
-			max = Math.Max(max, Solve(new(size, i), new(-1, 0))); // right
-			max = Math.Max(max, Solve(new(i, size), new(0, -1))); // bottom
+			max = Math.Max(max, Solve(new(grid.Width, i), new(-1, 0))); // right
+			max = Math.Max(max, Solve(new(i, grid.Width), new(0, -1))); // bottom
 			return max;
 		}).Max();
 

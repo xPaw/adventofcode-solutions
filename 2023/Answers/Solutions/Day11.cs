@@ -11,26 +11,25 @@ public class Day11 : IAnswer
 		var part1 = 0L;
 		var part2 = 0L;
 
-		var width = input.IndexOf('\n');
-		var stride = width + 1;
+		var grid = new ReadOnlyGrid(input);
 		var emptyRows = new List<int>(16);
 		var emptyCols = new List<int>(16);
 		var galaxies = new List<(int X, int Y)>(512);
 
-		for (var y = 0; y < width; y++)
+		for (var y = 0; y < grid.Height; y++)
 		{
 			bool emptyRow = true;
 			bool emptyCol = true;
 
-			for (var x = 0; x < width; x++)
+			for (var x = 0; x < grid.Width; x++)
 			{
-				if (input[x * stride + y] == '#')
+				if (grid[x, y] == '#')
 				{
 					emptyRow = false;
 					galaxies.Add((y, x));
 				}
 
-				if (input[y * stride + x] == '#')
+				if (grid[y, x] == '#')
 				{
 					emptyCol = false;
 				}
