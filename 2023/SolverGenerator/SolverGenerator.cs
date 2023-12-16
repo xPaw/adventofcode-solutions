@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -69,7 +68,6 @@ public static partial class {mainMethod.Name} {{
 					.GetText(context.CancellationToken)
 					.ToString()
 					.Replace("\r", "")
-					.Replace("\"", "\"\"")
 					.TrimEnd();
 
 				if (name == "answers")
@@ -83,7 +81,7 @@ public static partial class {mainMethod.Name} {{
 					{
 						var answers = day.Split(new string[] { " | " }, StringSplitOptions.None);
 
-						source.AppendLine($"        new(\"{answers[0]}\", \"{answers[1]}\"),");
+						source.AppendLine($"        new(@\"{answers[0]}\", @\"{answers[1]}\"),");
 					}
 
 					source.AppendLine("    ];");
@@ -92,7 +90,8 @@ public static partial class {mainMethod.Name} {{
 				{
 					var day = int.Parse(name.Substring(3));
 
-					text = text.Replace("\n", "\\n");
+					var lines = text.Split('\n');
+					text = string.Join(" + \"\\n\" + ", lines.Select(l => $"@\"{l}\""));
 
 					if (isExample)
 					{
@@ -109,7 +108,7 @@ public static partial class {mainMethod.Name} {{
 			source.AppendLine("    public static string[] DataExamples = [");
 			foreach (var text in dataExamples)
 			{
-				source.AppendLine($"        \"{text ?? string.Empty}\",");
+				source.AppendLine($"        {text ?? "string.Empty"},");
 			}
 			source.AppendLine("    ];");
 
@@ -117,7 +116,7 @@ public static partial class {mainMethod.Name} {{
 			source.AppendLine("    public static string[] Data = [");
 			foreach (var text in data)
 			{
-				source.AppendLine($"        \"{text ?? string.Empty}\",");
+				source.AppendLine($"        {text ?? "string.Empty"},");
 			}
 			source.AppendLine("    ];");
 
