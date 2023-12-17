@@ -16,3 +16,5 @@ if ((Test-Path $Path) -eq $False) {
 $wc = New-Object System.Net.WebClient
 $wc.Headers.Add([System.Net.HttpRequestHeader]::Cookie, "session=$Cookie")
 $wc.DownloadFile("https://adventofcode.com/$Year/day/$Day/input", (Resolve-Path "Data\day$Day.txt"))
+
+Start-Process "https://adventofcode.com/$Year/day/$Day"
