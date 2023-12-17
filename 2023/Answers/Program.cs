@@ -25,6 +25,11 @@ if (args.Length > 0)
 		return 0;
 	}
 
+	if (args[0] == "test")
+	{
+		return TestAllDays();
+	}
+
 #if !NO_BENCHMARK
 	if (args[0] == "benchmark")
 	{
@@ -42,6 +47,7 @@ if (args.Length > 0)
 		Console.Error.WriteLine("       20 100    - Run day 20 for 100 times");
 		Console.Error.WriteLine("       combined  - Benchmark all days");
 		Console.Error.WriteLine("       benchmark - Benchmark today");
+		Console.Error.WriteLine("       test      - Test all days");
 		return 1;
 	}
 
@@ -59,6 +65,12 @@ Console.Write("Day: ");
 Console.ForegroundColor = ConsoleColor.Blue;
 Console.WriteLine(day);
 Console.ResetColor();
+
+if (day < 1 || day > Solver.AvailableDays)
+{
+	Console.Error.WriteLine("Wrong day");
+	return 1;
+}
 
 var data = Solver.Data[day];
 
@@ -184,13 +196,59 @@ else
 
 return 0;
 
+static int TestAllDays()
+{
+	static void Assert(string expected, string actual)
+	{
+		if (expected != actual)
+		{
+			throw new Exception($"Expected '{expected}' but got '{actual}'");
+		}
+	}
+
+	var exit = 0;
+	var stopWatch = Stopwatch.StartNew();
+
+	for (var day = 1; day <= Solver.AvailableDays; day++)
+	{
+		try
+		{
+			var correct = Solver.Answers[day];
+			var solution = Solver.Solve(day, Solver.Data[day]);
+
+			Assert(correct.Part1, solution.Part1);
+			Assert(correct.Part2, solution.Part2);
+
+			correct = Solver.AnswersExample[day];
+			solution = Solver.Solve(day, Solver.DataExamples[day]);
+
+			Assert(correct.Part1, solution.Part1);
+			Assert(correct.Part2, solution.Part2);
+		}
+		catch (Exception e)
+		{
+			exit = 1;
+
+			Console.ForegroundColor = ConsoleColor.Red;
+			Console.Error.WriteLine($"Day {day}: {e.Message}");
+			Console.ResetColor();
+		}
+	}
+
+	stopWatch.Stop();
+
+	Console.WriteLine($"Tested in {stopWatch.Elapsed.TotalMilliseconds:N6}ms");
+
+	return exit;
+}
+
 static void BenchmarkAllDays()
 {
 	double combined = 0d;
 
 	Console.WriteLine($"{"Day",-10} {"Runs",-10} Time");
 
-	for (var day = 1; day <= 25; day++)
+	for (var day = 1; day <= Solver.AvailableDays; day++)
 	{
 		var data = Solver.Data[day];
 		//var type = Solver.GetSolutionType(day);
