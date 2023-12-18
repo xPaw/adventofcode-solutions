@@ -28,10 +28,12 @@ public class Day18 : IAnswer
 			// p1
 			var direction = line[0];
 			var number = line[2] - '0';
+			var hash = 6;
 
 			if (line[3] != ' ')
 			{
 				number = 10 * number + line[3] - '0';
+				hash++;
 			}
 
 			var posNew = pos1 + direction switch
@@ -48,9 +50,17 @@ public class Day18 : IAnswer
 			pos1 = posNew;
 
 			// p2
-			var hash = line.IndexOf('#') + 1;
 			direction = line[hash + 5];
-			number = int.Parse(line[hash..(hash + 5)], NumberStyles.HexNumber);
+
+			number = 0;
+
+			for (var i = 0; i < 5; i++)
+			{
+				var c = line[hash + i];
+				var r = c < 'a' ? (c - '0') : (c - 'a' + 10);
+
+				number = 16 * number + r;
+			}
 
 			posNew = pos2 + direction switch
 			{
