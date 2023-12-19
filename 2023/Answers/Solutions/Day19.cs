@@ -28,7 +28,7 @@ public class Day19 : IAnswer
 			return result;
 		}
 
-		long RunWorkflows(ImmutableArray<Range> ranges, string workflow)
+		long RunWorkflows(ImmutableArray<Range> ranges, ReadOnlySpan<char> workflow)
 		{
 			if (workflow[0] == 'R')
 			{
@@ -52,7 +52,7 @@ public class Day19 : IAnswer
 
 			var total = 0L;
 
-			foreach (var expression in workflows[workflow])
+			foreach (var expression in workflows[workflow.ToString()])
 			{
 				var condition = expression.Length > 1 ? expression[1] : '\0';
 
@@ -74,7 +74,7 @@ public class Day19 : IAnswer
 
 				var colon = expression.IndexOf(':');
 				var value = ParseInt(expression.AsSpan()[2..colon]);
-				workflow = expression[(colon + 1)..];
+				workflow = expression.AsSpan()[(colon + 1)..];
 
 				if (condition == '>')
 				{
