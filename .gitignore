@@ -2,6 +2,8 @@ bin/
 obj/
 node_modules/
 .vs/
+data/
+Data/
 yarn.lock
 *.log
 BenchmarkDotNet.Artifacts/
