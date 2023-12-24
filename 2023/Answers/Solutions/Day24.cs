@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Diagnostics.Tracing.Parsers.Tpl;
+using Z3 = Microsoft.Z3;
 
 namespace AdventOfCode;
 
@@ -14,8 +14,6 @@ public class Day24 : IAnswer
 	public Solution Solve(string input)
 	{
 		var part1 = 0;
-		var part2 = 0;
-
 		var stones = new List<Hailstone>();
 
 		foreach (var line in input.AsSpan().EnumerateLines())
@@ -78,6 +76,40 @@ public class Day24 : IAnswer
 			}
 		}
 
+		var part2 = SolveZ3(stones);
+
 		return new(part1.ToString(), part2.ToString());
+	}
+
+	private long SolveZ3(List<Hailstone> stones)
+	{
+		using var ctx = new Z3.Context();
+		using var solver = ctx.MkSolver();
+
+		var x = ctx.MkRealConst("x");
+		var y = ctx.MkRealConst("y");
+		var z = ctx.MkRealConst("z");
+
+		var vx = ctx.MkRealConst("vx");
+		var vy = ctx.MkRealConst("vy");
+		var vz = ctx.MkRealConst("vz");
+
+		for (var i = 0; i < stones.Count; i++)
+		{
+			var hail = stones[i];
+			var t = ctx.MkRealConst($"t{i}");
+
+			solver.Assert(ctx.MkEq(x + vx * t, ctx.MkReal(hail.Position.X) + ctx.MkReal(hail.Velocity.X) * t));
+			solver.Assert(ctx.MkEq(y + vy * t, ctx.MkReal(hail.Position.Y) + ctx.MkReal(hail.Velocity.Y) * t));
+			solver.Assert(ctx.MkEq(z + vz * t, ctx.MkReal(hail.Position.Z) + ctx.MkReal(hail.Velocity.Z) * t));
+		}
+
+		solver.Check();
+
+		var xl = (long)(solver.Model.Evaluate(x) as Z3.RatNum)!.BigIntNumerator;
+		var yl = (long)(solver.Model.Evaluate(y) as Z3.RatNum)!.BigIntNumerator;
+		var zl = (long)(solver.Model.Evaluate(z) as Z3.RatNum)!.BigIntNumerator;
+
+		return xl + yl + zl;
 	}
 }
