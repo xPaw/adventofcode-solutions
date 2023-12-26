@@ -163,7 +163,7 @@ if (runs > 1)
 	Array.Sort(runTimes);
 
 	Console.ForegroundColor = ConsoleColor.Blue;
-	Console.Write("{0:N6}", runTimes[runTimes.Length / 2]);
+	Console.Write("{0:F6}", runTimes[runTimes.Length / 2]);
 	Console.ResetColor();
 	Console.Write("ms mean for ");
 	Console.ForegroundColor = ConsoleColor.Blue;
@@ -173,20 +173,20 @@ if (runs > 1)
 
 	Console.Write("Min : ");
 	Console.ForegroundColor = ConsoleColor.Blue;
-	Console.Write("{0:N6}", min);
+	Console.Write("{0:F6}", min);
 	Console.ResetColor();
 	Console.WriteLine("ms");
 
 	Console.Write("Max : ");
 	Console.ForegroundColor = ConsoleColor.Blue;
-	Console.Write("{0:N6}", max);
+	Console.Write("{0:F6}", max);
 	Console.ResetColor();
 	Console.WriteLine("ms");
 }
 else
 {
 	Console.ForegroundColor = ConsoleColor.Blue;
-	Console.Write("{0:N6}", stopWatch.Elapsed.TotalMilliseconds);
+	Console.Write("{0:F6}", stopWatch.Elapsed.TotalMilliseconds);
 	Console.ResetColor();
 	Console.Write("ms");
 	Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -237,7 +237,7 @@ static int TestAllDays()
 
 	stopWatch.Stop();
 
-	Console.WriteLine($"Tested in {stopWatch.Elapsed.TotalMilliseconds:N6}ms");
+	Console.WriteLine($"Tested in {stopWatch.Elapsed.TotalMilliseconds:F6}ms");
 
 	return exit;
 }
@@ -246,20 +246,19 @@ static void BenchmarkAllDays()
 {
 	double combined = 0d;
 
-	Console.WriteLine($"{"Day",-10} {"Runs",-10} Time");
+	Console.WriteLine($"{"Day",-10} {"Runs",-4} {"Time",14}");
 
 	for (var day = 1; day <= Solver.AvailableDays; day++)
 	{
 		var data = Solver.Data[day];
-		//var type = Solver.GetSolutionType(day);
-		//var attribute = (AnswerAttribute)type.GetCustomAttributes(typeof(AnswerAttribute), true)[0];
-		//var runs = attribute.Slow ? 100 : 5000;
-		var runs = 100;
+		var runs = 5000;
 
-		Console.Write($"{day,-10} {runs,-10} ");
+		Console.Write($"{day,-10} ");
 
 		var stopWatch = new Stopwatch();
 		double total = 0d;
+
+		Solver.Solve(day, data); // warmup
 
 		for (var i = 1; i < runs; i++)
 		{
@@ -269,27 +268,37 @@ static void BenchmarkAllDays()
 
 			var elapsed = stopWatch.Elapsed.TotalMilliseconds;
 			total += elapsed;
+
+			if (elapsed >= 100)
+			{
+				runs = (int)(runs / 1.5);
+			}
+			else if (elapsed >= 10)
+			{
+				runs = (int)(runs / 1.1);
+			}
 		}
+
+		Console.Write($"{runs,-4} ");
 
 		var time = total / runs;
 		combined += time;
 
-		if (time >= 1.0d)
+		Console.ForegroundColor = time switch
 		{
-			Console.ForegroundColor = ConsoleColor.Red;
-		}
-		else if (time <= 0.1d)
-		{
-			Console.ForegroundColor = ConsoleColor.Green;
-		}
+			<= 0.1d => ConsoleColor.Green,
+			>= 10d => ConsoleColor.Red,
+			>= 1d => ConsoleColor.Yellow,
+			_ => ConsoleColor.Blue,
+		};
 
-		Console.WriteLine($"{time:N6}");
+		Console.WriteLine($"{time,14:F6}");
 		Console.ResetColor();
 	}
 
-	Console.Write($"{"Total",-10} {"-",-10} ");
-	Console.ForegroundColor = ConsoleColor.Blue;
-	Console.Write($"{combined:N6}");
+	Console.Write($"{"Total",-10} {" ",-4} ");
+	Console.ForegroundColor = ConsoleColor.Magenta;
+	Console.Write($"{combined,14:F6}");
 	Console.ResetColor();
 	Console.WriteLine("ms");
 }
