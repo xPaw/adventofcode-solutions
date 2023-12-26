@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Z3 = Microsoft.Z3;
 
 namespace AdventOfCode;
 
@@ -9,7 +8,7 @@ namespace AdventOfCode;
 public class Day24 : IAnswer
 {
 	record struct Vector3l(long X, long Y, long Z);
-	record class Hailstone(Vector3l Position, Vector3l Velocity);
+	record struct Hailstone(Vector3l Position, Vector3l Velocity);
 
 	public Solution Solve(string input)
 	{
@@ -30,6 +29,7 @@ public class Day24 : IAnswer
 
 		var min = 200_000_000_000_000;
 		var max = 400_000_000_000_000;
+		var maxVelocity = 0L;
 
 		if (input.Length < 200)
 		{
@@ -39,6 +39,13 @@ public class Day24 : IAnswer
 
 		for (var i = 0; i < stones.Count; i++)
 		{
+			if (i <= 3)
+			{
+				maxVelocity = Math.Max(maxVelocity, Math.Abs(stones[i].Velocity.X));
+				maxVelocity = Math.Max(maxVelocity, Math.Abs(stones[i].Velocity.Y));
+				maxVelocity = Math.Max(maxVelocity, Math.Abs(stones[i].Velocity.Z));
+			}
+
 			for (var j = i + 1; j < stones.Count; j++)
 			{
 				var a = stones[i];
@@ -76,40 +83,79 @@ public class Day24 : IAnswer
 			}
 		}
 
-		var part2 = SolveZ3(stones);
+		var part2 = SolvePart2(stones, maxVelocity);
 
 		return new(part1.ToString(), part2.ToString());
 	}
 
-	private long SolveZ3(List<Hailstone> stones)
+	// Taken from https://pastebin.com/B0LijzNb
+	private long SolvePart2(List<Hailstone> stones, long range)
 	{
-		using var ctx = new Z3.Context();
-		using var solver = ctx.MkSolver();
-
-		var x = ctx.MkRealConst("x");
-		var y = ctx.MkRealConst("y");
-		var z = ctx.MkRealConst("z");
-
-		var vx = ctx.MkRealConst("vx");
-		var vy = ctx.MkRealConst("vy");
-		var vz = ctx.MkRealConst("vz");
-
-		for (var i = 0; i < stones.Count; i++)
+		foreach (var x in Range(range))
 		{
-			var hail = stones[i];
-			var t = ctx.MkRealConst($"t{i}");
+			foreach (var y in Range(range))
+			{
+				var intersect1 = TryIntersectPos(stones[1], stones[0], new(x, y, 0));
+				var intersect2 = TryIntersectPos(stones[2], stones[0], new(x, y, 0));
 
-			solver.Assert(ctx.MkEq(x + vx * t, ctx.MkReal(hail.Position.X) + ctx.MkReal(hail.Velocity.X) * t));
-			solver.Assert(ctx.MkEq(y + vy * t, ctx.MkReal(hail.Position.Y) + ctx.MkReal(hail.Velocity.Y) * t));
-			solver.Assert(ctx.MkEq(z + vz * t, ctx.MkReal(hail.Position.Z) + ctx.MkReal(hail.Velocity.Z) * t));
+				if (!intersect1.Intersects || intersect1.Position != intersect2.Position)
+				{
+					continue;
+				}
+
+				foreach (var z in Range(range))
+				{
+					var intersectZ1 = stones[1].Position.Z + intersect1.Time * (stones[1].Velocity.Z + z);
+					var intersectZ2 = stones[2].Position.Z + intersect2.Time * (stones[2].Velocity.Z + z);
+
+					if (intersectZ1 != intersectZ2)
+					{
+						continue;
+					}
+
+					return intersect1.Position.X + intersect1.Position.Y + intersectZ1;
+				}
+			}
 		}
 
-		solver.Check();
+		return 0;
+	}
 
-		var xl = (long)(solver.Model.Evaluate(x) as Z3.RatNum)!.BigIntNumerator;
-		var yl = (long)(solver.Model.Evaluate(y) as Z3.RatNum)!.BigIntNumerator;
-		var zl = (long)(solver.Model.Evaluate(z) as Z3.RatNum)!.BigIntNumerator;
+	private (bool Intersects, Vector3l Position, long Time) TryIntersectPos(Hailstone one, Hailstone two, Vector3l offset)
+	{
+		var a = new Hailstone(new(one.Position.X, one.Position.Y, 0), Velocity: new(one.Velocity.X + offset.X, one.Velocity.Y + offset.Y, 0));
+		var c = new Hailstone(new(two.Position.X, two.Position.Y, 0), Velocity: new(two.Velocity.X + offset.X, two.Velocity.Y + offset.Y, 0));
+		var D = (a.Velocity.X * -1 * c.Velocity.Y) - (a.Velocity.Y * -1 * c.Velocity.X);
 
-		return xl + yl + zl;
+		if (D == 0)
+		{
+			return (false, new(0, 0, 0), 0);
+		}
+
+		var Qx = (-1 * c.Velocity.Y * (c.Position.X - a.Position.X)) - (-1 * c.Velocity.X * (c.Position.Y - a.Position.Y));
+		var t = Qx / D;
+
+		var Px = a.Position.X + t * a.Velocity.X;
+		var Py = a.Position.Y + t * a.Velocity.Y;
+
+		return (true, new(Px, Py, 0), t);
+	}
+
+	private IEnumerable<long> Range(long max)
+	{
+		var i = 0L;
+		yield return i;
+
+		while (i < max)
+		{
+			if (i >= 0)
+			{
+				i++;
+			}
+
+			i *= -1;
+
+			yield return i;
+		}
 	}
 }
