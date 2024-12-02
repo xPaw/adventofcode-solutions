@@ -19,7 +19,7 @@ public class Day2 : IAnswer
 
 			foreach (var range in line.Split(' '))
 			{
-				levels.Add(int.Parse(line[range], NumberStyles.None));
+				levels.Add(ParseInt(line[range]));
 			}
 
 			var unsafeIndex = GetFirstUnsafeIndex(levels, -1);
@@ -84,5 +84,19 @@ public class Day2 : IAnswer
 		}
 
 		return -1;
+	}
+
+	static int ParseInt(ReadOnlySpan<char> line)
+	{
+		var result = 0;
+		var i = 0;
+
+		do
+		{
+			result = 10 * result + line[i++] - '0';
+		}
+		while (i < line.Length);
+
+		return result;
 	}
 }
