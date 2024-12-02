@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace AdventOfCode;
 
@@ -11,18 +10,29 @@ public class Day2 : IAnswer
 	{
 		var part1 = 0;
 		var part2 = 0;
-		var levels = new List<int>(10);
+		Span<int> levels = stackalloc int[10];
 
 		foreach (var line in input.AsSpan().EnumerateLines())
 		{
-			levels.Clear();
+			var count = 0;
+			var number = 0;
 
-			foreach (var range in line.Split(' '))
+			foreach (var c in line)
 			{
-				levels.Add(ParseInt(line[range]));
+				if (c != ' ')
+				{
+					number = (number * 10) + (c - '0');
+				}
+				else
+				{
+					levels[count++] = number;
+					number = 0;
+				}
 			}
 
-			var unsafeIndex = GetFirstUnsafeIndex(levels, -1);
+			levels[count++] = number;
+
+			var unsafeIndex = GetFirstUnsafeIndex(levels[..count], -1);
 
 			if (unsafeIndex == -1)
 			{
@@ -33,7 +43,7 @@ public class Day2 : IAnswer
 
 			for (var i = unsafeIndex - 1; i <= unsafeIndex + 1; i++)
 			{
-				unsafeIndex = GetFirstUnsafeIndex(levels, i);
+				unsafeIndex = GetFirstUnsafeIndex(levels[..count], i);
 
 				if (unsafeIndex == -1)
 				{
@@ -46,12 +56,12 @@ public class Day2 : IAnswer
 		return new(part1.ToString(), part2.ToString());
 	}
 
-	private static int GetFirstUnsafeIndex(List<int> levels, int skip)
+	private static int GetFirstUnsafeIndex(Span<int> levels, int skip)
 	{
 		var prevNum = -1;
 		var prevDiff = 0;
 
-		for (var i = 0; i < levels.Count; i++)
+		for (var i = 0; i < levels.Length; i++)
 		{
 			if (i == skip)
 			{
