@@ -19,4 +19,5 @@ $wc.DownloadFile("https://adventofcode.com/$Year/day/$Day/input", (Resolve-Path 
 
 Start-Process "https://adventofcode.com/$Year/day/$Day"
 
+code .
 code $Path
