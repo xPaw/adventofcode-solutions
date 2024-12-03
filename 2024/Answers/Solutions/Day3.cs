@@ -1,51 +1,74 @@
 using System;
-using System.Text.RegularExpressions;
+using System.Buffers;
 
 namespace AdventOfCode;
 
 [Answer(3)]
-public partial class Day3 : IAnswer
+public class Day3 : IAnswer
 {
-	[GeneratedRegex(@"do\(\)|don't\(\)|mul\((?<a>[0-9]{1,3}),(?<b>[0-9]{1,3})\)")]
-	private static partial Regex MulRegex();
-
 	public Solution Solve(string input)
 	{
 		var part1 = 0;
 		var part2 = 0;
 		var doing = true;
+		var span = input.AsSpan();
 
-		foreach (Match a in MulRegex().Matches(input))
+		var instructions = SearchValues.Create([
+			"mul(",
+			"do()",
+			"don't()"
+		], StringComparison.Ordinal);
+		int match;
+
+		while ((match = span.IndexOfAny(instructions)) != -1)
 		{
-			if (a.ValueSpan[0] == 'd')
+			if (span[match] == 'd')
 			{
-				doing = a.ValueSpan.Length == 4;
+				doing = span[match + 2] == '(';
+				match += doing ? "do()".Length : "don't()".Length;
+				span = span[match..];
 				continue;
 			}
 
-			var val = ParseInt(a.Groups[1].ValueSpan) * ParseInt(a.Groups[2].ValueSpan);
-			part1 += val;
+			span = span[(match + 4)..];
+
+			var a = 0;
+			var b = 0;
+
+			while (char.IsAsciiDigit(span[0]))
+			{
+				a = 10 * a + span[0] - '0';
+				span = span[1..];
+			}
+
+			if (span[0] != ',')
+			{
+				continue;
+			}
+
+			span = span[1..]; // ,
+
+			while (char.IsAsciiDigit(span[0]))
+			{
+				b = 10 * b + span[0] - '0';
+				span = span[1..];
+			}
+
+			if (span[0] != ')')
+			{
+				continue;
+			}
+
+			span = span[1..]; // )
+
+			part1 += a * b;
 
 			if (doing)
 			{
-				part2 += val;
+				part2 += a * b;
 			}
 		}
 
 		return new(part1.ToString(), part2.ToString());
-	}
-
-	static int ParseInt(ReadOnlySpan<char> line)
-	{
-		var result = 0;
-		var i = 0;
-
-		do
-		{
-			result = 10 * result + line[i++] - '0';
-		}
-		while (i < line.Length);
-
-		return result;
 	}
 }
