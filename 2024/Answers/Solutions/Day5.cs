@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace AdventOfCode;
 
@@ -22,11 +21,12 @@ public class Day5 : IAnswer
 
 			if (!dependents.TryGetValue(b, out var list))
 			{
-				list = [];
-				dependents[b] = list;
+				dependents[b] = [a];
 			}
-
-			list.Add(a);
+			else
+			{
+				list.Add(a);
+			}
 		}
 
 		var pages = new List<int>(32);
@@ -41,33 +41,10 @@ public class Day5 : IAnswer
 				pages.Add(number);
 			}
 
-			var valid = true;
+			bool valid;
+			var canBeInitiallyValid = true;
+			var initiallyValid = false;
 
-			for (var i = 0; i < pages.Count; i++)
-			{
-				if (!dependents.TryGetValue(pages[i], out var deps))
-				{
-					continue;
-				}
-
-				foreach (var dep in deps)
-				{
-					var pos = pages.IndexOf(dep, 0, i);
-
-					if (pos > -1)
-					{
-						valid = false;
-					}
-				}
-			}
-
-			if (valid)
-			{
-				part1 += pages[pages.Count / 2];
-				continue;
-			}
-
-			// part 2
 			do
 			{
 				valid = true;
@@ -90,10 +67,27 @@ public class Day5 : IAnswer
 						}
 					}
 				}
+
+				if (valid && canBeInitiallyValid)
+				{
+					initiallyValid = true;
+					break;
+				}
+
+				canBeInitiallyValid = false;
 			}
 			while (!valid);
 
-			part2 += pages[pages.Count / 2];
+			var mid = pages[pages.Count / 2];
+
+			if (initiallyValid)
+			{
+				part1 += mid;
+			}
+			else
+			{
+				part2 += mid;
+			}
 		}
 
 		return new(part1.ToString(), part2.ToString());
