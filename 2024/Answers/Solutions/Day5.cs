@@ -42,8 +42,7 @@ public class Day5 : IAnswer
 			}
 
 			bool valid;
-			var canBeInitiallyValid = true;
-			var initiallyValid = false;
+			var initiallyValid = true;
 
 			do
 			{
@@ -68,13 +67,12 @@ public class Day5 : IAnswer
 					}
 				}
 
-				if (valid && canBeInitiallyValid)
+				if (valid && initiallyValid)
 				{
-					initiallyValid = true;
 					break;
 				}
 
-				canBeInitiallyValid = false;
+				initiallyValid = false;
 			}
 			while (!valid);
 
@@ -92,7 +90,6 @@ public class Day5 : IAnswer
 
 		return new(part1.ToString(), part2.ToString());
 	}
-
 
 	static int ParseTwoInt(ReadOnlySpan<char> line) => 10 * (line[0] - '0') + (line[1] - '0');
 }
