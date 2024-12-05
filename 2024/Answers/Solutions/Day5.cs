@@ -12,20 +12,21 @@ public class Day5 : IAnswer
 		var part2 = 0;
 		var span = input.AsSpan();
 		var split = span.IndexOf("\n\n");
-		var dependents = new Dictionary<int, List<int>>();
+		var dependents = new List<int>[100];
 
 		foreach (var line in span[..split].EnumerateLines())
 		{
 			var b = ParseTwoInt(line[0..]);
 			var a = ParseTwoInt(line[3..]);
+			var deps = dependents[b];
 
-			if (!dependents.TryGetValue(b, out var list))
+			if (deps == null)
 			{
 				dependents[b] = [a];
 			}
 			else
 			{
-				list.Add(a);
+				deps.Add(a);
 			}
 		}
 
@@ -35,9 +36,9 @@ public class Day5 : IAnswer
 		{
 			pages.Clear();
 
-			foreach (var page in line.Split(','))
+			for (var i = 0; i < line.Length; i += 3)
 			{
-				var number = ParseTwoInt(line[page].ToString());
+				var number = ParseTwoInt(line[i..]);
 				pages.Add(number);
 			}
 
@@ -50,7 +51,9 @@ public class Day5 : IAnswer
 
 				for (var i = 0; i < pages.Count; i++)
 				{
-					if (!dependents.TryGetValue(pages[i], out var deps))
+					var deps = dependents[pages[i]];
+
+					if (deps == null)
 					{
 						continue;
 					}
