@@ -6,6 +6,8 @@ namespace AdventOfCode;
 [Answer(6)]
 public class Day6 : IAnswer
 {
+	record struct Position(int X, int Y, int Facing);
+
 	readonly static (int x, int y)[] Directions =
 	[
 		(0, -1), // up
@@ -20,7 +22,7 @@ public class Day6 : IAnswer
 		var part2 = 0;
 		var grid = new ReadOnlyGrid(input);
 		var visited = new HashSet<int>(1024 * 7);
-		var simulatedPath = new List<(int X, int Y, int Facing)>(visited.Capacity);
+		var simulatedPath = new List<Position>(visited.Capacity);
 		var (startY, startX) = grid.IndexOf('^');
 
 		{
@@ -31,7 +33,7 @@ public class Day6 : IAnswer
 			{
 				if (visited.Add(x * 100_000 + y))
 				{
-					simulatedPath.Add((x, y, facing));
+					simulatedPath.Add(new(x, y, facing));
 				}
 
 				var (dx, dy) = Directions[facing];
@@ -57,16 +59,8 @@ public class Day6 : IAnswer
 			visited.Clear();
 
 			var running = true;
-			var (obstacleX, obstacleY, _) = simulatedPath[i + 1];
 			var (x, y, facing) = simulatedPath[i];
-
-#if false
-			for (var j = 0; j < i; j++)
-			{
-				var simulated = simulatedPath[j];
-				visited.Add(simulated.Facing * 10_000_000 + simulated.X * 10_000 + simulated.Y);
-			}
-#endif
+			var (obstacleX, obstacleY, _) = simulatedPath[i + 1];
 
 			do
 			{
