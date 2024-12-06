@@ -77,28 +77,36 @@ public class Day6 : IAnswer
 				}
 
 				var (dx, dy) = Directions[facing];
-				var newX = x + dx;
-				var newY = y + dy;
+				var turned = false;
 
-				if (newY == obstacleY && newX == obstacleX)
+				do
 				{
-					facing = (facing + 1) % 4;
-					continue;
-				}
+					var newX = x + dx;
+					var newY = y + dy;
 
-				switch (grid[newY, newX])
-				{
-					case '\0':
-						running = false;
-						break;
-					case '#':
+					if (newY == obstacleY && newX == obstacleX)
+					{
 						facing = (facing + 1) % 4;
 						break;
-					default:
-						y = newY;
-						x = newX;
-						continue;
+					}
+
+					switch (grid[newY, newX])
+					{
+						case '\0':
+							running = false;
+							turned = true;
+							break;
+						case '#':
+							facing = (facing + 1) % 4;
+							turned = true;
+							break;
+						default:
+							y = newY;
+							x = newX;
+							break;
+					}
 				}
+				while (!turned);
 			}
 			while (running);
 		}
