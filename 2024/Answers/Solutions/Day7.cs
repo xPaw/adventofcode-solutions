@@ -1,12 +1,11 @@
 using System;
+using System.Runtime.CompilerServices;
 
 namespace AdventOfCode;
 
 [Answer(7)]
 public class Day7 : IAnswer
 {
-	private static readonly long[] Powers = [1, 10, 100, 1000, 10000, 100000, 1000000];
-
 	public Solution Solve(string input)
 	{
 		var part1 = 0L;
@@ -63,17 +62,19 @@ public class Day7 : IAnswer
 			return true;
 		}
 
+		target -= last;
+
 		if (allowConcat)
 		{
-			var mag = Powers[(int)MathF.Floor(MathF.Log10(last)) + 1];
+			var mag = Magnitude(last);
 
-			if ((target - last) % mag == 0 && TryOperators(allowConcat, numbers, (target - last) / mag))
+			if (target % mag == 0 && TryOperators(allowConcat, numbers, target / mag))
 			{
 				return true;
 			}
 		}
 
-		if (TryOperators(allowConcat, numbers, target - last)) // add
+		if (TryOperators(allowConcat, numbers, target)) // add
 		{
 			return true;
 		}
@@ -81,6 +82,16 @@ public class Day7 : IAnswer
 		return false;
 	}
 
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	static long Magnitude(long value) => value switch
+	{
+		>= 1000 => 10000,
+		>= 100 => 1000,
+		>= 10 => 100,
+		_ => 10,
+	};
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
 	static long ParseInt(ReadOnlySpan<char> line)
 	{
 		var result = 0L;
