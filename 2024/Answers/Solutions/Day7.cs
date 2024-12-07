@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace AdventOfCode;
 
@@ -12,75 +11,69 @@ public class Day7 : IAnswer
 	{
 		var part1 = 0L;
 		var part2 = 0L;
-		var numbers = new List<long>(32);
+		var count = 0;
+		Span<long> numbers = stackalloc long[16];
 
 		foreach (var line in input.AsSpan().EnumerateLines())
 		{
-			numbers.Clear();
-
 			var colon = line.IndexOf(':');
-			var result = ParseInt(line[..colon]);
+			var target = ParseInt(line[..colon]);
 			var numbersSpan = line[(colon + 2)..];
 
 			foreach (var num in numbersSpan.Split(' '))
 			{
-				numbers.Add(ParseInt(numbersSpan[num]));
+				numbers[count++] = ParseInt(numbersSpan[num]);
 			}
 
-			if (TryOperators(false, numbers, 0, numbers[0], result))
+			var nums = numbers[..count];
+
+			if (TryOperators(true, nums, target))
 			{
-				part1 += result;
+				part2 += target;
+
+				if (TryOperators(false, nums, target))
+				{
+					part1 += target;
+				}
 			}
 
-			if (TryOperators(true, numbers, 0, numbers[0], result))
-			{
-				part2 += result;
-			}
+			count = 0;
 		}
 
 		return new(part1.ToString(), part2.ToString());
 	}
 
-	static bool TryOperators(bool allowConcat, List<long> values, int pos, long current, long target)
+	static bool TryOperators(bool allowConcat, Span<long> numbers, long target)
 	{
-		if (current > target)
+		if (numbers.Length == 0)
 		{
-			return false;
+			return target == 0;
 		}
 
-		if (pos == values.Count - 1)
+		if (numbers.Length == 1)
 		{
-			return current == target;
+			return target == numbers[0];
 		}
 
-		pos++;
-		var next = values[pos];
+		var last = numbers[^1];
+		numbers = numbers[..^1];
 
-		if (TryOperators(allowConcat, values, pos, current + next, target)) // add
-		{
-			return true;
-		}
-
-		if (TryOperators(allowConcat, values, pos, current * next, target)) // multiply
+		if (target % last == 0 && TryOperators(allowConcat, numbers, target / last)) // multiply
 		{
 			return true;
 		}
 
-		if (!allowConcat)
+		if (allowConcat)
 		{
-			return false;
+			var mag = Powers[(int)MathF.Floor(MathF.Log10(last)) + 1];
+
+			if ((target - last) % mag == 0 && TryOperators(allowConcat, numbers, (target - last) / mag))
+			{
+				return true;
+			}
 		}
 
-		var digits = 1;
-		var remainder = next;
-		while (remainder >= 10)
-		{
-			digits++;
-			remainder /= 10;
-		}
-		var concatenated = current * Powers[digits] + next;
-
-		if (TryOperators(allowConcat, values, pos, concatenated, target))
+		if (TryOperators(allowConcat, numbers, target - last)) // add
 		{
 			return true;
 		}
