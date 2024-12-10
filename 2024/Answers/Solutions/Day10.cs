@@ -6,6 +6,14 @@ namespace AdventOfCode;
 [Answer(10)]
 public class Day10 : IAnswer
 {
+	readonly static (int x, int y)[] Directions =
+	[
+		(0, -1), // up
+		(1, 0), // right
+		(0, 1), // down
+		(-1, 0), // left
+	];
+
 	public Solution Solve(string input)
 	{
 		var part1 = 0;
@@ -36,41 +44,32 @@ public class Day10 : IAnswer
 
 	(int Part1, int Part2) FollowTrail(ReadOnlyGrid grid, int currentScore, int x, int y, char current, HashSet<int> visited)
 	{
-		if (current == '9')
+		var p1 = 0;
+		var p2 = 0;
+
+		foreach (var (dx, dy) in Directions)
 		{
-			return visited.Add(x * 10000 + y) ? (1, 1) : (0, 1);
+			var xx = x + dx;
+			var yy = y + dy;
+			var c = grid[yy, xx];
+
+			if (c - current != 1)
+			{
+				continue;
+			}
+
+			if (c == '9')
+			{
+				p1 += visited.Add(xx * 10000 + yy) ? 1 : 0;
+				p2 += 1;
+				continue;
+			}
+
+			var (a, b) = FollowTrail(grid, currentScore + 1, xx, yy, c, visited);
+			p1 += a;
+			p2 += b;
 		}
 
-		var score = (Part1: 0, Part2: 0);
-
-		if (grid[y + 1, x] - current == 1)
-		{
-			var (a, b) = FollowTrail(grid, currentScore + 1, x, y + 1, grid[y + 1, x], visited);
-			score.Part1 += a;
-			score.Part2 += b;
-		}
-
-		if (grid[y - 1, x] - current == 1)
-		{
-			var (a, b) = FollowTrail(grid, currentScore + 1, x, y - 1, grid[y - 1, x], visited);
-			score.Part1 += a;
-			score.Part2 += b;
-		}
-
-		if (grid[y, x + 1] - current == 1)
-		{
-			var (a, b) = FollowTrail(grid, currentScore + 1, x + 1, y, grid[y, x + 1], visited);
-			score.Part1 += a;
-			score.Part2 += b;
-		}
-
-		if (grid[y, x - 1] - current == 1)
-		{
-			var (a, b) = FollowTrail(grid, currentScore + 1, x - 1, y, grid[y, x - 1], visited);
-			score.Part1 += a;
-			score.Part2 += b;
-		}
-
-		return score;
+		return (p1, p2);
 	}
 }
