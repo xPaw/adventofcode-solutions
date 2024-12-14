@@ -92,7 +92,7 @@ public class Day14 : IAnswer
 		// part 2
 		var bestX = FindBestVariance(robots, gridSize.X, isX: true);
 		var bestY = FindBestVariance(robots, gridSize.Y, isX: false);
-		var modInverseX = ModInverse(gridSize.X, gridSize.Y);
+		var modInverseX = Mod(ExtendedGcd(gridSize.X, gridSize.Y).x, gridSize.Y);
 		var diff = Mod(bestY - bestX, gridSize.Y);
 		var part2 = Mod(bestX + modInverseX * diff * gridSize.X, gridSize.X * gridSize.Y);
 
@@ -136,12 +136,6 @@ public class Day14 : IAnswer
 		}
 
 		return bestT;
-	}
-
-	static int ModInverse(int a, int m)
-	{
-		var x = ExtendedGcd(a, m).x;
-		return Mod(x, m);
 	}
 
 	static (int gcd, int x, int y) ExtendedGcd(int a, int b)
