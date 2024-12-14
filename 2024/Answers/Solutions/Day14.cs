@@ -31,19 +31,17 @@ public class Day14 : IAnswer
 			var vx = ParseInt(ref l);
 			var vy = ParseInt(ref l);
 
-			px += vx * seconds;
-			px = Mod(px, gridSize.X);
-
-			py += vy * seconds;
-			py = Mod(py, gridSize.Y);
-
-			// The tree isn't going to appear under 100 anyway
 			robots.Add(new Robot
 			{
 				Position = new(px, py),
 				Velocity = new(vx, vy),
 			});
 
+			px += vx * seconds;
+			px = Mod(px, gridSize.X);
+
+			py += vy * seconds;
+			py = Mod(py, gridSize.Y);
 
 			var hash = py * gridSize.X + px;
 			if (robots1.TryGetValue(hash, out var count))
@@ -92,34 +90,69 @@ public class Day14 : IAnswer
 		}
 
 		// part 2
-		var part2 = 0;
-		var iterations = 100;
-		var minTotalDistance = long.MaxValue;
-		var maxIterations = gridSize.X * gridSize.Y;
+		var bestX = FindBestVariance(robots, gridSize.X, isX: true);
+		var bestY = FindBestVariance(robots, gridSize.Y, isX: false);
+		var modInverseX = ModInverse(gridSize.X, gridSize.Y);
+		var diff = Mod(bestY - bestX, gridSize.Y);
+		var part2 = Mod(bestX + modInverseX * diff * gridSize.X, gridSize.X * gridSize.Y);
 
-		while (iterations++ <= maxIterations)
+		return new(part1.ToString(), part2.ToString());
+	}
+
+	static int FindBestVariance(List<Robot> robots, int size, bool isX)
+	{
+		var bestT = 0;
+		var minVariance = long.MaxValue;
+
+		for (var time = 0; time < size; time++)
 		{
-			var totalDistance = 0L;
+			var sum = 0L;
+			var sumOfSquares = 0L;
 
 			foreach (var robot in robots)
 			{
-				robot.Position.X = Mod(robot.Position.X + robot.Velocity.X, gridSize.X);
-				robot.Position.Y = Mod(robot.Position.Y + robot.Velocity.Y, gridSize.Y);
+				int position;
 
-				if (minTotalDistance > totalDistance)
+				if (isX)
 				{
-					totalDistance += Math.Abs(robot.Position.X - halfX) * Math.Abs(robot.Position.Y - halfY);
+					position = Mod(robot.Position.X + time * robot.Velocity.X, size);
 				}
+				else
+				{
+					position = Mod(robot.Position.Y + time * robot.Velocity.Y, size);
+				}
+
+				sum += position;
+				sumOfSquares += position * position;
 			}
 
-			if (minTotalDistance > totalDistance)
+			var variance = robots.Count * sumOfSquares - sum * sum;
+
+			if (variance < minVariance)
 			{
-				minTotalDistance = totalDistance;
-				part2 = iterations;
+				minVariance = variance;
+				bestT = time;
 			}
 		}
 
-		return new(part1.ToString(), part2.ToString());
+		return bestT;
+	}
+
+	static int ModInverse(int a, int m)
+	{
+		var x = ExtendedGcd(a, m).x;
+		return Mod(x, m);
+	}
+
+	static (int gcd, int x, int y) ExtendedGcd(int a, int b)
+	{
+		if (b == 0)
+		{
+			return (a, 1, 0);
+		}
+
+		var (gcd, x1, y1) = ExtendedGcd(b, a % b);
+		return (gcd, y1, x1 - (a / b) * y1);
 	}
 
 	static int Mod(int x, int m)
