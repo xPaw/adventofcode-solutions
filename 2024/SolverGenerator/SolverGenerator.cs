@@ -52,6 +52,7 @@ public static partial class {mainMethod.Name} {{
 
 			var data = new string[26];
 			var dataExamples = new string[26];
+			var writtenAnswers = false;
 
 			foreach (var file in context.AdditionalFiles)
 			{
@@ -72,6 +73,11 @@ public static partial class {mainMethod.Name} {{
 
 				if (name == "answers")
 				{
+					if (!isExample)
+					{
+						writtenAnswers = true;
+					}
+
 					source.AppendLine($"    public static Solution[] Answers{(isExample ? "Example" : "")} = [");
 					source.AppendLine($"        new(string.Empty, string.Empty),"); // day 0
 
@@ -102,6 +108,18 @@ public static partial class {mainMethod.Name} {{
 						data[day] = text;
 					}
 				}
+			}
+
+			if (!writtenAnswers)
+			{
+				source.AppendLine("    public static Solution[] Answers = [");
+
+				for (var d = 0; d < data.Length; d++)
+				{
+					source.AppendLine($"        new(string.Empty, string.Empty),");
+				}
+
+				source.AppendLine("    ];");
 			}
 
 			//
