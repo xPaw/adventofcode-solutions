@@ -3,16 +3,33 @@ using System.Runtime.CompilerServices;
 
 namespace AdventOfCode;
 
-public readonly struct ReadOnlyGrid
+public record struct Coord(int X, int Y)
+{
+	public static Coord operator +(Coord a, Coord b) => new(a.X + b.X, a.Y + b.Y);
+	public static Coord operator +(Coord a, (int X, int Y) b) => new(a.X + b.X, a.Y + b.Y);
+
+	public static Coord operator -(Coord a, Coord b) => new(a.X - b.X, a.Y - b.Y);
+	public static Coord operator -(Coord a, (int X, int Y) b) => new(a.X - b.X, a.Y - b.Y);
+
+	public readonly static Coord[] Directions =
+	[
+		new Coord(0, 1), // down
+		new Coord(1, 0), // right
+		new Coord(-1, 0), // left
+		new Coord(0, -1), // up
+	];
+}
+
+public readonly ref struct ReadOnlyGrid
 {
 	private readonly char OutOfBoundsCharacter;
 	private readonly int Stride;
 
-	public readonly string Data { get; }
+	public readonly ReadOnlySpan<char> Data { get; }
 	public readonly int Width { get; }
 	public readonly int Height { get; }
 
-	public ReadOnlyGrid(string data, char oob = '\0')
+	public ReadOnlyGrid(ReadOnlySpan<char> data, char oob = '\0')
 	{
 		OutOfBoundsCharacter = oob;
 		Data = data;
@@ -21,36 +38,40 @@ public readonly struct ReadOnlyGrid
 		Height = (data.Length + 1) / Stride;
 	}
 
-	public readonly char this[int row, int column]
+	public readonly char this[int y, int x]
 	{
 		get
 		{
-			if (row < 0 || column < 0 || row >= Height || column >= Width)
+			if (y < 0 || x < 0 || y >= Height || x >= Width)
 			{
 				return OutOfBoundsCharacter;
 			}
 
-			return Data[row * Stride + column];
+			return Data[y * Stride + x];
 		}
 	}
 
-	public readonly char this[(int row, int column) d] => this[d.row, d.column];
+	public readonly char this[Coord d] => this[d.Y, d.X];
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public (int Row, int Column) IndexOf(char c) => Math.DivRem(Data.IndexOf(c), Stride);
-
-	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public char InfiniteAt(int row, int column)
+	public Coord IndexOf(char c)
 	{
-		var r = row % Height;
-		row = r < 0 ? r + Height : r;
-
-		r = column % Width;
-		column = r < 0 ? r + Width : r;
-
-		return Data[row * Stride + column];
+		var a = Math.DivRem(Data.IndexOf(c), Stride);
+		return new Coord(a.Remainder, a.Quotient);
 	}
 
 	[MethodImpl(MethodImplOptions.AggressiveInlining)]
-	public char InfiniteAt((int row, int column) d) => InfiniteAt(d.row, d.column);
+	public char InfiniteAt(int y, int x)
+	{
+		var r = y % Height;
+		y = r < 0 ? r + Height : r;
+
+		r = x % Width;
+		x = r < 0 ? r + Width : r;
+
+		return Data[y * Stride + x];
+	}
+
+	[MethodImpl(MethodImplOptions.AggressiveInlining)]
+	public char InfiniteAt(Coord d) => InfiniteAt(d.Y, d.X);
 }

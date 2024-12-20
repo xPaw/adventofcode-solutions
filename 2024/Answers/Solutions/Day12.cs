@@ -15,7 +15,7 @@ public class Day12 : IAnswer
 		var queue = new Queue<(int X, int Y)>(128);
 		var fences = new HashSet<(int X, int Y, int Direction)>(256);
 
-		int Walk(int x2, int y2, int direction, char plant)
+		int Walk(ReadOnlyGrid grid, int x2, int y2, int direction, char plant)
 		{
 			if (grid[y2, x2] != plant)
 			{
@@ -60,10 +60,10 @@ public class Day12 : IAnswer
 					visited[hash] = true;
 
 					area++;
-					perimeter += Walk(n.X + 1, n.Y, 1, plant);
-					perimeter += Walk(n.X - 1, n.Y, 2, plant);
-					perimeter += Walk(n.X, n.Y + 1, 3, plant);
-					perimeter += Walk(n.X, n.Y - 1, 4, plant);
+					perimeter += Walk(grid, n.X + 1, n.Y, 1, plant);
+					perimeter += Walk(grid, n.X - 1, n.Y, 2, plant);
+					perimeter += Walk(grid, n.X, n.Y + 1, 3, plant);
+					perimeter += Walk(grid, n.X, n.Y - 1, 4, plant);
 				}
 
 				foreach (var cur in fences)

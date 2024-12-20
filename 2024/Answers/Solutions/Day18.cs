@@ -6,16 +6,6 @@ namespace AdventOfCode;
 [Answer(18)]
 public class Day18 : IAnswer
 {
-	readonly static (int x, int y)[] Directions =
-	[
-		(0, 1), // down
-		(1, 0), // right
-		(-1, 0), // left
-		(0, -1), // up
-	];
-
-	record struct Coord(int X, int Y);
-
 	public Solution Solve(string input)
 	{
 		var finish = input.Length < 500 ? 6 : 70;
@@ -71,7 +61,7 @@ public class Day18 : IAnswer
 					return cost;
 				}
 
-				foreach (var (dx, dy) in Directions)
+				foreach (var (dx, dy) in Coord.Directions)
 				{
 					Enqueue(checkTile.X + dx, checkTile.Y + dy, cost + 1, maxCorruptedSteps);
 				}

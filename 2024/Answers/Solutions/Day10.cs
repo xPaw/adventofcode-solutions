@@ -6,14 +6,6 @@ namespace AdventOfCode;
 [Answer(10)]
 public class Day10 : IAnswer
 {
-	readonly static (int x, int y)[] Directions =
-	[
-		(0, -1), // up
-		(1, 0), // right
-		(0, 1), // down
-		(-1, 0), // left
-	];
-
 	public Solution Solve(string input)
 	{
 		var part1 = 0;
@@ -47,7 +39,7 @@ public class Day10 : IAnswer
 		var p1 = 0;
 		var p2 = 0;
 
-		foreach (var (dx, dy) in Directions)
+		foreach (var (dx, dy) in Coord.Directions)
 		{
 			var xx = x + dx;
 			var yy = y + dy;

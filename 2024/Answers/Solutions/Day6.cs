@@ -23,7 +23,7 @@ public class Day6 : IAnswer
 		var grid = new ReadOnlyGrid(input);
 		var visited = new HashSet<int>(1024 * 7);
 		var simulatedPath = new List<Position>(visited.Capacity);
-		var (startY, startX) = grid.IndexOf('^');
+		var (startX, startY) = grid.IndexOf('^');
 
 		{
 			var (y, x) = (startY, startX);

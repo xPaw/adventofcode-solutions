@@ -27,9 +27,9 @@ public class Day16 : IAnswer
 		var visitedTiles = new Dictionary<int, int>(1024 * 40);
 		var bestPaths = new HashSet<int>(1024);
 
-		Enqueue(start.Column, start.Row, 0, [], 0);
+		Enqueue(grid, start.X, start.Y, 0, [], 0);
 
-		void Enqueue(int tileX, int tileY, int facing, HashSet<int> path, int cost)
+		void Enqueue(ReadOnlyGrid grid, int tileX, int tileY, int facing, HashSet<int> path, int cost)
 		{
 			var hash = tileY * grid.Width + tileX;
 			var visitedHash = facing * 10000000 + hash;
@@ -66,7 +66,7 @@ public class Day16 : IAnswer
 				break;
 			}
 
-			if (checkTile.Y == finish.Row && checkTile.X == finish.Column)
+			if (checkTile.X == finish.X && checkTile.Y == finish.Y)
 			{
 				if (part1 == int.MaxValue)
 				{
@@ -81,15 +81,15 @@ public class Day16 : IAnswer
 			var facing = checkTile.Facing;
 			var (dx, dy) = Directions[facing];
 
-			Enqueue(checkTile.X + dx, checkTile.Y + dy, facing, checkTile.Path, cost + 1);
+			Enqueue(grid, checkTile.X + dx, checkTile.Y + dy, facing, checkTile.Path, cost + 1);
 
 			facing = (checkTile.Facing + 1) % 4;
 			(dx, dy) = Directions[facing];
-			Enqueue(checkTile.X + dx, checkTile.Y + dy, facing, checkTile.Path, cost + 1001);
+			Enqueue(grid, checkTile.X + dx, checkTile.Y + dy, facing, checkTile.Path, cost + 1001);
 
 			facing = checkTile.Facing == 0 ? 3 : checkTile.Facing - 1;
 			(dx, dy) = Directions[facing];
-			Enqueue(checkTile.X + dx, checkTile.Y + dy, facing, checkTile.Path, cost + 1001);
+			Enqueue(grid, checkTile.X + dx, checkTile.Y + dy, facing, checkTile.Path, cost + 1001);
 		}
 
 		var part2 = bestPaths.Count;
