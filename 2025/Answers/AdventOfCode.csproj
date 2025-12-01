@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <RootNamespace>AdventOfCode</RootNamespace>
+    <Nullable>enable</Nullable>
+    <TieredCompilation>false</TieredCompilation>
+    <NoWarn>CA1822</NoWarn>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishAot>true</PublishAot>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <TieredPGO>true</TieredPGO>
+    <BuiltInComInteropSupport Condition=" '$(NO_BENCHMARK)' == '' ">true</BuiltInComInteropSupport>
+    <DefineConstants Condition=" '$(NO_BENCHMARK)' != '' ">$(DefineConstants);NO_BENCHMARK</DefineConstants>
+    <PlatformTarget>x64</PlatformTarget>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+  </PropertyGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="../Data/*.txt">
+      <Link>Data\%(Filename)%(Extension)</Link>
+    </AdditionalFiles>
+    <AdditionalFiles Include="../DataExamples/*.txt">
+      <Link>DataExamples\%(Filename)%(Extension)</Link>
+    </AdditionalFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="BenchmarkDotNet" Version="0.14.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SolverGenerator\SolverGenerator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Answers/AdventOfCode.csproj" />
+  <Project Path="SolverGenerator/SolverGenerator.csproj" />
+</Solution>
