@@ -13,7 +13,7 @@ public class Day1 : IAnswer
 
 		foreach (var line in input.AsSpan().EnumerateLines())
 		{
-			var value = int.Parse(line[1..]);
+			var value = line[1..].ParseInt();
 			var nonZero = dial != 0;
 
 			if (line[0] == 'L')
