@@ -100,7 +100,7 @@ public class Day5 : IAnswer
 			for (var j = 0; j < moves; j++)
 			{
 				toStack2.Push(temp[j]);
-			};
+			}
 		}
 
 		string GetResult(Stack<char>[] stacks)

@@ -24,7 +24,7 @@ public class Day2 : IAnswer
 				2 => 6,
 				_ => throw new System.NotImplementedException(),
 			};
-		};
+		}
 
 		for (var i = 0; i < input.Length; i += 4)
 		{

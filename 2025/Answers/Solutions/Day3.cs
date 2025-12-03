@@ -53,6 +53,11 @@ public class Day3 : IAnswer
 				{
 					largestDigit = n;
 					largestDigitIndex = i;
+
+					if (n == 9)
+					{
+						break;
+					}
 				}
 			}
 

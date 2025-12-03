@@ -14,7 +14,6 @@ public class Day1 : IAnswer
 		foreach (var line in input.AsSpan().EnumerateLines())
 		{
 			var value = line[1..].ParseInt();
-			var nonZero = dial != 0;
 
 			if (line[0] == 'L')
 			{
@@ -27,10 +26,11 @@ public class Day1 : IAnswer
 					dial -= value;
 				}
 
-				while (dial < 0)
+				if (dial < 0)
 				{
-					part2++;
-					dial += 100;
+					var crossings = (-dial + 99) / 100;
+					part2 += crossings;
+					dial += crossings * 100;
 				}
 
 				if (dial == 0)
@@ -42,10 +42,11 @@ public class Day1 : IAnswer
 			{
 				dial += value;
 
-				while (dial > 99)
+				if (dial > 99)
 				{
-					part2++;
-					dial -= 100;
+					var (quotient, remainder) = Math.DivRem(dial, 100);
+					part2 += quotient;
+					dial = remainder;
 				}
 			}
 

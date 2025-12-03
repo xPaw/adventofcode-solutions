@@ -44,24 +44,27 @@ public class Day2 : IAnswer
 
 		for (var check = 1; check <= length / 2; check++)
 		{
-			var first = s[..check];
-			var found = 1;
-
-			for (var i = check; i + check <= length; i += check)
+			if (length % check != 0)
 			{
-				var second = s[i..(i + check)];
-
-				if (!first.SequenceEqual(second))
-				{
-					break;
-				}
-
-				found++;
+				continue;
 			}
 
-			if (found == Math.Ceiling(length / (float)check))
+			var first = s[..check];
+			var repetitions = length / check;
+			var allMatch = true;
+
+			for (var i = check; i < length; i += check)
 			{
-				return found;
+				if (!first.SequenceEqual(s[i..(i + check)]))
+				{
+					allMatch = false;
+					break;
+				}
+			}
+
+			if (allMatch)
+			{
+				return repetitions;
 			}
 		}
 
