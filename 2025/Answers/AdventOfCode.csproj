@@ -12,6 +12,7 @@
     <TieredPGO>true</TieredPGO>
     <BuiltInComInteropSupport Condition=" '$(NO_BENCHMARK)' == '' ">true</BuiltInComInteropSupport>
     <DefineConstants Condition=" '$(NO_BENCHMARK)' != '' ">$(DefineConstants);NO_BENCHMARK</DefineConstants>
+    <CheckForOverflowUnderflow Condition="'$(Configuration)'=='Debug'">True</CheckForOverflowUnderflow>
     <PlatformTarget>x64</PlatformTarget>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
