@@ -49,7 +49,6 @@ public class Day11 : IAnswer
 		}
 
 		var part1 = CountPaths("you", "out");
-		cache.Clear();
 		var part2 = CountPaths("svr", "fft") * CountPaths("fft", "dac") * CountPaths("dac", "out");
 
 		return new(part1.ToString(), part2.ToString());
